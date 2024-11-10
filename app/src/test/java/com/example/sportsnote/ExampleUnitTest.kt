@@ -1,4 +1,4 @@
-package com.example.sportsnote_android
+package com.example.sportsnote
 
 import org.junit.Test
 

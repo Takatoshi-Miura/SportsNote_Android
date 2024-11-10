@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SportsNote_Android"
+rootProject.name = "SportsNote"
 include(":app")
