@@ -1,8 +1,6 @@
 package com.example.sportsnote.ui.setting
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.ItemData
@@ -43,4 +41,3 @@ fun SettingScreen() {
 fun PreviewSettingScreen() {
     SettingScreen()
 }
-
