@@ -26,24 +26,33 @@ import com.example.sportsnote.R
  * セクションタイトルと含有するアイテムのデータモデル
  *
  * @param title セクションのタイトル
- * @param items セルのタイトルリスト
+ * @param items セルのアイテムリスト
  */
 data class SectionData(
     val title: String,
-    val items: List<String>
+    val items: List<ItemData>
+)
+
+/**
+ * セクション内のアイテムのデータモデル
+ *
+ * @param title アイテムのタイトル
+ * @param iconRes アイコン画像のリソースID
+ * @param onClick タップ時のアクション
+ */
+data class ItemData(
+    val title: String,
+    val iconRes: Int,
+    val onClick: () -> Unit = {}
 )
 
 /**
  * セクション付きのリストを作成
  *
  * @param sections セクション
- * @param onItemClick タップ時のアクション
  */
 @Composable
-fun SectionedColumn(
-    sections: List<SectionData>,
-    onItemClick: (String) -> Unit
-) {
+fun SectionedColumn(sections: List<SectionData>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,10 +64,10 @@ fun SectionedColumn(
 
             // セクションのアイテムを描画
             section.items.forEachIndexed { index, item ->
-                SectionItem(
-                    item = item,
-                    onItemClick = onItemClick
-                )
+                SectionItem(item = item)
+                if (index < section.items.lastIndex) {
+                    Divider(thickness = 1.dp)
+                }
             }
 
             // セクション間の区切り
@@ -88,28 +97,28 @@ fun SectionHeader(title: String) {
     }
 }
 
+
 /**
  * セクション内のアイテムを作成
  *
- * @param item アイテムのタイトル
- * @param onItemClick アイテムタップ時のアクション
+ * @param item アイテムデータ
  */
 @Composable
-fun SectionItem(item: String, onItemClick: (String) -> Unit) {
+fun SectionItem(item: ItemData) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onItemClick(item) }
+            .clickable { item.onClick() }
             .padding(8.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_home_black_24dp),
+            painter = painterResource(id = item.iconRes),
             contentDescription = "Item Icon",
             modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.padding(horizontal = 8.dp))
         Text(
-            text = item,
+            text = item.title,
             fontSize = 16.sp
         )
     }
@@ -119,16 +128,22 @@ fun SectionItem(item: String, onItemClick: (String) -> Unit) {
 @Composable
 fun PreviewSectionedColumn() {
     val sections = listOf(
-        SectionData("Fruits", listOf("Apple", "Banana", "Orange")),
-        SectionData("Vegetables", listOf("Carrot", "Potato", "Spinach"))
+        SectionData(
+            title = "Fruits",
+            items = listOf(
+                ItemData("Apple", R.drawable.ic_home_black_24dp) { println("Apple clicked") },
+                ItemData("Banana", R.drawable.ic_home_black_24dp) { println("Banana clicked") },
+                ItemData("Orange", R.drawable.ic_home_black_24dp) { println("Orange clicked") }
+            )
+        ),
+        SectionData(
+            title = "Vegetables",
+            items = listOf(
+                ItemData("Carrot", R.drawable.ic_home_black_24dp) { println("Carrot clicked") },
+                ItemData("Potato", R.drawable.ic_home_black_24dp) { println("Potato clicked") },
+                ItemData("Spinach", R.drawable.ic_home_black_24dp) { println("Spinach clicked") }
+            )
+        )
     )
-    val selectedItem = remember { mutableStateOf("") }
-
-    SectionedColumn(
-        sections = sections,
-        onItemClick = { item ->
-            selectedItem.value = item
-            println("Item clicked: $item")
-        }
-    )
+    SectionedColumn(sections = sections)
 }
