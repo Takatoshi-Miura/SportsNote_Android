@@ -36,7 +36,7 @@ fun MainScreen() {
             )
         },
         bottomBar = { BottomNavigationBar(navController) },
-        drawerContent = { DrawerContent(drawerState) }
+        drawerContent = { DrawerContent() }
     ) { paddingValues ->
         NavigationHost(navController, paddingValues)
     }
