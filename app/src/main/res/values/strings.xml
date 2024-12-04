@@ -3,4 +3,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="data">データ</string>
+    <string name="data_transfer">データの引継ぎ</string>
+    <string name="help">ヘルプ</string>
+    <string name="how_to_use_this_app">アプリの使い方</string>
+    <string name="inquiry">お問い合わせ</string>
+    <string name="system_info">システム情報</string>
+    <string name="app_version">アプリバージョン</string>
 </resources>
