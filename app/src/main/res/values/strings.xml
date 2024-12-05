@@ -10,4 +10,7 @@
     <string name="inquiry">お問い合わせ</string>
     <string name="system_info">システム情報</string>
     <string name="app_version">アプリバージョン</string>
+    <string name="task">課題</string>
+    <string name="note">ノート</string>
+    <string name="target">目標</string>
 </resources>
