@@ -17,20 +17,20 @@ fun SettingScreen() {
         SectionData(
             title = stringResource(R.string.data),
             items = listOf(
-                ItemData(stringResource(R.string.data_transfer), R.drawable.ic_home_black_24dp) { println("データの引継ぎ") }
+                ItemData(stringResource(R.string.data_transfer), R.drawable.outline_cloud_upload_24) { println("データの引継ぎ") }
             )
         ),
         SectionData(
             title = stringResource(R.string.help),
             items = listOf(
-                ItemData(stringResource(R.string.how_to_use_this_app), R.drawable.ic_home_black_24dp) { println("アプリの使い方") },
-                ItemData(stringResource(R.string.inquiry), R.drawable.ic_home_black_24dp) { println("お問い合わせ") }
+                ItemData(stringResource(R.string.how_to_use_this_app), R.drawable.baseline_question_mark_24) { println("アプリの使い方") },
+                ItemData(stringResource(R.string.inquiry), R.drawable.baseline_mail_outline_24) { println("お問い合わせ") }
             )
         ),
         SectionData(
             title = stringResource(R.string.system_info),
             items = listOf(
-                ItemData(stringResource(R.string.app_version), R.drawable.ic_home_black_24dp) { println("アプリバージョン") }
+                ItemData(stringResource(R.string.app_version), R.drawable.baseline_info_outline_24) { println("アプリバージョン") }
             )
         )
     )

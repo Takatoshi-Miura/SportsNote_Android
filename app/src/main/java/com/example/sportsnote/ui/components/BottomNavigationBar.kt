@@ -6,9 +6,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.sportsnote.R
@@ -17,13 +16,13 @@ import com.example.sportsnote.R
 fun BottomNavigationBar(navController: NavController) {
     BottomNavigation {
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.List, contentDescription = "Home") },
+            icon = { Icon(painterResource(id = R.drawable.baseline_format_list_bulleted_24), contentDescription = "Home") },
             label = { Text(stringResource(R.string.task)) },
             selected = true,
             onClick = { navController.navigate("home") }
         )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Dashboard") },
+            icon = { Icon(painterResource(id = R.drawable.baseline_menu_book_24), contentDescription = "Dashboard") },
             label = { Text(stringResource(R.string.note)) },
             selected = false,
             onClick = { navController.navigate("dashboard") }
