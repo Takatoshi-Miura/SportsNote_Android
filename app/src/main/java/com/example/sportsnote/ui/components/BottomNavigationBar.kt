@@ -19,19 +19,19 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(painterResource(id = R.drawable.baseline_format_list_bulleted_24), contentDescription = "Home") },
             label = { Text(stringResource(R.string.task)) },
             selected = true,
-            onClick = { navController.navigate("home") }
+            onClick = { navController.navigate("task") }
         )
         BottomNavigationItem(
             icon = { Icon(painterResource(id = R.drawable.baseline_menu_book_24), contentDescription = "Dashboard") },
             label = { Text(stringResource(R.string.note)) },
             selected = false,
-            onClick = { navController.navigate("dashboard") }
+            onClick = { navController.navigate("note") }
         )
         BottomNavigationItem(
             icon = { Icon(Icons.Filled.DateRange, contentDescription = "Notifications") },
             label = { Text(stringResource(R.string.target)) },
             selected = false,
-            onClick = { navController.navigate("notifications") }
+            onClick = { navController.navigate("target") }
         )
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.rememberNavController
 import com.example.sportsnote.ui.components.BottomNavigationBar
 import com.example.sportsnote.ui.components.DrawerContent
-import com.example.sportsnote.ui.navigation.NavigationHost
+import com.example.sportsnote.ui.components.NavigationHost
 import kotlinx.coroutines.launch
 
 @Composable
