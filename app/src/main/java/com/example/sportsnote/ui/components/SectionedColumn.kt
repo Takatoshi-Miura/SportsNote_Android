@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,7 +47,37 @@ data class ItemData(
 )
 
 /**
- * セクション付きのリストを作成
+ * セクション付きのLazyColumnを作成
+ *
+ * @param sections セクション
+ */
+@Composable
+fun LazySectionedColumn(sections: List<SectionData>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        sections.forEach { section ->
+            // セクションヘッダーを描画
+            item {
+                SectionHeader(title = section.title)
+            }
+            // セクション内のアイテムを描画
+            items(section.items) { item ->
+                SectionItem(item = item)
+                Divider(thickness = 1.dp)
+            }
+            // セクション間の区切り
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+    }
+}
+
+/**
+ * セクション付きのColumnを作成
  *
  * @param sections セクション
  */
