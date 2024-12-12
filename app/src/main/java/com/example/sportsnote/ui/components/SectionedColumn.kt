@@ -47,6 +47,25 @@ data class ItemData(
 )
 
 /**
+ * セクションなしのLazyColumnを作成
+ *
+ * @param items リスト項目
+ */
+@Composable
+fun LazyNonSectionedColumn(items: List<ItemData>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(items) { item ->
+            TextListItem(title = item.title, onClick = item.onClick)
+            Divider(thickness = 1.dp)
+        }
+    }
+}
+
+/**
  * セクション付きのLazyColumnを作成
  *
  * @param sections セクション
@@ -151,6 +170,38 @@ fun SectionItem(item: ItemData) {
             fontSize = 16.sp
         )
     }
+}
+
+/**
+ * テキストのみのリストアイテム
+ *
+ * @param title タイトル
+ * @param onClick 押下時の処理
+ */
+@Composable
+fun TextListItem(title: String, onClick: () -> Unit = {}) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(8.dp)
+    ) {
+        Text(
+            text = title,
+            fontSize = 16.sp
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLazyNonSectionedColumn() {
+    val items = listOf(
+        ItemData("Apple", R.drawable.ic_home_black_24dp) { println("Apple clicked") },
+        ItemData("Banana", R.drawable.ic_home_black_24dp) { println("Banana clicked") },
+        ItemData("Orange", R.drawable.ic_home_black_24dp) { println("Orange clicked") }
+    )
+    LazyNonSectionedColumn(items = items)
 }
 
 @Preview(showBackground = true)
