@@ -21,7 +21,10 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,6 +42,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val BOTTOM_NAVIGATION_HEIGHT = 56.dp
+    var isModalVisible by remember { mutableStateOf(false) }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -49,7 +53,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                     coroutineScope.launch { sheetState.hide() }
                 },
                 onTournamentNoteSelected = {
-//                    noteViewModel.addTournamentNote()
+                    isModalVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
                 onCancel = {
@@ -77,6 +81,12 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Note")
             }
         }
+    }
+    // フルスクリーンモーダルの表示
+    if (isModalVisible) {
+        AddTournamentNoteScreen(
+            onDismiss = { isModalVisible = false }
+        )
     }
 }
 
