@@ -36,6 +36,9 @@ import java.util.Calendar
  */
 @Composable
 fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
+    // 入力欄間のスペース
+    val spacerHeight = 4.dp
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -93,28 +96,28 @@ fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
                 ) {
                     // 日付
                     DatePickerField()
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     // 天気
                     WeatherPickerField()
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     // 気温
                     TemperatureSlider()
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     // テキスト入力欄
                     MultiLineTextInputField("体調")
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     MultiLineTextInputField("目標")
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     MultiLineTextInputField("意識すること")
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     MultiLineTextInputField("結果")
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacerHeight))
 
                     MultiLineTextInputField("反省")
                 }
