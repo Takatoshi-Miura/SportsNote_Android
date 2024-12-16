@@ -1,33 +1,52 @@
 package com.example.sportsnote.utils
 
+import com.example.sportsnote.R
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+
 /**
  * 天気
+ *
+ * @param id ID
+ * @param titleRes タイトル文字列のリソースID
  */
-enum class Weather(val value: Int) {
-    SUNNY(0),   // 晴れ
-    CLOUDY(1),  // くもり
-    RAINY(2);   // 雨
+enum class Weather(val id: Int, val titleRes: Int) {
+    SUNNY(0, R.string.sunny),
+    CLOUDY(1, R.string.cloudy),
+    RAINY(2, R.string.rainy);
 
-    // タイトル
-    val title: String
-        get() = when (this) {
-            SUNNY -> "Sunny"  // TODO: 多言語対応
-            CLOUDY -> "Cloudy"
-            RAINY -> "Rainy"
-        }
-
-    // TODO: 画像ファイル追加
-//    val image: Int
-//        get() = when (this) {
-//            SUNNY -> R.drawable.sunny
-//            CLOUDY -> R.drawable.cloudy
-//            RAINY -> R.drawable.rainy
-//        }
+    /**
+     * タイトル文字列を取得
+     *
+     * @return 天気名
+     */
+    @Composable
+    fun getTitle(): String {
+        val context = LocalContext.current
+        return context.getString(titleRes)
+    }
 
     companion object {
-        // Int 値から Weather を取得するためのメソッド
-        fun fromInt(value: Int): Weather {
-            return entries.first { it.value == value }
+        /**
+         * IDからWeatherを取得
+         *
+         * @param id ID
+         * @return Weather
+         */
+        fun fromInt(id: Int): Weather {
+            return entries.first { it.id == id }
         }
+
+        /**
+         * 全ての天気のタイトルリストを取得
+         *
+         * @return 全ての天気のタイトルリスト
+         */
+        @Composable
+        fun getAllTitles(): List<String> {
+            return entries.map { it.getTitle() }
+        }
+
+        // TODO: イメージを取得
     }
 }

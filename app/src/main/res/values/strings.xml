@@ -13,4 +13,8 @@
     <string name="task">課題</string>
     <string name="note">ノート</string>
     <string name="target">目標</string>
+    <string name="sunny">晴れ</string>
+    <string name="cloudy">くもり</string>
+    <string name="rainy">雨</string>
+    <string name="weather">天気</string>
 </resources>

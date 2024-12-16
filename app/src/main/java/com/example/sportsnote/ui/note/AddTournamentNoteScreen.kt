@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.components.WeatherPickerField
 import java.util.Calendar
 
 /**
@@ -173,52 +174,6 @@ fun DatePickerField() {
             modifier = Modifier.weight(1f) // 右隣まで伸ばす
         ) {
             Text(text = selectedDate.value)
-        }
-    }
-}
-
-/**
- * 天気選択欄
- */
-@Composable
-fun WeatherPickerField() {
-    val weatherOptions = listOf("晴れ", "くもり", "雨")
-    var selectedWeather by remember { mutableStateOf(weatherOptions.first()) }
-    var expanded by remember { mutableStateOf(false) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = "天気",
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp)
-        )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        // 天気選択ドロップダウン
-        Button(
-            onClick = { expanded = true },
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(selectedWeather)
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            weatherOptions.forEach { option ->
-                DropdownMenuItem(onClick = {
-                    selectedWeather = option
-                    expanded = false
-                }) {
-                    Text(option)
-                }
-            }
         }
     }
 }

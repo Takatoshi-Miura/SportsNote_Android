@@ -49,7 +49,7 @@ open class Note : RealmObject {
         this.updated_at = Date()
         this.title = ""
         this.date = Date()
-        this.weather = Weather.SUNNY.value
+        this.weather = Weather.SUNNY.id
         this.temperature = 0
         this.condition = ""
         this.reflection = ""
