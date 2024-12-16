@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
@@ -45,6 +46,25 @@ data class ItemData(
     val iconRes: Int,
     val onClick: () -> Unit = {}
 )
+
+/**
+ * 入力項目間にスペースを付与するColumn
+ *
+ * @param items 入力項目リスト
+ * @param spacerHeight 付与したいスペース
+ */
+@Composable
+fun CustomSpacerColumn(
+    items: List<@Composable () -> Unit>,
+    spacerHeight: Dp
+) {
+    Column {
+        items.forEach { item ->
+            item()
+            Spacer(modifier = Modifier.height(spacerHeight))
+        }
+    }
+}
 
 /**
  * セクションなしのLazyColumnを作成
