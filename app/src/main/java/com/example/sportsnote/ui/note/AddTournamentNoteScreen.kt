@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.sportsnote.ui.components.MultiLineTextInputField
 import java.util.Calendar
 
 /**
@@ -103,19 +104,19 @@ fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
 
                     // テキスト入力欄
-                    TextInputField("体調")
+                    MultiLineTextInputField("体調")
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TextInputField("目標")
+                    MultiLineTextInputField("目標")
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TextInputField("意識すること")
+                    MultiLineTextInputField("意識すること")
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TextInputField("結果")
+                    MultiLineTextInputField("結果")
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    TextInputField("反省")
+                    MultiLineTextInputField("反省")
                 }
             }
         }
@@ -242,27 +243,4 @@ fun TemperatureSlider() {
             modifier = Modifier.weight(1f) // 右隣まで伸ばす
         )
     }
-}
-
-/**
- * テキスト入力欄
- *
- * @param title タイトル
- * @param placeholder プレースホルダー
- */
-@Composable
-fun TextInputField(title: String, placeholder: String? = null) {
-    var text by remember { mutableStateOf("") }
-    val placeholderStr = placeholder ?: "$title を入力してください"
-
-    Text(
-        text = title,
-        style = MaterialTheme.typography.body1
-    )
-    androidx.compose.material.OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = { Text(placeholderStr) },
-        modifier = Modifier.fillMaxWidth()
-    )
 }
