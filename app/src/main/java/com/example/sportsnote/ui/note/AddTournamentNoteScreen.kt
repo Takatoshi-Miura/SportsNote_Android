@@ -15,9 +15,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -70,7 +72,7 @@ fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
                             .align(Alignment.CenterStart)
                             .padding(start = 8.dp)
                     ) {
-                        Text("キャンセル")
+                        Text(stringResource(R.string.cancel))
                     }
 
                     // タイトル
@@ -90,7 +92,7 @@ fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
                             .align(Alignment.CenterEnd)
                             .padding(end = 8.dp)
                     ) {
-                        Text("保存")
+                        Text(stringResource(R.string.save))
                     }
                 }
 

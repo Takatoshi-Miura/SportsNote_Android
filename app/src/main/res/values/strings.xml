@@ -17,4 +17,6 @@
     <string name="cloudy">くもり</string>
     <string name="rainy">雨</string>
     <string name="weather">天気</string>
+    <string name="cancel">キャンセル</string>
+    <string name="save">保存</string>
 </resources>
