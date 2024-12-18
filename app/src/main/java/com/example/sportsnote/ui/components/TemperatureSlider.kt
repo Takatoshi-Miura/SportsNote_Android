@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
  * 気温入力欄
  */
 @Composable
-fun TemperatureSlider() {
+fun TemperatureSlider(onTemperatureSelected: (Int) -> Unit) {
     var temperature by remember { mutableStateOf(0f) }
     Row(
         modifier = Modifier
@@ -38,7 +38,10 @@ fun TemperatureSlider() {
         // 気温スライダー
         Slider(
             value = temperature,
-            onValueChange = { temperature = it },
+            onValueChange = {
+                temperature = it
+                onTemperatureSelected(temperature.toInt())
+            },
             valueRange = -40f..40f,
             modifier = Modifier.weight(1f) // 右隣まで伸ばす
         )

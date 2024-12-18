@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import java.util.Calendar
+import java.util.Date
 
 /**
  * 日付入力欄
  */
 @Composable
-fun DatePickerField() {
+fun DatePickerField(onDateSelected: (Date) -> Unit) {
     // カレンダーのインスタンスを作成
     val calendar = Calendar.getInstance()
 
@@ -54,6 +55,11 @@ fun DatePickerField() {
                     { _, year, month, dayOfMonth ->
                         // 日付が選択されたらフォーマットして表示
                         selectedDate.value = "$year/${month + 1}/$dayOfMonth"
+
+                        // 選択した日付をDate型で渡す
+                        calendar.set(year, month, dayOfMonth)
+                        val date = calendar.time
+                        onDateSelected(date)
                     },
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),

@@ -13,6 +13,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,25 +28,43 @@ import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.TemperatureSlider
 import com.example.sportsnote.ui.components.WeatherPickerField
+import com.example.sportsnote.utils.Weather
+import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * 大会ノート追加画面
  */
 @Composable
-fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
+fun AddTournamentNoteScreen(
+    onDismiss: () -> Unit,
+    viewModel: NoteViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
     // 入力欄間のスペース
     val spacerHeight = 4.dp
 
+    val coroutineScope = rememberCoroutineScope()
+
+    // 入力データの状態管理
+    var date = remember { mutableStateOf(Date()) }
+    var weather = remember { mutableStateOf(Weather.SUNNY.id) }
+    var temperature = remember { mutableStateOf(20) }
+    var condition = remember { mutableStateOf("") }
+    var target = remember { mutableStateOf("") }
+    var consciousness = remember { mutableStateOf("") }
+    var result = remember { mutableStateOf("") }
+    var reflection = remember { mutableStateOf("") }
+
     // 入力項目
     val inputFields: List<@Composable () -> Unit> = listOf(
-        { DatePickerField() },
-        { WeatherPickerField() },
-        { TemperatureSlider() },
-        { MultiLineTextInputField("体調") },
-        { MultiLineTextInputField("目標") },
-        { MultiLineTextInputField("意識すること") },
-        { MultiLineTextInputField("結果") },
-        { MultiLineTextInputField("反省") }
+        { DatePickerField {selectedDate -> date.value = selectedDate} },
+        { WeatherPickerField { selectedWeather -> weather.value = selectedWeather } },
+        { TemperatureSlider { selectedTemperature -> temperature.value = selectedTemperature } },
+        { MultiLineTextInputField("体調") { input -> condition.value = input } },
+        { MultiLineTextInputField("目標") { input -> target.value = input } },
+        { MultiLineTextInputField("意識すること") { input -> consciousness.value = input } },
+        { MultiLineTextInputField("結果") { input -> result.value = input } },
+        { MultiLineTextInputField("反省") { input -> reflection.value = input } }
     )
 
     Dialog(
@@ -85,8 +106,21 @@ fun AddTournamentNoteScreen(onDismiss: () -> Unit) {
                     // 保存ボタン
                     Button(
                         onClick = {
-                            // TODO: 保存処理を呼び出し
-                            onDismiss()
+                            coroutineScope.launch {
+                                // 保存処理
+                                viewModel.saveTournamentNote(
+                                    date.value,
+                                    weather.value,
+                                    temperature.value,
+                                    condition.value,
+                                    target.value,
+                                    consciousness.value,
+                                    result.value,
+                                    reflection.value
+                                )
+                                // 大会ノート追加画面を閉じる
+                                onDismiss()
+                            }
                         },
                         modifier = Modifier
                             .align(Alignment.CenterEnd)

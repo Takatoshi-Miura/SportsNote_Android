@@ -23,9 +23,15 @@ import androidx.compose.ui.unit.times
  * @param title タイトル
  * @param placeholder プレースホルダー
  * @param defaultLines デフォルトの行数
+ * @param onTextChanged テキスト変更時の処理
  */
 @Composable
-fun MultiLineTextInputField(title: String, placeholder: String = "$title を入力してください", defaultLines: Int = 1) {
+fun MultiLineTextInputField(
+    title: String,
+    placeholder: String = "$title を入力してください",
+    defaultLines: Int = 1,
+    onTextChanged: (String) -> Unit
+) {
     var text by remember { mutableStateOf("") }
     val textHeight = remember { mutableStateOf(0) } // テキストの高さを動的に管理
     val lineHeight = 56.dp
@@ -41,6 +47,7 @@ fun MultiLineTextInputField(title: String, placeholder: String = "$title を入�
             value = text,
             onValueChange = {
                 text = it
+                onTextChanged(text)
                 // 入力されたテキストの行数を取得
                 textHeight.value = it.split("\n").size
             },
