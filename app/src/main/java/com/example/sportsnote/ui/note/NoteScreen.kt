@@ -1,20 +1,13 @@
 package com.example.sportsnote.ui.note
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
@@ -29,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.LazyNonSectionedColumn
 import kotlinx.coroutines.launch
 
@@ -47,19 +41,20 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            BottomSheetContent(
-                onPracticeNoteSelected = {
-//                    noteViewModel.addPracticeNote()
+            val actionItems = listOf(
+                "練習ノートを追加" to {
+                    // noteViewModel.addPracticeNote()
                     coroutineScope.launch { sheetState.hide() }
                 },
-                onTournamentNoteSelected = {
+                "大会ノートを追加" to {
                     isModalVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
-                onCancel = {
+                "キャンセル" to {
                     coroutineScope.launch { sheetState.hide() }
                 }
             )
+            ActionBottomSheetContent(items = actionItems)
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -89,38 +84,3 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         )
     }
 }
-
-@Composable
-fun BottomSheetContent(
-    onPracticeNoteSelected: () -> Unit,
-    onTournamentNoteSelected: () -> Unit,
-    onCancel: () -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Text(
-            text = "練習ノートを追加",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onPracticeNoteSelected() }
-                .padding(vertical = 16.dp)
-        )
-        Divider()
-        Text(
-            text = "大会ノートを追加",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onTournamentNoteSelected() }
-                .padding(vertical = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Divider()
-        Text(
-            text = "キャンセル",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onCancel() }
-                .padding(vertical = 16.dp),
-        )
-    }
-}
-
