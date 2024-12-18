@@ -37,6 +37,18 @@ class RealmManager {
     }
 
     /**
+     * Noteリストを取得
+     *
+     * @return List<Note>
+     */
+    fun selectNoteList(): List<Note> {
+        val notes = realm.where(Note::class.java)
+            .equalTo("isDeleted", false)
+            .findAll()
+        return realm.copyFromRealm(notes)
+    }
+
+    /**
      * Noteを保存する処理
      */
     suspend fun saveNote(note: Note) {

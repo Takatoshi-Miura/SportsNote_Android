@@ -49,12 +49,7 @@ class NoteViewModel : ViewModel() {
      * @return List<Note>
      */
     private fun getNoteList(): List<Note> {
-        // TODO: Realmから取得するように修正
-        return listOf(
-            Note(title = "フリーノート"),
-            Note(purpose = "練習の目的", detail = "練習内容"),
-            Note(target = "目標", consciousness = "考慮すること", result = "結果")
-        )
+        return realmManager.selectNoteList()
     }
 
     /**
