@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.LazyNonSectionedColumn
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 /**
@@ -37,6 +39,14 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val BOTTOM_NAVIGATION_HEIGHT = 56.dp
     var isModalVisible by remember { mutableStateOf(false) }
+
+    // プルリフレッシュ状態を管理
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+
+    // ノート一覧のリフレッシュ処理
+    val onRefresh = {
+        noteViewModel.loadNotes()
+    }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -58,8 +68,14 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // ノート一覧
-            LazyNonSectionedColumn(items = items)
+            // SwipeRefreshでリフレッシュ可能にする
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = onRefresh
+            ) {
+                // ノート一覧
+                LazyNonSectionedColumn(items = items)
+            }
 
             // +ボタン
             FloatingActionButton(

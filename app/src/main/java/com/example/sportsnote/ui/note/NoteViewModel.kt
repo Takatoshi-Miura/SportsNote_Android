@@ -24,9 +24,9 @@ class NoteViewModel : ViewModel() {
     }
 
     /**
-     * ノート一覧のダミーデータを取得
+     * ノート一覧データを取得
      */
-    private fun loadNotes() {
+    fun loadNotes() {
         viewModelScope.launch {
             _items.value = getNoteList().map { note ->
                 val displayText = when (NoteType.fromInt(note.noteType)) {
