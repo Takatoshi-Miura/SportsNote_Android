@@ -1,12 +1,40 @@
 package com.example.sportsnote.model
 
+import android.content.Context
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
+
+object RealmConstants {
+    const val DATABASE_NAME = "sportsnote.realm"
+    const val SCHEMA_VERSION = 1L
+}
 
 class RealmManager {
 
     private val realm: Realm = Realm.getDefaultInstance()
+
+    companion object {
+
+        /**
+         * Realmを初期化
+         *
+         * @param context Context
+         */
+        fun initRealm(context: Context) {
+            // Realmの初期化
+            Realm.init(context)
+
+            // Realm設定
+            val config = RealmConfiguration.Builder()
+                .name(RealmConstants.DATABASE_NAME)
+                .schemaVersion(RealmConstants.SCHEMA_VERSION)
+                .deleteRealmIfMigrationNeeded() // マイグレーションが必要な場合、データ削除
+                .build()
+            Realm.setDefaultConfiguration(config)
+        }
+    }
 
     /**
      * Noteを保存する処理
