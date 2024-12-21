@@ -9,6 +9,7 @@ import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
@@ -18,6 +19,16 @@ class NoteViewModel : ViewModel() {
     private val _items = MutableStateFlow<List<ItemData>>(emptyList())
     val items: StateFlow<List<ItemData>> = _items
     private val realmManager: RealmManager = RealmManager()
+    private val _navigateToAddNote = MutableStateFlow(false)
+    val navigateToAddNote = _navigateToAddNote.asStateFlow()
+
+    fun onAddNoteClicked() {
+        _navigateToAddNote.value = true
+    }
+
+    fun onNavigationHandled() {
+        _navigateToAddNote.value = false
+    }
 
     init {
         loadNotes()
@@ -37,7 +48,9 @@ class NoteViewModel : ViewModel() {
                 ItemData(
                     title = displayText,
                     iconRes = R.drawable.ic_home_black_24dp,
-                    onClick = { println("$displayText clicked") }
+                    onClick = {
+                        onAddNoteClicked()
+                    }
                 )
             }
         }

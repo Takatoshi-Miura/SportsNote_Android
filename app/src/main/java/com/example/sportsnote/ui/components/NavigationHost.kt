@@ -16,7 +16,12 @@ fun NavigationHost(paddingValues: PaddingValues) {
     NavHost(navController, startDestination = "task") {
         composable("task") { TaskScreen() }
         composable("note") { NoteScreen() }
-        composable("add_tournament_note") { AddTournamentNoteScreen({}) }
+        composable("add_tournament_note") {
+            AddTournamentNoteScreen(
+                onDismiss = { navController.popBackStack() },
+                isNavigation = true
+            )
+        }
         composable("target") { TargetScreen() }
     }
 }

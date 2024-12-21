@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.LazyNonSectionedColumn
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -38,7 +40,17 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val BOTTOM_NAVIGATION_HEIGHT = 56.dp
-    var isModalVisible by remember { mutableStateOf(false) }
+    var isDialogVisible by remember { mutableStateOf(false) } // ダイアログの表示フラグ
+    val navController = LocalNavController.current
+    val navigateToAddNote by noteViewModel.navigateToAddNote.collectAsState()
+
+    // ナビゲーション遷移が要求された場合
+    if (navigateToAddNote) {
+        LaunchedEffect(Unit) {
+            navController.navigate("add_tournament_note")
+            noteViewModel.onNavigationHandled()
+        }
+    }
 
     // プルリフレッシュ状態を管理
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
@@ -53,11 +65,11 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         sheetContent = {
             val actionItems = listOf(
                 "練習ノートを追加" to {
-                    // noteViewModel.addPracticeNote()
+                    // 練習ノート追加処理（仮）
                     coroutineScope.launch { sheetState.hide() }
                 },
                 "大会ノートを追加" to {
-                    isModalVisible = true
+                    isDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
                 "キャンセル" to {
@@ -93,10 +105,12 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
             }
         }
     }
-    // フルスクリーンモーダルの表示
-    if (isModalVisible) {
+
+    // ダイアログでフルスクリーンモーダルを表示
+    if (isDialogVisible) {
         AddTournamentNoteScreen(
-            onDismiss = { isModalVisible = false }
+            isNavigation = false,
+            onDismiss = { isDialogVisible = false }
         )
     }
 }

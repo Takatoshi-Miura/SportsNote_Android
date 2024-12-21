@@ -37,8 +37,37 @@ import java.util.Date
  */
 @Composable
 fun AddTournamentNoteScreen(
+    viewModel: NoteViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    isNavigation: Boolean = false,
     onDismiss: () -> Unit,
-    viewModel: NoteViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+    if (isNavigation) {
+        TournamentNoteContent(
+            viewModel = viewModel,
+            isNavigation = isNavigation,
+            onDismiss = { onDismiss() }
+        )
+    } else {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            TournamentNoteContent(
+                viewModel = viewModel,
+                isNavigation = isNavigation,
+                onDismiss = { onDismiss() }
+            )
+        }
+    }
+}
+
+@Composable
+fun TournamentNoteContent(
+    viewModel: NoteViewModel,
+    isNavigation: Boolean,
+    onDismiss: () -> Unit
 ) {
     // 入力欄間のスペース
     val spacerHeight = 4.dp
@@ -67,45 +96,43 @@ fun AddTournamentNoteScreen(
         { MultiLineTextInputField("反省") { input -> reflection.value = input } }
     )
 
-    Dialog(
-        onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false // デフォルトの幅制限を無効化
-        )
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                // ヘッダー
-                Box(
+        Column(modifier = Modifier.fillMaxSize()) {
+            // ヘッダー
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .background(MaterialTheme.colors.primary)
+            ) {
+                // 戻る
+                Button(
+                    onClick = onDismiss,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .background(MaterialTheme.colors.primary)
+                        .align(Alignment.CenterStart)
+                        .padding(start = 8.dp)
                 ) {
-                    // キャンセルボタン
-                    Button(
-                        onClick = { onDismiss() },
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(stringResource(R.string.cancel))
-                    }
+                    val buttonName = if (isNavigation) "戻る" else stringResource(R.string.cancel)
+                    Text(buttonName)
+                }
 
-                    // タイトル
-                    Text(
-                        text = "大会ノートの追加",
-                        color = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
+                // タイトル
+                Text(
+                    text = "大会ノートの追加",
+                    color = MaterialTheme.colors.onPrimary,
+                    modifier = Modifier.align(Alignment.Center)
+                )
 
-                    // 保存ボタン
-                    Button(
-                        onClick = {
+                // 保存or削除
+                Button(
+                    onClick = {
+                        if (isNavigation) {
+                            // TODO: 削除処理
+                        } else {
                             coroutineScope.launch {
                                 // 保存処理
                                 viewModel.saveTournamentNote(
@@ -118,29 +145,30 @@ fun AddTournamentNoteScreen(
                                     result.value,
                                     reflection.value
                                 )
-                                // 大会ノート追加画面を閉じる
-                                onDismiss()
                             }
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 8.dp)
-                    ) {
-                        Text(stringResource(R.string.save))
-                    }
-                }
-
-                Column(
+                        }
+                        onDismiss()
+                    },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .verticalScroll(rememberScrollState())
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 8.dp)
                 ) {
-                    CustomSpacerColumn(
-                        items = inputFields,
-                        spacerHeight = spacerHeight
-                    )
+                    val buttonName = if (isNavigation) "削除" else stringResource(R.string.save)
+                    Text(buttonName)
                 }
+            }
+
+            // ノート内容
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                CustomSpacerColumn(
+                    items = inputFields,
+                    spacerHeight = spacerHeight
+                )
             }
         }
     }
