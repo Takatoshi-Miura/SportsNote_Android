@@ -43,6 +43,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     var isDialogVisible by remember { mutableStateOf(false) } // ダイアログの表示フラグ
     val navController = LocalNavController.current
     val navigateToAddNote by noteViewModel.navigateToAddNote.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     // ナビゲーション遷移が要求された場合
     if (navigateToAddNote) {
@@ -51,9 +52,6 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
             noteViewModel.onNavigationHandled()
         }
     }
-
-    // プルリフレッシュ状態を管理
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     // ノート一覧のリフレッシュ処理
     val onRefresh = {
@@ -80,7 +78,6 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            // SwipeRefreshでリフレッシュ可能にする
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = onRefresh
