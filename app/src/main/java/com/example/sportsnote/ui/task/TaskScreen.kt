@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.LazySectionedColumn
+import com.example.sportsnote.ui.group.AddGroupScreen
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -54,7 +55,7 @@ fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
         sheetContent = {
             val actionItems = listOf(
                 "グループを追加" to {
-                    // TODO: グループ追加
+                    isDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
                 "課題を追加" to {
@@ -92,6 +93,13 @@ fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
                 Icon(Icons.Filled.Add, contentDescription = "Add Task")
             }
         }
+    }
+
+    // ダイアログでフルスクリーンモーダルを表示
+    if (isDialogVisible) {
+        AddGroupScreen(
+            onDismiss = { isDialogVisible = false }
+        )
     }
 }
 

@@ -69,9 +69,6 @@ fun TournamentNoteContent(
     isNavigation: Boolean,
     onDismiss: () -> Unit
 ) {
-    // 入力欄間のスペース
-    val spacerHeight = 4.dp
-
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
@@ -166,8 +163,7 @@ fun TournamentNoteContent(
                     .verticalScroll(rememberScrollState())
             ) {
                 CustomSpacerColumn(
-                    items = inputFields,
-                    spacerHeight = spacerHeight
+                    items = inputFields
                 )
             }
         }

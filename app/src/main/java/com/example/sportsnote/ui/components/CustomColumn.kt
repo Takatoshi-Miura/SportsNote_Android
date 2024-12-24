@@ -56,7 +56,7 @@ data class ItemData(
 @Composable
 fun CustomSpacerColumn(
     items: List<@Composable () -> Unit>,
-    spacerHeight: Dp
+    spacerHeight: Dp = 4.dp
 ) {
     Column {
         items.forEach { item ->

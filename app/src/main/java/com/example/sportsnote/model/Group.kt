@@ -36,7 +36,7 @@ open class Group : RealmObject {
     // コンストラクタ
     constructor(title: String, color: Color, order: Int) : this() {
         this.title = title
-        this.color = color.rawValue
+        this.color = color.id
         this.order = order
         this.groupID = UUID.randomUUID().toString()
         this.userID = ""  // TODO: SharedPreferenceからユーザーIDを取得
