@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun AddGroupScreen(
+    viewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     onDismiss: () -> Unit
 ) {
     Dialog(
@@ -45,6 +46,7 @@ fun AddGroupScreen(
         )
     ) {
         AddGroupContent(
+            viewModel = viewModel,
             onDismiss = { onDismiss() }
         )
     }
@@ -52,6 +54,7 @@ fun AddGroupScreen(
 
 @Composable
 fun AddGroupContent(
+    viewModel: GroupViewModel,
     onDismiss: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -99,7 +102,10 @@ fun AddGroupContent(
                     onClick = {
                         coroutineScope.launch {
                             // 保存処理
-
+                            viewModel.saveGroup(
+                                title = title.value,
+                                colorId = color.value
+                            )
                         }
                         onDismiss()
                     },

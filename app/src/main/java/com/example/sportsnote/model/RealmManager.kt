@@ -3,6 +3,7 @@ package com.example.sportsnote.model
 import android.content.Context
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmObject
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
 
@@ -37,6 +38,31 @@ class RealmManager {
     }
 
     /**
+     * 汎用的なデータ保存メソッド
+     *
+     * @param T RealmObjectを継承したデータ型
+     * @param item 保存するデータ
+     */
+    suspend fun <T : RealmObject> saveItem(item: T) {
+        realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
+            realmTransaction.insert(item)
+        }
+    }
+
+    /**
+     * 任意のRealmObjectでisDeletedがfalseのデータ数を取得
+     *
+     * @param clazz RealmObjectのクラス型
+     * @return Int データ数
+     */
+    fun <T : RealmObject> getCount(clazz: Class<T>): Int {
+        return realm.where(clazz)
+            .equalTo("isDeleted", false)
+            .count()
+            .toInt()
+    }
+
+    /**
      * Noteリストを取得
      *
      * @return List<Note>
@@ -46,15 +72,6 @@ class RealmManager {
             .equalTo("isDeleted", false)
             .findAll()
         return realm.copyFromRealm(notes)
-    }
-
-    /**
-     * Noteを保存する処理
-     */
-    suspend fun saveNote(note: Note) {
-        realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            realmTransaction.insert(note)
-        }
     }
 
     /**

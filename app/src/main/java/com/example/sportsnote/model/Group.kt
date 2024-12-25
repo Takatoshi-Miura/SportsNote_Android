@@ -34,9 +34,9 @@ open class Group : RealmObject {
     }
 
     // コンストラクタ
-    constructor(title: String, color: Color, order: Int) : this() {
+    constructor(title: String, colorId: Int, order: Int) : this() {
         this.title = title
-        this.color = color.id
+        this.color = colorId
         this.order = order
         this.groupID = UUID.randomUUID().toString()
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())

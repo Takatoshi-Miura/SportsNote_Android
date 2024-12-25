@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.utils.NoteType
@@ -89,7 +90,7 @@ class NoteViewModel : ViewModel() {
     ) {
         val note = Note().apply {
             this.noteID = UUID.randomUUID().toString()
-            this.userID = "defaultUserID" // TODO: SharedPreferenceなどから取得する想定
+            this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
             this.noteType = NoteType.TOURNAMENT.value
             this.isDeleted = false
             this.created_at = Date()
@@ -103,7 +104,7 @@ class NoteViewModel : ViewModel() {
             this.result = result
             this.reflection = reflection
         }
-        realmManager.saveNote(note)
+        realmManager.saveItem(note)
     }
 
 }
