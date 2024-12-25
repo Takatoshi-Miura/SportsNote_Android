@@ -24,7 +24,7 @@ open class Memo : RealmObject {
     // デフォルトコンストラクタ
     constructor() {
         this.memoID = UUID.randomUUID().toString()
-        this.userID = "" // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.measuresID = ""
         this.noteID = ""
         this.detail = ""

@@ -24,7 +24,7 @@ open class Group : RealmObject {
     // デフォルトのコンストラクタ
     constructor() {
         this.groupID = UUID.randomUUID().toString()
-        this.userID = ""  // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.title = ""
         this.color = 0
         this.order = 0
@@ -39,7 +39,7 @@ open class Group : RealmObject {
         this.color = color.id
         this.order = order
         this.groupID = UUID.randomUUID().toString()
-        this.userID = ""  // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.isDeleted = false
         this.created_at = Date()
         this.updated_at = Date()

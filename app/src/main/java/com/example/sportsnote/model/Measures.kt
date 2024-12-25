@@ -23,7 +23,7 @@ open class Measures : RealmObject {
     // デフォルトコンストラクタ
     constructor() {
         this.measuresID = UUID.randomUUID().toString()
-        this.userID = "" // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.taskID = ""
         this.title = ""
         this.order = 0

@@ -24,7 +24,7 @@ open class Target : RealmObject {
     // デフォルトコンストラクタ
     constructor() {
         this.targetID = UUID.randomUUID().toString()
-        this.userID = "" // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.title = ""
         this.year = 2020
         this.month = 1

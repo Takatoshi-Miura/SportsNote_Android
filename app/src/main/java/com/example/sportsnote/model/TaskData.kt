@@ -25,7 +25,7 @@ open class TaskData : RealmObject {
     // デフォルトコンストラクタ
     constructor() {
         this.taskID = UUID.randomUUID().toString()
-        this.userID = "" // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.groupID = ""
         this.title = ""
         this.cause = ""

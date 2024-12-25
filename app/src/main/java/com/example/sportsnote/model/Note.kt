@@ -42,7 +42,7 @@ open class Note : RealmObject {
     // デフォルトコンストラクタ
     constructor() {
         this.noteID = UUID.randomUUID().toString()
-        this.userID = "" // TODO: SharedPreferenceからユーザーIDを取得
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.noteType = NoteType.FREE.value
         this.isDeleted = false
         this.created_at = Date()
