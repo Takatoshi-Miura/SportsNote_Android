@@ -4,6 +4,7 @@ import android.content.Context
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
+import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
 
@@ -50,6 +51,25 @@ class RealmManager {
     }
 
     /**
+     * 汎用的なデータ取得メソッド
+     *
+     * @param clazz 取得するデータ型のクラス
+     * @return 条件に一致するデータのリスト
+     */
+    fun <T : RealmObject> getDataList(clazz: Class<T>): List<T> {
+        return realm.where(clazz)
+            .equalTo("isDeleted", false)
+            .apply {
+                // `order` フィールドが存在する場合、昇順で並び替え
+                if (realm.schema[clazz.simpleName]?.hasField("order") == true) {
+                    sort("order", Sort.ASCENDING)
+                }
+            }
+            .findAll()
+            .let { realm.copyFromRealm(it) }
+    }
+
+    /**
      * 任意のRealmObjectでisDeletedがfalseのデータ数を取得
      *
      * @param clazz RealmObjectのクラス型
@@ -60,18 +80,6 @@ class RealmManager {
             .equalTo("isDeleted", false)
             .count()
             .toInt()
-    }
-
-    /**
-     * Noteリストを取得
-     *
-     * @return List<Note>
-     */
-    fun selectNoteList(): List<Note> {
-        val notes = realm.where(Note::class.java)
-            .equalTo("isDeleted", false)
-            .findAll()
-        return realm.copyFromRealm(notes)
     }
 
     /**

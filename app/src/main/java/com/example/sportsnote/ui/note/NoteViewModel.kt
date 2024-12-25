@@ -63,7 +63,7 @@ class NoteViewModel : ViewModel() {
      * @return List<Note>
      */
     private fun getNoteList(): List<Note> {
-        return realmManager.selectNoteList()
+        return realmManager.getDataList(Note::class.java)
     }
 
     /**
