@@ -29,4 +29,7 @@
     <string name="purple">パープル</string>
     <string name="gray">グレー</string>
     <string name="color">カラー</string>
+    <string name="課題">Task</string>
+    <string name="groupView">グループの詳細</string>
+    <string name="noteDetail">ノートの詳細</string>
 </resources>

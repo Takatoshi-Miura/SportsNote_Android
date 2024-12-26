@@ -28,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
-import com.example.sportsnote.ui.components.LazySectionedColumn
 import com.example.sportsnote.ui.group.AddGroupScreen
 import com.example.sportsnote.ui.group.GroupHeaderView
 import com.example.sportsnote.ui.group.GroupViewModel

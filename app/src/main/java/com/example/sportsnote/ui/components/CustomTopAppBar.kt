@@ -1,21 +1,27 @@
 package com.example.sportsnote.ui.components
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 
+/**
+ * TopBarのUI
+ *
+ * @param title タイトル
+ * @param navigationIcon 左側のボタン
+ * @param rightIcon 右側のボタン
+ */
 @Composable
-fun CustomTopAppBar(title: String, onNavigationIconClick: () -> Unit) {
+fun CustomTopAppBar(
+    title: String,
+    navigationIcon: @Composable (() -> Unit)? = null,
+    rightIcon: @Composable (() -> Unit)? = null
+) {
     TopAppBar(
         title = { Text(title) },
-        navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
-                Icon(Icons.Filled.Menu, contentDescription = "Menu")
-            }
+        navigationIcon = navigationIcon,
+        actions = {
+            rightIcon?.invoke()
         }
     )
 }

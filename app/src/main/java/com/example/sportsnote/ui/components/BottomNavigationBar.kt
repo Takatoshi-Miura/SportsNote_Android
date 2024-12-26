@@ -13,11 +13,8 @@ import com.example.sportsnote.R
 import com.example.sportsnote.ui.LocalNavController
 
 @Composable
-fun BottomNavigationBar(onTitleChange: (String) -> Unit) {
+fun BottomNavigationBar() {
     val navController = LocalNavController.current
-    val taskTitle = stringResource(R.string.task)
-    val noteTitle = stringResource(R.string.note)
-    val targetTitle = stringResource(R.string.target)
 
     BottomNavigation {
         // 課題タブ
@@ -27,7 +24,6 @@ fun BottomNavigationBar(onTitleChange: (String) -> Unit) {
             selected = true,
             onClick = {
                 navController.navigate("task")
-                onTitleChange(taskTitle)
             }
         )
         // ノートタブ
@@ -37,7 +33,6 @@ fun BottomNavigationBar(onTitleChange: (String) -> Unit) {
             selected = false,
             onClick = {
                 navController.navigate("note")
-                onTitleChange(noteTitle)
             }
         )
         // 目標タブ
@@ -47,7 +42,6 @@ fun BottomNavigationBar(onTitleChange: (String) -> Unit) {
             selected = false,
             onClick = {
                 navController.navigate("target")
-                onTitleChange(targetTitle)
             }
         )
     }
