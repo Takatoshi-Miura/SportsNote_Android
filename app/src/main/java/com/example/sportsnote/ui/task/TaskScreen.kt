@@ -88,7 +88,8 @@ fun TaskScreen(
                 GroupListScreen(
                     groups = groups,
                     onInfoButtonClick = { group ->
-                        // TODO: Info button clicked, handle logic for group
+                        // GroupViewScreenに遷移する
+                        navController.navigate("group_view_screen/${group.groupID}")
                     }
                 )
             }
