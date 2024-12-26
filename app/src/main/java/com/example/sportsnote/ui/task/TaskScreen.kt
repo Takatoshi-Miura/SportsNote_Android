@@ -1,7 +1,9 @@
 package com.example.sportsnote.ui.task
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -23,10 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.LazySectionedColumn
 import com.example.sportsnote.ui.group.AddGroupScreen
+import com.example.sportsnote.ui.group.GroupHeaderView
+import com.example.sportsnote.ui.group.GroupViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -36,7 +41,11 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
+fun TaskScreen(
+    taskViewModel: TaskViewModel = viewModel(),
+    groupViewModel: GroupViewModel = viewModel()
+) {
+    val groups by groupViewModel.groups.collectAsState()
     val sections by taskViewModel.sections.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -47,6 +56,7 @@ fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
+        groupViewModel.loadData()
 //        taskViewModel.loadNotes()
     }
 
@@ -75,7 +85,12 @@ fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
                 onRefresh = onRefresh
             ) {
                 // 課題一覧
-                LazySectionedColumn(sections = sections)
+                GroupListScreen(
+                    groups = groups,
+                    onInfoButtonClick = { group ->
+                        // TODO: Info button clicked, handle logic for group
+                    }
+                )
             }
 
             // +ボタン
@@ -100,6 +115,21 @@ fun TaskScreen(taskViewModel: TaskViewModel = viewModel()) {
         AddGroupScreen(
             onDismiss = { isDialogVisible = false }
         )
+    }
+}
+
+@Composable
+fun GroupListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        groups.forEach { group ->
+            GroupHeaderView(
+                title = group.title,
+                colorId = group.color,
+                onInfoButtonClick = { onInfoButtonClick(group) }
+            )
+        }
     }
 }
 
