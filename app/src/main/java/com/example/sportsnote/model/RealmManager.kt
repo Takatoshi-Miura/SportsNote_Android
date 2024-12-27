@@ -61,7 +61,7 @@ class RealmManager {
     /**
      * 指定したクラスに対応するプライマリキーのプロパティ名を取得
      *
-     * @param T RealmObjectのサブクラス
+     * @param T RealmObjectを継承したデータ型
      * @return Tに対応するプライマリキーのプロパティ名
      * @throws IllegalArgumentException 対応していないクラスの場合にスローされる
      */
@@ -78,11 +78,11 @@ class RealmManager {
     }
 
     /**
-     * 指定したIDに基づいて、Realmデータベースからオブジェクトを取得
+     * 汎用的なデータ取得メソッド（ID指定）
      *
-     * @param T RealmObjectのサブクラスで、取得したいオブジェクトの型を指定
-     * @param id 検索するID（文字列）を指定します。各RealmObjectは固有のID（例えば、`groupId`や`noteId`）
-     * @return 指定されたIDに一致するオブジェクトが見つかった場合、そのオブジェクトを返します。存在しない場合やエラーが発生した場合は`null`を返します。
+     * @param T RealmObjectを継承したデータ型
+     * @param id 検索するID（文字列）
+     * @return 取得データ（存在しない場合やエラーが発生した場合は`null`）
      */
     internal inline fun <reified T : RealmObject> getObjectById(id: String): T? {
         return try {
@@ -122,6 +122,24 @@ class RealmManager {
             .equalTo("isDeleted", false)
             .count()
             .toInt()
+    }
+
+    /**
+     * 汎用的な論理削除処理
+     *
+     * @param T RealmObjectを継承したデータ型
+     * @param id 削除するデータのID
+     */
+    internal suspend inline fun <reified T : RealmObject> logicalDelete(id: String) {
+        realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
+            val item = realmTransaction.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
+            item?.let {
+                if (it is Group) {
+                    it.isDeleted = true
+                    realmTransaction.insertOrUpdate(it)
+                }
+            }
+        }
     }
 
     /**

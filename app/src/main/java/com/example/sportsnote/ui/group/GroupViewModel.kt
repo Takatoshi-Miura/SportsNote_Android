@@ -59,4 +59,13 @@ class GroupViewModel : ViewModel() {
         realmManager.saveItem(group)
     }
 
+    /**
+     * Groupを論理削除
+     *
+     * @param groupId groupId
+     */
+    suspend fun deleteGroup(groupId: String) {
+        realmManager.logicalDelete<Group>(groupId)
+    }
+
 }

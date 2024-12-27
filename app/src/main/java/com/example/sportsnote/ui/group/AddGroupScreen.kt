@@ -140,7 +140,10 @@ fun AddGroupContent(
                 },
                 {
                     IconButton(onClick = {
-                        // TODO: 削除処理
+                        // 削除処理
+                        coroutineScope.launch {
+                            viewModel.deleteGroup(groupId!!)
+                        }
                         onDismiss()
                     }) {
                         Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
