@@ -1,10 +1,12 @@
 package com.example.sportsnote.ui.task
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -119,10 +121,12 @@ fun TaskScreen(
 
 @Composable
 fun GroupListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
     ) {
-        groups.forEach { group ->
+        items(groups) { group ->
             GroupHeaderView(
                 title = group.title,
                 colorId = group.color,
