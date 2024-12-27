@@ -34,11 +34,16 @@ open class Group : RealmObject {
     }
 
     // コンストラクタ
-    constructor(title: String, colorId: Int, order: Int) : this() {
+    constructor(
+        groupId: String = UUID.randomUUID().toString(),
+        title: String,
+        colorId: Int,
+        order: Int
+    ) : this() {
         this.title = title
         this.color = colorId
         this.order = order
-        this.groupID = UUID.randomUUID().toString()
+        this.groupID = groupId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.isDeleted = false
         this.created_at = Date()

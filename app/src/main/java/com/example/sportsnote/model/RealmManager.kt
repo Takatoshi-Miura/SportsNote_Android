@@ -54,7 +54,7 @@ class RealmManager {
      */
     suspend fun <T : RealmObject> saveItem(item: T) {
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            realmTransaction.insert(item)
+            realmTransaction.insertOrUpdate(item)
         }
     }
 

@@ -124,7 +124,15 @@ fun AddGroupContent(
             updateAppBar(
                 {
                     IconButton(onClick = {
-                        // TODO: 更新処理
+                        // 更新処理
+                        coroutineScope.launch {
+                            viewModel.saveGroup(
+                                groupId = group?.groupID!!,
+                                title = title.value,
+                                colorId = color.value,
+                                order = group.order
+                            )
+                        }
                         onDismiss()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -179,7 +187,8 @@ fun AddGroupContent(
                                 // 保存処理
                                 viewModel.saveGroup(
                                     title = title.value,
-                                    colorId = color.value
+                                    colorId = color.value,
+                                    order = null
                                 )
                             }
                             onDismiss()

@@ -7,6 +7,7 @@ import com.example.sportsnote.model.RealmManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class GroupViewModel : ViewModel() {
 
@@ -44,14 +45,16 @@ class GroupViewModel : ViewModel() {
      * @param colorId カラーID
      */
     suspend fun saveGroup(
+        groupId: String = UUID.randomUUID().toString(),
         title: String,
-        colorId: Int
+        colorId: Int,
+        order: Int?
     ) {
-        val count = realmManager.getCount(Group::class.java)
         val group = Group(
+            groupId = groupId,
             title = title,
             colorId = colorId,
-            order = count
+            order = order ?: realmManager.getCount(Group::class.java)
         )
         realmManager.saveItem(group)
     }
