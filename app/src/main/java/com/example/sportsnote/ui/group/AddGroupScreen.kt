@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.ColorPickerField
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -84,10 +86,36 @@ fun AddGroupContent(
     val title = remember { mutableStateOf("") }
     val color = remember { mutableStateOf(Color.RED.id) }
 
+    // グループ詳細画面の場合、対象のGroupを取得
+    val group: Group? = if (groupId != null) {
+        viewModel.getGroupById(groupId)
+    } else {
+        null
+    }
+
+    // Groupが取得できた場合に初期値を設定
+    LaunchedEffect(group) {
+        group?.let {
+            title.value = it.title
+            color.value = it.color
+        }
+    }
+
     // 入力項目
     val inputFields: List<@Composable () -> Unit> = listOf (
-        { MultiLineTextInputField(stringResource(R.string.title)) { input -> title.value = input } },
-        { ColorPickerField { selectedColor -> color.value = selectedColor } }
+        {
+            MultiLineTextInputField(
+                title = stringResource(R.string.title),
+                onTextChanged = { updatedText -> title.value = updatedText },
+                initialText = group?.title ?: ""
+            )
+        },
+        {
+            ColorPickerField(
+                onColorSelected = { selectedColor -> color.value = selectedColor },
+                initialColor = group?.color ?: Color.RED.id
+            )
+        }
     )
 
     if (isDialog == false) {

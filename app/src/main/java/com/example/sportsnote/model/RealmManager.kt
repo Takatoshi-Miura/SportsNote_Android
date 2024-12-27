@@ -15,7 +15,7 @@ object RealmConstants {
 
 class RealmManager {
 
-    private val realm: Realm = Realm.getDefaultInstance()
+    internal val realm: Realm = Realm.getDefaultInstance()
 
     companion object {
 
@@ -36,6 +36,14 @@ class RealmManager {
                 .build()
             Realm.setDefaultConfiguration(config)
         }
+
+        /**
+         * Realmファイルのパスを出力
+         */
+        fun printRealmFilePath() {
+            val realmFile = Realm.getDefaultInstance().configuration.path
+            println("Realm file path: $realmFile")
+        }
     }
 
     /**
@@ -47,6 +55,40 @@ class RealmManager {
     suspend fun <T : RealmObject> saveItem(item: T) {
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             realmTransaction.insert(item)
+        }
+    }
+
+    /**
+     * 指定したクラスに対応するプライマリキーのプロパティ名を取得
+     *
+     * @param T RealmObjectのサブクラス
+     * @return Tに対応するプライマリキーのプロパティ名
+     * @throws IllegalArgumentException 対応していないクラスの場合にスローされる
+     */
+    private inline fun <reified T : RealmObject> getPrimaryKeyName(): String {
+        return when (T::class) {
+            Group::class -> "groupID"
+            Measures::class -> "measuresID"
+            Memo::class -> "memoID"
+            Note::class -> "noteID"
+            Target::class -> "targetID"
+            TaskData::class -> "taskID"
+            else -> throw IllegalArgumentException("Unsupported class")
+        }
+    }
+
+    /**
+     * 指定したIDに基づいて、Realmデータベースからオブジェクトを取得
+     *
+     * @param T RealmObjectのサブクラスで、取得したいオブジェクトの型を指定
+     * @param id 検索するID（文字列）を指定します。各RealmObjectは固有のID（例えば、`groupId`や`noteId`）
+     * @return 指定されたIDに一致するオブジェクトが見つかった場合、そのオブジェクトを返します。存在しない場合やエラーが発生した場合は`null`を返します。
+     */
+    internal inline fun <reified T : RealmObject> getObjectById(id: String): T? {
+        return try {
+            realm.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
+        } catch (e: Exception) {
+            null
         }
     }
 

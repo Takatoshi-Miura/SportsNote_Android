@@ -28,6 +28,16 @@ class GroupViewModel : ViewModel() {
     }
 
     /**
+     * 指定された`groupId`に基づいて、`Group`オブジェクトを取得
+     *
+     * @param groupId groupId
+     * @return `groupId`に一致する`Group`オブジェクト。存在しない場合やエラーが発生した場合は`null`
+     */
+    fun getGroupById(groupId: String): Group? {
+        return realmManager.getObjectById<Group>(groupId)
+    }
+
+    /**
      * Groupを保存(orderは最後尾固定)
      *
      * @param title タイトル

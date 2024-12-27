@@ -45,7 +45,6 @@ fun TaskScreen(
     groupViewModel: GroupViewModel = viewModel()
 ) {
     val groups by groupViewModel.groups.collectAsState()
-    val sections by taskViewModel.sections.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current

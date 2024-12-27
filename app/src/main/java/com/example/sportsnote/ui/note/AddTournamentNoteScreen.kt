@@ -86,11 +86,41 @@ fun TournamentNoteContent(
         { DatePickerField {selectedDate -> date.value = selectedDate} },
         { WeatherPickerField { selectedWeather -> weather.value = selectedWeather } },
         { TemperatureSlider { selectedTemperature -> temperature.value = selectedTemperature } },
-        { MultiLineTextInputField("体調") { input -> condition.value = input } },
-        { MultiLineTextInputField("目標") { input -> target.value = input } },
-        { MultiLineTextInputField("意識すること") { input -> consciousness.value = input } },
-        { MultiLineTextInputField("結果") { input -> result.value = input } },
-        { MultiLineTextInputField("反省") { input -> reflection.value = input } }
+        {
+            MultiLineTextInputField(
+                title = "体調",
+                onTextChanged = { input -> condition.value = input },
+                initialText = ""
+            )
+        },
+        {
+            MultiLineTextInputField(
+                title = "目標",
+                onTextChanged = { input -> condition.value = input },
+                initialText = ""
+            )
+        },
+        {
+            MultiLineTextInputField(
+                title = "意識すること",
+                onTextChanged = { input -> condition.value = input },
+                initialText = ""
+            )
+        },
+        {
+            MultiLineTextInputField(
+                title = "結果",
+                onTextChanged = { input -> condition.value = input },
+                initialText = ""
+            )
+        },
+        {
+            MultiLineTextInputField(
+                title = "反省",
+                onTextChanged = { input -> condition.value = input },
+                initialText = ""
+            )
+        }
     )
 
     Box(

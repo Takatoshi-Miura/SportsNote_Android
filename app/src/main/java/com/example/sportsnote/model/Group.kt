@@ -26,7 +26,7 @@ open class Group : RealmObject {
         this.groupID = UUID.randomUUID().toString()
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.title = ""
-        this.color = 0
+        this.color = Color.RED.id
         this.order = 0
         this.isDeleted = false
         this.created_at = Date()

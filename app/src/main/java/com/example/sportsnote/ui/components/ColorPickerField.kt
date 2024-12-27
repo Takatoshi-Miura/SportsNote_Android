@@ -28,9 +28,12 @@ import androidx.compose.ui.graphics.Color as AndroidColor
  * @param onColorSelected カラー選択時
  */
 @Composable
-fun ColorPickerField(onColorSelected: (Int) -> Unit) {
+fun ColorPickerField(
+    onColorSelected: (Int) -> Unit,
+    initialColor: Int = Color.RED.id
+) {
     val colorOptions = Color.entries
-    var selectedColor by remember { mutableStateOf(colorOptions.first()) }
+    var selectedColor by remember { mutableStateOf(colorOptions.first { it.id == initialColor }) }
     var expanded by remember { mutableStateOf(false) }
 
     Column(
@@ -70,10 +73,4 @@ fun ColorPickerField(onColorSelected: (Int) -> Unit) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewColorPickerField() {
-    ColorPickerField { }
 }
