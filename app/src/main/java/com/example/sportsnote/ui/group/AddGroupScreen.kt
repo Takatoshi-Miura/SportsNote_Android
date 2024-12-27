@@ -10,9 +10,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -30,8 +36,9 @@ import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.launch
 
 /**
- * グループ登録画面
+ * Group登録画面
  *
+ * @param viewModel GroupViewModel
  * @param onDismiss 閉じる際の処理
  */
 @Composable
@@ -47,15 +54,29 @@ fun AddGroupScreen(
     ) {
         AddGroupContent(
             viewModel = viewModel,
-            onDismiss = { onDismiss() }
+            onDismiss = { onDismiss() },
+            updateAppBar = { _, _ -> },
+            isDialog = true
         )
     }
 }
 
+/**
+ * Groupの情報入力画面のUI
+ *
+ * @param viewModel GroupViewModel
+ * @param groupId groupId(編集時のみ必須)
+ * @param onDismiss 前画面に戻る処理
+ * @param updateAppBar TopBarを編集するために必要(編集時のみ必須)
+ * @param isDialog ダイアログ表示かどうか
+ */
 @Composable
 fun AddGroupContent(
     viewModel: GroupViewModel,
-    onDismiss: () -> Unit
+    groupId: String? = null,
+    onDismiss: () -> Unit,
+    updateAppBar: (@Composable (() -> Unit)?, @Composable (() -> Unit)?) -> Unit,
+    isDialog: Boolean
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -69,51 +90,78 @@ fun AddGroupContent(
         { ColorPickerField { selectedColor -> color.value = selectedColor } }
     )
 
+    if (isDialog == false) {
+        // CustomTopAppBar の設定を更新
+        SideEffect {
+            updateAppBar(
+                {
+                    IconButton(onClick = {
+                        // TODO: 更新処理
+                        onDismiss()
+                    }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                {
+                    IconButton(onClick = {
+                        // TODO: 削除処理
+                        onDismiss()
+                    }) {
+                        Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
+                    }
+                }
+            )
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // ヘッダー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(MaterialTheme.colors.primary)
-            ) {
-                // キャンセル
-                Button(
-                    onClick = onDismiss,
+            if (isDialog) {
+                // ヘッダー
+                Box(
                     modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp)
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(MaterialTheme.colors.primary)
                 ) {
-                    Text(stringResource(R.string.cancel))
-                }
-                // タイトル
-                Text(
-                    text = "グループの追加",
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                // 保存
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            // 保存処理
-                            viewModel.saveGroup(
-                                title = title.value,
-                                colorId = color.value
-                            )
-                        }
-                        onDismiss()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 8.dp)
-                ) {
-                    Text(stringResource(R.string.save))
+
+                    // キャンセル
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 8.dp)
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    // タイトル
+                    Text(
+                        text = "グループの追加",
+                        color = MaterialTheme.colors.onPrimary,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    // 保存
+                    Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                // 保存処理
+                                viewModel.saveGroup(
+                                    title = title.value,
+                                    colorId = color.value
+                                )
+                            }
+                            onDismiss()
+                        },
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 8.dp)
+                    ) {
+                        Text(stringResource(R.string.save))
+                    }
                 }
             }
             // 入力欄

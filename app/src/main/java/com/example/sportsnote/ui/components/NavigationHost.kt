@@ -1,14 +1,16 @@
 package com.example.sportsnote.ui.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -21,6 +23,7 @@ import com.example.sportsnote.ui.note.AddTournamentNoteScreen
 import com.example.sportsnote.ui.note.NoteScreen
 import com.example.sportsnote.ui.target.TargetScreen
 import com.example.sportsnote.ui.task.TaskScreen
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -31,6 +34,10 @@ fun NavigationHost() {
     val drawerState = scaffoldState.drawerState
     val coroutineScope = rememberCoroutineScope()
 
+    // CustomTopAppBar の設定を管理する状態
+    val appBarNavigationIcon = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+    val appBarRightIcon = remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+
     // 画面設定を動的に取得
     val screen = Screen.fromRoute(currentRoute)
     val screenConfig = screen.getConfig()
@@ -40,24 +47,8 @@ fun NavigationHost() {
         topBar = {
             CustomTopAppBar(
                 title = screenConfig.topBarTitle,
-                navigationIcon = {
-                    // TOPの場合はメニューを表示
-                    if (screenConfig.showBottomBar) {
-                        IconButton(onClick = {
-                            coroutineScope.launch {
-                                if (drawerState.isClosed) drawerState.open()
-                                else drawerState.close()
-                            }
-                        }) {
-                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
-                        }
-                    } else {
-                        // デフォルトは前の画面に戻る
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                        }
-                    }
-                },
+                navigationIcon = appBarNavigationIcon.value,
+                rightIcon = appBarRightIcon.value
             )
         },
         bottomBar = {
@@ -67,25 +58,73 @@ fun NavigationHost() {
         },
         drawerContent = { DrawerContent() }
     ) { paddingValues ->
-        // 各画面の遷移処理
         NavHost(
             navController,
             startDestination = Screen.Task.route,
             modifier = Modifier.padding(paddingValues)
         ) {
-            composable(Screen.Task.route) { TaskScreen() }
+            // 課題タブTOP
+            composable(Screen.Task.route) {
+                appBarNavigationIcon.value = {
+                    DrawerToggleButton(coroutineScope, drawerState)
+                }
+                appBarRightIcon.value = null
+                TaskScreen()
+            }
+            // Group詳細
             composable(Screen.GroupView.route) { backStackEntry ->
                 val groupId = backStackEntry.arguments?.getString("groupId") ?: ""
-                GroupViewScreen(groupId = groupId, onBack = { navController.popBackStack() })
+                GroupViewScreen(
+                    groupId = groupId,
+                    onBack = { navController.popBackStack() },
+                    appBarNavigationIcon = appBarNavigationIcon,
+                    appBarRightIcon = appBarRightIcon
+                )
             }
-            composable(Screen.Note.route) { NoteScreen() }
+            // ノートタブTOP
+            composable(Screen.Note.route) {
+                appBarNavigationIcon.value = {
+                    DrawerToggleButton(coroutineScope, drawerState)
+                }
+                appBarRightIcon.value = null
+                NoteScreen()
+            }
+            // 大会ノート追加
             composable(Screen.AddTournamentNote.route) {
                 AddTournamentNoteScreen(
                     onDismiss = { navController.popBackStack() },
                     isNavigation = true
                 )
             }
-            composable(Screen.Target.route) { TargetScreen() }
+            // 目標タブTOP
+            composable(Screen.Target.route) {
+                appBarNavigationIcon.value = {
+                    DrawerToggleButton(coroutineScope, drawerState)
+                }
+                appBarRightIcon.value = null
+                TargetScreen()
+            }
         }
+    }
+}
+
+/**
+ * ハンバーガーメニューボタン
+ *
+ * @param coroutineScope
+ * @param drawerState
+ */
+@Composable
+fun DrawerToggleButton(
+    coroutineScope: CoroutineScope,
+    drawerState: DrawerState
+) {
+    IconButton(onClick = {
+        coroutineScope.launch {
+            if (drawerState.isClosed) drawerState.open()
+            else drawerState.close()
+        }
+    }) {
+        Icon(Icons.Filled.Menu, contentDescription = "Menu")
     }
 }
