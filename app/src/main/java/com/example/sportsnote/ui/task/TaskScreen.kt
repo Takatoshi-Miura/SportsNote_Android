@@ -51,7 +51,8 @@ fun TaskScreen(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
     val BOTTOM_NAVIGATION_HEIGHT = 56.dp
-    var isDialogVisible by remember { mutableStateOf(false) } // ダイアログの表示フラグ
+    var groupDialogVisible by remember { mutableStateOf(false) }
+    var taskDialogVisible by remember { mutableStateOf(false) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
 
     // 一覧のリフレッシュ処理
@@ -65,11 +66,11 @@ fun TaskScreen(
         sheetContent = {
             val actionItems = listOf(
                 "グループを追加" to {
-                    isDialogVisible = true
+                    groupDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
                 "課題を追加" to {
-                    isDialogVisible = true
+                    taskDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
                 "キャンセル" to {
@@ -111,10 +112,16 @@ fun TaskScreen(
         }
     }
 
-    // ダイアログでフルスクリーンモーダルを表示
-    if (isDialogVisible) {
+    // グループ追加モーダル表示
+    if (groupDialogVisible) {
         AddGroupScreen(
-            onDismiss = { isDialogVisible = false }
+            onDismiss = { groupDialogVisible = false }
+        )
+    }
+    // 課題追加モーダル表示
+    if (taskDialogVisible) {
+        AddTaskScreen(
+            onDismiss = { taskDialogVisible = false }
         )
     }
 }

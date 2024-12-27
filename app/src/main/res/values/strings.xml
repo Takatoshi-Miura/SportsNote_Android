@@ -32,4 +32,7 @@
     <string name="課題">Task</string>
     <string name="groupView">グループの詳細</string>
     <string name="noteDetail">ノートの詳細</string>
+    <string name="addTask">課題の追加</string>
+    <string name="cause">原因</string>
+    <string name="measures">対策</string>
 </resources>
