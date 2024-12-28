@@ -134,10 +134,15 @@ class RealmManager {
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             val item = realmTransaction.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
             item?.let {
-                if (it is Group) {
-                    it.isDeleted = true
-                    realmTransaction.insertOrUpdate(it)
+                when (it) {
+                    is Group -> { it.isDeleted = true }
+                    is Measures -> { it.isDeleted = true }
+                    is Memo -> { it.isDeleted = true }
+                    is Note -> { it.isDeleted = true }
+                    is Target -> { it.isDeleted = true }
+                    is TaskData -> { it.isDeleted = true }
                 }
+                realmTransaction.insertOrUpdate(it)
             }
         }
     }

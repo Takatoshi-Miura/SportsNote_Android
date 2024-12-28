@@ -101,7 +101,7 @@ fun TournamentNoteViewScreen(
             confirmButtonText = stringResource(R.string.delete),
             onConfirm = {
                 coroutineScope.launch {
-                    viewModel.deleteNote(note!!.noteID)
+                    viewModel.deleteNote(noteId)
                     showDialog.value = false
                     onBack()
                 }
