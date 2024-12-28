@@ -37,4 +37,9 @@
     <string name="measures">対策</string>
     <string name="group">グループ</string>
     <string name="addGroup">グループの追加</string>
+    <string name="condition">体調</string>
+    <string name="consciousness">意識すること</string>
+    <string name="result">結果</string>
+    <string name="reflection">反省</string>
+    <string name="addTournamentNote">大会ノートの追加</string>
 </resources>

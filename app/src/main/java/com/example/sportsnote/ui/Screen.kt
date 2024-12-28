@@ -19,7 +19,7 @@ sealed class Screen(val route: String) {
     object Task : Screen("task")
     object GroupView : Screen("group_view_screen/{groupId}")
     object Note : Screen("note")
-    object AddTournamentNote : Screen("add_tournament_note")
+    object TournamentNoteView : Screen("tournament_note_view/{noteId}")
     object Target : Screen("target")
 
     // 各画面に対応する設定を定義
@@ -29,7 +29,7 @@ sealed class Screen(val route: String) {
             is Task -> ScreenConfig(stringResource(R.string.task), showBottomBar = true)
             is GroupView -> ScreenConfig(stringResource(R.string.groupView), showBottomBar = false)
             is Note -> ScreenConfig(stringResource(R.string.note), showBottomBar = true)
-            is AddTournamentNote -> ScreenConfig(stringResource(R.string.noteDetail), showBottomBar = false)
+            is TournamentNoteView -> ScreenConfig(stringResource(R.string.noteDetail), showBottomBar = false)
             is Target -> ScreenConfig(stringResource(R.string.target), showBottomBar = true)
         }
     }
@@ -41,7 +41,7 @@ sealed class Screen(val route: String) {
                 route.startsWith(Task.route) -> Task
                 route.startsWith(GroupView.route) -> GroupView
                 route.startsWith(Note.route) -> Note
-                route.startsWith(AddTournamentNote.route) -> AddTournamentNote
+                route.startsWith(TournamentNoteView.route) -> TournamentNoteView
                 route.startsWith(Target.route) -> Target
                 else -> Task // デフォルトはTaskに戻る
             }

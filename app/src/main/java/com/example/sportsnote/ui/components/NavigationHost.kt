@@ -19,8 +19,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.Screen
 import com.example.sportsnote.ui.group.GroupViewScreen
-import com.example.sportsnote.ui.note.AddTournamentNoteScreen
 import com.example.sportsnote.ui.note.NoteScreen
+import com.example.sportsnote.ui.note.TournamentNoteViewScreen
 import com.example.sportsnote.ui.target.TargetScreen
 import com.example.sportsnote.ui.task.TaskScreen
 import kotlinx.coroutines.CoroutineScope
@@ -89,11 +89,14 @@ fun NavigationHost() {
                 appBarRightIcon.value = null
                 NoteScreen()
             }
-            // 大会ノート追加
-            composable(Screen.AddTournamentNote.route) {
-                AddTournamentNoteScreen(
-                    onDismiss = { navController.popBackStack() },
-                    isNavigation = true
+            // 大会ノート詳細
+            composable(Screen.TournamentNoteView.route) { backStackEntry ->
+                val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
+                TournamentNoteViewScreen(
+                    noteId = noteId,
+                    onBack = { navController.popBackStack() },
+                    appBarNavigationIcon = appBarNavigationIcon,
+                    appBarRightIcon = appBarRightIcon
                 )
             }
             // 目標タブTOP

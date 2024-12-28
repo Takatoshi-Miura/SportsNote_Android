@@ -2,34 +2,21 @@ package com.example.sportsnote.ui.note
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
-import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
 
 class NoteViewModel : ViewModel() {
 
-    private val _items = MutableStateFlow<List<ItemData>>(emptyList())
-    val items: StateFlow<List<ItemData>> = _items
     private val realmManager: RealmManager = RealmManager()
-    private val _navigateToAddNote = MutableStateFlow(false)
-    val navigateToAddNote = _navigateToAddNote.asStateFlow()
-
-    fun onAddNoteClicked() {
-        _navigateToAddNote.value = true
-    }
-
-    fun onNavigationHandled() {
-        _navigateToAddNote.value = false
-    }
+    private val _notes = MutableStateFlow<List<Note>>(emptyList())
+    val notes: StateFlow<List<Note>> = _notes
 
     init {
         loadNotes()
@@ -40,20 +27,7 @@ class NoteViewModel : ViewModel() {
      */
     fun loadNotes() {
         viewModelScope.launch {
-            _items.value = getNoteList().map { note ->
-                val displayText = when (NoteType.fromInt(note.noteType)) {
-                    NoteType.FREE -> note.title
-                    NoteType.PRACTICE -> note.detail
-                    NoteType.TOURNAMENT -> note.result
-                }
-                ItemData(
-                    title = displayText,
-                    iconRes = R.drawable.ic_home_black_24dp,
-                    onClick = {
-                        onAddNoteClicked()
-                    }
-                )
-            }
+            _notes.value = getNoteList()
         }
     }
 
@@ -67,8 +41,19 @@ class NoteViewModel : ViewModel() {
     }
 
     /**
+     * 指定された`groupId`に基づいて、`Note`オブジェクトを取得
+     *
+     * @param noteId noteId
+     * @return `noteId`に一致する`Note`オブジェクト。存在しない場合やエラーが発生した場合は`null`
+     */
+    fun getNoteById(noteId: String): Note? {
+        return realmManager.getObjectById<Note>(noteId)
+    }
+
+    /**
      * 大会ノートを保存する処理
      *
+     * @param noteId ノートID
      * @param date 日付
      * @param weather 天気
      * @param temperature 気温
@@ -79,6 +64,7 @@ class NoteViewModel : ViewModel() {
      * @param reflection 反省
      */
     suspend fun saveTournamentNote(
+        noteId: String = UUID.randomUUID().toString(),
         date: Date,
         weather: Int,
         temperature: Int,
@@ -89,7 +75,7 @@ class NoteViewModel : ViewModel() {
         reflection: String
     ) {
         val note = Note().apply {
-            this.noteID = UUID.randomUUID().toString()
+            this.noteID = noteId
             this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
             this.noteType = NoteType.TOURNAMENT.value
             this.isDeleted = false
