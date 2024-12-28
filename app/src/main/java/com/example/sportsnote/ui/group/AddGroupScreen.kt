@@ -5,15 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -23,7 +20,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +29,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.ColorPickerField
 import com.example.sportsnote.ui.components.CustomSpacerColumn
+import com.example.sportsnote.ui.components.Header
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.launch
@@ -160,49 +157,20 @@ fun AddGroupContent(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             if (isDialog) {
-                // ヘッダー
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .background(MaterialTheme.colors.primary)
-                ) {
-
-                    // キャンセル
-                    Button(
-                        onClick = onDismiss,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 8.dp)
-                    ) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                    // タイトル
-                    Text(
-                        text = "グループの追加",
-                        color = MaterialTheme.colors.onPrimary,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                    // 保存
-                    Button(
-                        onClick = {
-                            coroutineScope.launch {
-                                // 保存処理
-                                viewModel.saveGroup(
-                                    title = title.value,
-                                    colorId = color.value,
-                                    order = null
-                                )
-                            }
-                            onDismiss()
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .padding(end = 8.dp)
-                    ) {
-                        Text(stringResource(R.string.save))
-                    }
-                }
+                Header(
+                    title = stringResource(R.string.addGroup),
+                    onCancel = onDismiss,
+                    onSave = {
+                        // 保存処理
+                        viewModel.saveGroup(
+                            title = title.value,
+                            colorId = color.value,
+                            order = null
+                        )
+                        onDismiss()
+                    },
+                    coroutineScope = coroutineScope
+                )
             }
             // 入力欄
             Column(

@@ -1,22 +1,19 @@
 package com.example.sportsnote.ui.task
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,9 +23,9 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.GroupPickerField
+import com.example.sportsnote.ui.components.Header
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.group.GroupViewModel
-import kotlinx.coroutines.launch
 
 /**
  * 課題追加画面
@@ -36,6 +33,7 @@ import kotlinx.coroutines.launch
  * @param viewModel TaskViewModel
  * @param onDismiss 画面閉じる時の処理
  */
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AddTaskScreen(
     viewModel: TaskViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
@@ -121,45 +119,16 @@ fun AddTaskContent(
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            // ヘッダー
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .background(MaterialTheme.colors.primary)
-            ) {
-                // キャンセル
-                Button(
-                    onClick = onDismiss,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp)
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-                // タイトル
-                Text(
-                    text = "課題の追加",
-                    color = MaterialTheme.colors.onPrimary,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-                // 保存
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            // TODO: 保存処理
-                        }
-                        onDismiss()
-                    },
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .padding(end = 8.dp)
-                ) {
-                    Text(stringResource(R.string.save))
-                }
-            }
-        }
+        Header(
+            title = stringResource(R.string.addTask),
+            onCancel = onDismiss,
+            onSave = {
+                // TODO: 保存処理を実装
+//                viewModel.saveTask()
+                onDismiss()
+            },
+            coroutineScope = coroutineScope
+        )
         // 入力欄
         Column(
             modifier = Modifier

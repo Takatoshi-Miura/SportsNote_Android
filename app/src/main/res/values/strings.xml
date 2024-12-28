@@ -36,4 +36,5 @@
     <string name="cause">原因</string>
     <string name="measures">対策</string>
     <string name="group">グループ</string>
+    <string name="addGroup">グループの追加</string>
 </resources>
