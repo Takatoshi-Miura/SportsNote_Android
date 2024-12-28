@@ -93,4 +93,12 @@ class NoteViewModel : ViewModel() {
         realmManager.saveItem(note)
     }
 
+    /**
+     * ノートを論理削除
+     *
+     * @param noteId ノートID
+     */
+    suspend fun deleteNote(noteId: String) {
+        realmManager.logicalDelete<Note>(noteId)
+    }
 }

@@ -35,20 +35,18 @@ fun NavigationScreenHeader(
                 IconButton(onClick = {
                     coroutineScope.launch {
                         onSave()
+                        onDismiss()
                     }
-                    onDismiss()
                 }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                 }
             },
-
             // 削除ボタン
             {
                 IconButton(onClick = {
                     coroutineScope.launch {
                         onDelete()
                     }
-                    onDismiss()
                 }) {
                     Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
                 }

@@ -16,21 +16,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
 /**
  * 日付入力欄
+ *
+ * @param initialDate 初期値
+ * @param onDateSelected 日付選択時の処理
  */
 @Composable
-fun DatePickerField(onDateSelected: (Date) -> Unit) {
+fun DatePickerField(
+    initialDate: Date? = null,
+    onDateSelected: (Date) -> Unit
+) {
     // カレンダーのインスタンスを作成
     val calendar = Calendar.getInstance()
 
-    // 初期状態として今日の日付を設定
-    val initialDate = "${calendar.get(Calendar.YEAR)}/${calendar.get(Calendar.MONTH) + 1}/${calendar.get(
-        Calendar.DAY_OF_MONTH)}"
-    val selectedDate = remember { mutableStateOf(initialDate) }
+    // 初期日付を設定
+    val initialCalendar = initialDate?.let {
+        calendar.time = it
+        calendar
+    } ?: calendar
+
+    // 初期状態として渡された初期日付、もしくは今日の日付を設定
+    val selectedDate = remember {
+        mutableStateOf(SimpleDateFormat("yyyy/MM/dd").format(initialCalendar.time))
+    }
 
     // ダイアログの表示状態
     val context = LocalContext.current
@@ -66,7 +79,7 @@ fun DatePickerField(onDateSelected: (Date) -> Unit) {
                     calendar.get(Calendar.DAY_OF_MONTH)
                 ).show()
             },
-            modifier = Modifier.weight(1f) // 右隣まで伸ばす
+            modifier = Modifier.weight(1f)
         ) {
             Text(text = selectedDate.value)
         }

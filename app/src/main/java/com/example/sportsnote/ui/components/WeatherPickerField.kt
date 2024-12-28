@@ -24,11 +24,17 @@ import com.example.sportsnote.utils.Weather
 
 /**
  * 天気選択欄
+ *
+ * @param initialWeather 初期値
+ * @param onWeatherSelected 天気選択時の処理
  */
 @Composable
-fun WeatherPickerField(onWeatherSelected: (Int) -> Unit) {
+fun WeatherPickerField(
+    initialWeather: Int = Weather.SUNNY.id,
+    onWeatherSelected: (Int) -> Unit
+) {
     val weatherOptions = Weather.entries
-    var selectedWeather by remember { mutableStateOf(weatherOptions.first()) }
+    var selectedWeather by remember { mutableStateOf(initialWeather) }
     var expanded by remember { mutableStateOf(false) }
 
     Row(
@@ -50,7 +56,7 @@ fun WeatherPickerField(onWeatherSelected: (Int) -> Unit) {
             onClick = { expanded = true },
             modifier = Modifier.weight(1f)
         ) {
-            Text(selectedWeather.getTitle())
+            Text(Weather.fromInt(selectedWeather).getTitle())
         }
         DropdownMenu(
             expanded = expanded,
@@ -59,7 +65,7 @@ fun WeatherPickerField(onWeatherSelected: (Int) -> Unit) {
             weatherOptions.forEach { option ->
                 DropdownMenuItem(
                     onClick = {
-                        selectedWeather = option
+                        selectedWeather = option.id
                         onWeatherSelected(option.id)
                         expanded = false
                     }

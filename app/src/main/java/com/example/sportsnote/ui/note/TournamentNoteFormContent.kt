@@ -36,7 +36,7 @@ import java.util.Date
  */
 @Composable
 fun TournamentNoteFormContent(
-    note: Note?,
+    note: Note? = null,
     onDateChange: (Date) -> Unit,
     onWeatherChange: (Int) -> Unit,
     onTemperatureChange: (Int) -> Unit,
@@ -57,28 +57,31 @@ fun TournamentNoteFormContent(
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // 日付
-        { DatePickerField { selectedDate ->
-            date.value = selectedDate
-            onDateChange(selectedDate)
-        }},
+        {
+            DatePickerField(
+                initialDate = date.value,
+                onDateSelected = { selectedDate -> date.value = selectedDate }
+            )
+        },
         // 天気
-        { WeatherPickerField { selectedWeather ->
-            weather.value = selectedWeather
-            onWeatherChange(selectedWeather)
-        }},
+        {
+            WeatherPickerField(
+                initialWeather = weather.value,
+                onWeatherSelected = { selectedWeather -> weather.value = selectedWeather }
+            )
+        },
         // 気温
-        { TemperatureSlider { selectedTemperature ->
-            temperature.value = selectedTemperature
-            onTemperatureChange(selectedTemperature)
-        }},
+        {
+            TemperatureSlider(
+                initialTemperature = temperature.value,
+                onTemperatureSelected = { selectedTemperature -> temperature.value = selectedTemperature }
+            )
+        },
         // 体調
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.condition),
-                onTextChanged = { input ->
-                    condition.value = input
-                    onConditionChange(input)
-                },
+                onTextChanged = { input -> condition.value = input },
                 initialText = condition.value
             )
         },
@@ -86,10 +89,7 @@ fun TournamentNoteFormContent(
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.target),
-                onTextChanged = { input ->
-                    target.value = input
-                    onTargetChange(input)
-                },
+                onTextChanged = { input -> target.value = input },
                 initialText = target.value
             )
         },
@@ -97,10 +97,7 @@ fun TournamentNoteFormContent(
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.consciousness),
-                onTextChanged = { input ->
-                    consciousness.value = input
-                    onConsciousnessChange(input)
-                },
+                onTextChanged = { input -> consciousness.value = input },
                 initialText = consciousness.value
             )
         },
@@ -108,10 +105,7 @@ fun TournamentNoteFormContent(
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.result),
-                onTextChanged = { input ->
-                    result.value = input
-                    onResultChange(input)
-                },
+                onTextChanged = { input -> result.value = input },
                 initialText = result.value
             )
         },
@@ -119,10 +113,7 @@ fun TournamentNoteFormContent(
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.reflection),
-                onTextChanged = { input ->
-                    reflection.value = input
-                    onReflectionChange(input)
-                },
+                onTextChanged = { input -> reflection.value = input },
                 initialText = reflection.value
             )
         }

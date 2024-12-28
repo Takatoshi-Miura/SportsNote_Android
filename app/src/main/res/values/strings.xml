@@ -42,4 +42,7 @@
     <string name="result">結果</string>
     <string name="reflection">反省</string>
     <string name="addTournamentNote">大会ノートの追加</string>
+    <string name="deleteNote">ノートの削除</string>
+    <string name="deleteNoteMessage">ノートを削除しますか？\n削除すると復元できません。</string>
+    <string name="delete">削除</string>
 </resources>

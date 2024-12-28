@@ -19,10 +19,17 @@ import androidx.compose.ui.unit.dp
 
 /**
  * 気温入力欄
+ *
+ * @param initialTemperature 初期値
+ * @param onTemperatureSelected 気温選択時の処理
  */
 @Composable
-fun TemperatureSlider(onTemperatureSelected: (Int) -> Unit) {
-    var temperature by remember { mutableStateOf(0f) }
+fun TemperatureSlider(
+    initialTemperature: Int = 20,
+    onTemperatureSelected: (Int) -> Unit
+) {
+    var temperature by remember { mutableStateOf(initialTemperature.toFloat()) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +50,7 @@ fun TemperatureSlider(onTemperatureSelected: (Int) -> Unit) {
                 onTemperatureSelected(temperature.toInt())
             },
             valueRange = -40f..40f,
-            modifier = Modifier.weight(1f) // 右隣まで伸ばす
+            modifier = Modifier.weight(1f)
         )
     }
 }
