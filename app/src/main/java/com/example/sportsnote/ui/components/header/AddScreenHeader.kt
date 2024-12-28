@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.components
+package com.example.sportsnote.ui.components.header
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,7 +26,7 @@ import com.example.sportsnote.R
  * @param coroutineScope CoroutineScope（非同期処理に使用）
  */
 @Composable
-fun Header(
+fun AddScreenHeader(
     title: String,
     onCancel: () -> Unit,
     onSave: suspend () -> Unit,

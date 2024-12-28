@@ -23,7 +23,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.GroupPickerField
-import com.example.sportsnote.ui.components.Header
+import com.example.sportsnote.ui.components.header.AddScreenHeader
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.group.GroupViewModel
 
@@ -119,7 +119,7 @@ fun AddTaskContent(
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)
     ) {
-        Header(
+        AddScreenHeader(
             title = stringResource(R.string.addTask),
             onCancel = onDismiss,
             onSave = {
