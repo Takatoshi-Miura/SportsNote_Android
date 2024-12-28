@@ -67,8 +67,7 @@ fun GroupViewScreen(
 
             // 共通フォーム
             GroupFormContent(
-                initialTitle = group!!.title,
-                initialColor = group.color,
+                group = group,
                 onTitleChange = { title = it },
                 onColorChange = { color = it }
             )

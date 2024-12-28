@@ -63,8 +63,7 @@ fun AddGroupScreen(
 
                 // 共通フォーム
                 GroupFormContent(
-                    initialTitle = title,
-                    initialColor = color,
+                    group = null,
                     onTitleChange = { title = it },
                     onColorChange = { color = it }
                 )

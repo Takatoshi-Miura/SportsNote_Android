@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.ColorPickerField
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -20,20 +21,18 @@ import com.example.sportsnote.utils.Color
 /**
  * Groupの共通フォーム
  *
- * @param initialTitle タイトル初期値
- * @param initialColor カラー初期値
+ * @param group Groupデータ（nullならデフォルト値を設定）
  * @param onTitleChange タイトル変更時の処理
  * @param onColorChange カラー変更時の処理
  */
 @Composable
 fun GroupFormContent(
-    initialTitle: String = "",
-    initialColor: Int = Color.RED.id,
+    group: Group? = null,
     onTitleChange: (String) -> Unit,
     onColorChange: (Int) -> Unit
 ) {
-    val title = remember { mutableStateOf(initialTitle) }
-    val color = remember { mutableStateOf(initialColor) }
+    val title = remember { mutableStateOf(group?.title ?: "") }
+    val color = remember { mutableStateOf(group?.color ?: Color.RED.id) }
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // タイトル
