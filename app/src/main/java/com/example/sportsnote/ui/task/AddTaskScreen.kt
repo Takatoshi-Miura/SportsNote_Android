@@ -23,8 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.CustomSpacerColumn
+import com.example.sportsnote.ui.components.GroupPickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.group.GroupViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -38,6 +41,9 @@ fun AddTaskScreen(
     viewModel: TaskViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     onDismiss: () -> Unit,
 ) {
+    val groupViewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    val groups = groupViewModel.groups.value
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -46,6 +52,7 @@ fun AddTaskScreen(
     ) {
         AddTaskContent(
             viewModel = viewModel,
+            groups = groups,
             onDismiss = { onDismiss() },
         )
     }
@@ -55,17 +62,22 @@ fun AddTaskScreen(
  * 課題追加画面のUI
  *
  * @param viewModel TaskViewModel
+ * @param groups Groupリスト
  * @param onDismiss 閉じる時の処理
  */
 @Composable
 fun AddTaskContent(
     viewModel: TaskViewModel,
+    groups: List<Group>,
     onDismiss: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
     val title = remember { mutableStateOf("") }
+    val cause = remember { mutableStateOf("") }
+    val measures = remember { mutableStateOf("") }
+    val group = remember { mutableStateOf(groups.first()) }
 
     // 入力項目
     val inputFields: List<@Composable () -> Unit> = listOf (
@@ -82,16 +94,24 @@ fun AddTaskContent(
             MultiLineTextInputField(
                 title = stringResource(R.string.cause),
                 defaultLines = 3,
-                onTextChanged = { updatedText -> title.value = updatedText },
-                initialText = title.value
+                onTextChanged = { updatedText -> cause.value = updatedText },
+                initialText = cause.value
             )
         },
         // 対策
         {
             MultiLineTextInputField(
                 title = stringResource(R.string.measures),
-                onTextChanged = { updatedText -> title.value = updatedText },
-                initialText = title.value
+                onTextChanged = { updatedText -> measures.value = updatedText },
+                initialText = measures.value
+            )
+        },
+        // グループ
+        {
+            GroupPickerField(
+                groups = groups,
+                onGroupSelected = { updateGroup -> group.value = updateGroup },
+                initialGroup = group.value
             )
         }
     )

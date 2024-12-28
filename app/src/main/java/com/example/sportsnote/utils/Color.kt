@@ -1,9 +1,8 @@
 package com.example.sportsnote.utils
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.graphics.Color as ComposeColor
+import android.content.Context
 import com.example.sportsnote.R
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 /**
  * カラー
@@ -29,11 +28,10 @@ enum class Color(
     /**
      * タイトル文字列を取得
      *
+     * @param context Context
      * @return カラー名
      */
-    @Composable
-    fun getTitle(): String {
-        val context = LocalContext.current
+    fun getTitle(context: Context): String {
         return context.getString(titleRes)
     }
 
@@ -53,16 +51,6 @@ enum class Color(
          */
         fun fromInt(id: Int): Color {
             return Color.entries.first { it.id == id }
-        }
-
-        /**
-         * 全てのカラーのタイトルリストを取得
-         *
-         * @return 全てのカラーのタイトルリスト
-         */
-        @Composable
-        fun getAllTitles(): List<String> {
-            return Color.entries.map { it.getTitle() }
         }
     }
 }
