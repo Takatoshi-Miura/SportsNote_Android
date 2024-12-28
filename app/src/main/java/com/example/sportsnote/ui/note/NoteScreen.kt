@@ -25,8 +25,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
@@ -59,15 +61,15 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         sheetState = sheetState,
         sheetContent = {
             val actionItems = listOf(
-                "練習ノートを追加" to {
+                stringResource(R.string.addPracticeNoteAction) to {
                     // 練習ノート追加処理（仮）
                     coroutineScope.launch { sheetState.hide() }
                 },
-                "大会ノートを追加" to {
+                stringResource(R.string.addTournamentNoteAction) to {
                     isDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
-                "キャンセル" to {
+                stringResource(R.string.cancel) to {
                     coroutineScope.launch { sheetState.hide() }
                 }
             )

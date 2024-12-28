@@ -47,4 +47,8 @@
     <string name="delete">削除</string>
     <string name="deleteGroup">グループの削除</string>
     <string name="deleteGroupMessage">グループを削除しますか？\nグループを削除するとグループに含まれる課題も全て削除されます。一度削除したグループと課題は復元できません。</string>
+    <string name="addGroupAction">グループを追加</string>
+    <string name="addTaskAction">課題を追加</string>
+    <string name="addPracticeNoteAction">練習ノートを追加</string>
+    <string name="addTournamentNoteAction">大会ノートを追加</string>
 </resources>

@@ -24,9 +24,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
@@ -65,15 +67,15 @@ fun TaskScreen(
         sheetState = sheetState,
         sheetContent = {
             val actionItems = listOf(
-                "グループを追加" to {
+                stringResource(R.string.addGroupAction) to {
                     groupDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
-                "課題を追加" to {
+                stringResource(R.string.addTaskAction) to {
                     taskDialogVisible = true
                     coroutineScope.launch { sheetState.hide() }
                 },
-                "キャンセル" to {
+                stringResource(R.string.cancel) to {
                     coroutineScope.launch { sheetState.hide() }
                 }
             )
