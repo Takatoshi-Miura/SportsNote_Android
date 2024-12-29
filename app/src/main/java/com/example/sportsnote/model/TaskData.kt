@@ -36,4 +36,37 @@ open class TaskData : RealmObject {
         this.updated_at = Date()
     }
 
+    // コンストラクタ
+    constructor(
+        taskId: String = UUID.randomUUID().toString(),
+        title: String,
+        cause: String,
+        groupId: String,
+    ) {
+        this.taskID = taskId
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        this.groupID = groupId
+        this.title = title
+        this.cause = cause
+        this.order = 0
+        this.isComplete = false
+        this.isDeleted = false
+        this.created_at = Date()
+        this.updated_at = Date()
+    }
 }
+
+/**
+ * 課題の追加画面用データ
+ *
+ * @param title 課題のタイトル
+ * @param cause 原因
+ * @param measuresTitle 対策のタイトル
+ * @param groupList Groupのリスト
+ */
+data class AddTaskData(
+    val title: String = "",
+    val cause: String = "",
+    val measuresTitle: String = "",
+    val groupList: List<Group>
+)

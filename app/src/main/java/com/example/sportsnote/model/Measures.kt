@@ -32,4 +32,19 @@ open class Measures : RealmObject {
         this.updated_at = Date()
     }
 
+    // コンストラクタ
+    constructor(
+        measuresId: String = UUID.randomUUID().toString(),
+        taskId: String,
+        title: String,
+    ) {
+        this.measuresID = measuresId
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        this.taskID = taskId
+        this.title = title
+        this.order = 0
+        this.isDeleted = false
+        this.created_at = Date()
+        this.updated_at = Date()
+    }
 }

@@ -1,19 +1,21 @@
 package com.example.sportsnote.ui.task
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
+import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.model.TaskData
 import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.ui.components.SectionData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 
 class TaskViewModel : ViewModel() {
 
+    private val realmManager: RealmManager = RealmManager()
     private val _sections = MutableStateFlow<List<SectionData>>(emptyList())
     val sections: StateFlow<List<SectionData>> = _sections
 
@@ -45,5 +47,30 @@ class TaskViewModel : ViewModel() {
                 )
             )
         }
+    }
+
+    /**
+     * TaskDataを保存
+     *
+     * @param taskId taskID
+     * @param title タイトル
+     * @param cause 原因
+     * @param groupId グループID
+     * @param taskId 保存したTaskのID
+     */
+    suspend fun saveTask(
+        taskId: String = UUID.randomUUID().toString(),
+        title: String,
+        cause: String,
+        groupId: String,
+    ): String {
+        val task = TaskData(
+            taskId = taskId,
+            title = title,
+            cause = cause,
+            groupId = groupId
+        )
+        realmManager.saveItem(task)
+        return taskId
     }
 }
