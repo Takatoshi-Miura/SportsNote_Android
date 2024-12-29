@@ -148,6 +148,8 @@ fun TaskListScreen(
     taskList: List<TaskListData>,
     onInfoButtonClick: (Group) -> Unit
 ) {
+    val navController = LocalNavController.current
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,7 +179,8 @@ fun TaskListScreen(
                     .fillMaxWidth()
                     .height(40.dp)
                     .clickable {
-                        // クリック時の処理をここに記述
+                        // CompletedTaskScreenに遷移する
+                        navController.navigate("completed_task/${group.groupID}")
                     }
             ) {
                 Text(

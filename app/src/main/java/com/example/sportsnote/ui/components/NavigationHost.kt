@@ -22,6 +22,7 @@ import com.example.sportsnote.ui.group.GroupViewScreen
 import com.example.sportsnote.ui.note.NoteScreen
 import com.example.sportsnote.ui.note.TournamentNoteViewScreen
 import com.example.sportsnote.ui.target.TargetScreen
+import com.example.sportsnote.ui.task.CompletedTaskScreen
 import com.example.sportsnote.ui.task.TaskScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -79,6 +80,15 @@ fun NavigationHost() {
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
                     appBarRightIcon = appBarRightIcon
+                )
+            }
+            // 完了した課題一覧
+            composable(Screen.CompletedTask.route) { backStackEntry ->
+                val groupId = backStackEntry.arguments?.getString("groupId") ?: ""
+                CompletedTaskScreen(
+                    groupId = groupId,
+                    onBack = { navController.popBackStack() },
+                    appBarNavigationIcon = appBarNavigationIcon
                 )
             }
             // ノートタブTOP

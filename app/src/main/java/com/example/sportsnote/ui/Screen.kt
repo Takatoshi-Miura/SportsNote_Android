@@ -18,6 +18,7 @@ data class ScreenConfig(
 sealed class Screen(val route: String) {
     object Task : Screen("task")
     object GroupView : Screen("group_view_screen/{groupId}")
+    object CompletedTask : Screen("completed_task/{groupId}")
     object Note : Screen("note")
     object TournamentNoteView : Screen("tournament_note_view/{noteId}")
     object Target : Screen("target")
@@ -28,6 +29,7 @@ sealed class Screen(val route: String) {
         return when (this) {
             is Task -> ScreenConfig(stringResource(R.string.task), showBottomBar = true)
             is GroupView -> ScreenConfig(stringResource(R.string.groupView), showBottomBar = false)
+            is CompletedTask -> ScreenConfig(stringResource(R.string.completedTask), showBottomBar = true)
             is Note -> ScreenConfig(stringResource(R.string.note), showBottomBar = true)
             is TournamentNoteView -> ScreenConfig(stringResource(R.string.noteDetail), showBottomBar = false)
             is Target -> ScreenConfig(stringResource(R.string.target), showBottomBar = true)
@@ -40,6 +42,7 @@ sealed class Screen(val route: String) {
             return when {
                 route.startsWith(Task.route) -> Task
                 route.startsWith(GroupView.route) -> GroupView
+                route.startsWith(CompletedTask.route) -> CompletedTask
                 route.startsWith(Note.route) -> Note
                 route.startsWith(TournamentNoteView.route) -> TournamentNoteView
                 route.startsWith(Target.route) -> Target

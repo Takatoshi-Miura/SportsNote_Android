@@ -31,20 +31,48 @@ class TaskViewModel : ViewModel() {
             _tasks.value = realmManager.getDataList(TaskData::class.java)
 
             // 課題一覧用データを取得
-            val allMeasuresList = mutableListOf<TaskListData>()
+            val taskListDatas = mutableListOf<TaskListData>()
             _tasks.value.forEach { task ->
-                val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
-                val taskListData = TaskListData(
-                    taskID = task.taskID,
-                    groupID = task.groupID,
-                    title = task.title,
-                    measures = measuresList.first().title,
-                    order = task.order
-                )
-                allMeasuresList.add(taskListData)
+                val taskListData = convertTaskDataToTaskListData(task)
+                taskListDatas.add(taskListData)
             }
-            _taskLists.value = allMeasuresList
+            _taskLists.value = taskListDatas
         }
+    }
+
+    /**
+     * TaskDataをTaskListDataに変換
+     *
+     * @param task TaskData
+     * @return TaskListData
+     */
+    private fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
+        val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
+        return TaskListData(
+            taskID = task.taskID,
+            groupID = task.groupID,
+            title = task.title,
+            measures = measuresList.first().title,
+            order = task.order
+        )
+    }
+
+    /**
+     * groupIDに合致する完了した課題を取得
+     *
+     * @param groupID groupID
+     * @return List<TaskListData>
+     */
+    fun getCompletedTasksByGroupId(
+        groupID: String
+    ): List<TaskListData> {
+        val taskListDatas = mutableListOf<TaskListData>()
+        val tasks = realmManager.getCompletedTasksByGroupId(groupID)
+        tasks.forEach { task ->
+            val taskListData = convertTaskDataToTaskListData(task)
+            taskListDatas.add(taskListData)
+        }
+        return taskListDatas
     }
 
     /**

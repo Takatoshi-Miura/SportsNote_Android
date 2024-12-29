@@ -125,6 +125,22 @@ class RealmManager {
     }
 
     /**
+     * groupIDに合致する完了した課題を取得
+     *
+     * @param groupID groupID
+     * @return List<TaskData>
+     */
+    fun getCompletedTasksByGroupId(groupID: String): List<TaskData> {
+        return realm.where(TaskData::class.java)
+            .equalTo("groupID", groupID)
+            .equalTo("isComplete", true)
+            .equalTo("isDeleted", false)
+            .sort("order", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
      * taskIDに合致する対策を取得
      *
      * @param taskID taskID
