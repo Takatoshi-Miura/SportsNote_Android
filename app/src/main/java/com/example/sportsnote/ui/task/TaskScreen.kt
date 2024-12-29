@@ -2,6 +2,8 @@ package com.example.sportsnote.ui.task
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,10 +32,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
+import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.group.AddGroupScreen
@@ -52,6 +56,7 @@ fun TaskScreen(
     taskViewModel: TaskViewModel = viewModel(),
     groupViewModel: GroupViewModel = viewModel()
 ) {
+    val taskLists by taskViewModel.taskLists.collectAsState()
     val groups by groupViewModel.groups.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -64,7 +69,7 @@ fun TaskScreen(
     // 一覧のリフレッシュ処理
     val onRefresh = {
         groupViewModel.loadData()
-//        taskViewModel.loadNotes()
+        taskViewModel.loadData()
     }
 
     ModalBottomSheetLayout(
@@ -94,6 +99,7 @@ fun TaskScreen(
                 // 課題一覧
                 TaskListScreen(
                     groups = groups,
+                    taskList = taskLists,
                     onInfoButtonClick = { group ->
                         // GroupViewScreenに遷移する
                         navController.navigate("group_view_screen/${group.groupID}")
@@ -136,10 +142,15 @@ fun TaskScreen(
  * 課題一覧のリスト表示
  *
  * @param groups グループリスト
+ * @param taskList 課題リスト
  * @param onInfoButtonClick グループのInfoボタンの処理
  */
 @Composable
-fun TaskListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
+fun TaskListScreen(
+    groups: List<Group>,
+    taskList: List<TaskListData>,
+    onInfoButtonClick: (Group) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,6 +164,15 @@ fun TaskListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
                 onInfoButtonClick = { onInfoButtonClick(group) }
             )
             Divider()
+
+            // 課題セルのリスト
+            val groupTasks = taskList
+                .filter { it.groupID == group.groupID }
+                .sortedBy { it.order }
+            groupTasks.forEach { task ->
+                TaskCell(task)
+                Divider()
+            }
 
             // 完了した課題セル
             Box(
@@ -173,6 +193,44 @@ fun TaskListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
                 )
             }
             Divider()
+        }
+    }
+}
+
+/**
+ * 課題セル
+ *
+ * @param task TaskListData
+ */
+@Composable
+fun TaskCell(task: TaskListData) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .clickable {
+                // セルクリック時の処理を記述
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+        ) {
+            // タイトル
+            Text(
+                text = task.title,
+                style = MaterialTheme.typography.body1,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            // 対策
+            Text(
+                text = "対策：${task.measures}",
+                style = MaterialTheme.typography.body2,
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+            )
         }
     }
 }

@@ -2,11 +2,9 @@ package com.example.sportsnote.ui.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sportsnote.R
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.TaskData
-import com.example.sportsnote.ui.components.ItemData
-import com.example.sportsnote.ui.components.SectionData
+import com.example.sportsnote.model.TaskListData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,36 +14,36 @@ import java.util.UUID
 class TaskViewModel : ViewModel() {
 
     private val realmManager: RealmManager = RealmManager()
-    private val _sections = MutableStateFlow<List<SectionData>>(emptyList())
-    val sections: StateFlow<List<SectionData>> = _sections
+    private val _tasks = MutableStateFlow<List<TaskData>>(emptyList())
+    val tasks: StateFlow<List<TaskData>> = _tasks
+    private val _taskLists = MutableStateFlow<List<TaskListData>>(emptyList())
+    val taskLists: StateFlow<List<TaskListData>> = _taskLists
 
     init {
-        loadSections()
+        loadData()
     }
 
     /**
-     * 課題一覧のダミーデータをロード
+     * 課題一覧データをロード
      */
-    private fun loadSections() {
+    fun loadData() {
         viewModelScope.launch {
-            _sections.value = listOf(
-                SectionData(
-                    title = "Fruits",
-                    items = listOf(
-                        ItemData("Apple", R.drawable.ic_home_black_24dp) { println("Apple clicked") },
-                        ItemData("Banana", R.drawable.ic_home_black_24dp) { println("Banana clicked") },
-                        ItemData("Orange", R.drawable.ic_home_black_24dp) { println("Orange clicked") }
-                    )
-                ),
-                SectionData(
-                    title = "Vegetables",
-                    items = listOf(
-                        ItemData("Carrot", R.drawable.ic_home_black_24dp) { println("Carrot clicked") },
-                        ItemData("Potato", R.drawable.ic_home_black_24dp) { println("Potato clicked") },
-                        ItemData("Spinach", R.drawable.ic_home_black_24dp) { println("Spinach clicked") }
-                    )
+            _tasks.value = realmManager.getDataList(TaskData::class.java)
+
+            // 課題一覧用データを取得
+            val allMeasuresList = mutableListOf<TaskListData>()
+            _tasks.value.forEach { task ->
+                val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
+                val taskListData = TaskListData(
+                    taskID = task.taskID,
+                    groupID = task.groupID,
+                    title = task.title,
+                    measures = measuresList.first().title,
+                    order = task.order
                 )
-            )
+                allMeasuresList.add(taskListData)
+            }
+            _taskLists.value = allMeasuresList
         }
     }
 

@@ -125,6 +125,21 @@ class RealmManager {
     }
 
     /**
+     * taskIDに合致する対策を取得
+     *
+     * @param taskID taskID
+     * @return List<Measures>
+     */
+    fun getMeasuresByTaskID(taskID: String): List<Measures> {
+        return realm.where(Measures::class.java)
+            .equalTo("taskID", taskID)
+            .equalTo("isDeleted", false)
+            .sort("order", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
      * 汎用的な論理削除処理
      *
      * @param T RealmObjectを継承したデータ型

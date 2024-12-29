@@ -2,7 +2,8 @@ package com.example.sportsnote.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * 課題
@@ -69,4 +70,21 @@ data class AddTaskData(
     val cause: String = "",
     val measuresTitle: String = "",
     val groupList: List<Group>
+)
+
+/**
+ * 課題一覧用データ
+ *
+ * @param taskID 課題ID
+ * @param groupID グループID
+ * @param title タイトル
+ * @param measures 最優先の対策
+ * @param order 並び順
+ */
+data class TaskListData(
+    val taskID: String,
+    val groupID: String,
+    val title: String,
+    val measures: String,
+    val order: Int
 )
