@@ -1,17 +1,22 @@
 package com.example.sportsnote.ui.task
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
@@ -25,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.R
@@ -88,7 +92,7 @@ fun TaskScreen(
                 onRefresh = onRefresh
             ) {
                 // 課題一覧
-                GroupListScreen(
+                TaskListScreen(
                     groups = groups,
                     onInfoButtonClick = { group ->
                         // GroupViewScreenに遷移する
@@ -128,25 +132,47 @@ fun TaskScreen(
     }
 }
 
+/**
+ * 課題一覧のリスト表示
+ *
+ * @param groups グループリスト
+ * @param onInfoButtonClick グループのInfoボタンの処理
+ */
 @Composable
-fun GroupListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
+fun TaskListScreen(groups: List<Group>, onInfoButtonClick: (Group) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
         items(groups) { group ->
+            // グループ表示
             GroupHeaderView(
                 title = group.title,
                 colorId = group.color,
                 onInfoButtonClick = { onInfoButtonClick(group) }
             )
+            Divider()
+
+            // 完了した課題セル
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .clickable {
+                        // クリック時の処理をここに記述
+                    }
+            ) {
+                Text(
+                    text = stringResource(R.string.completedTask),
+                    color = MaterialTheme.colors.primary,
+                    style = MaterialTheme.typography.body2,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 8.dp)
+                )
+            }
+            Divider()
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewLazySectionedColumn() {
-    TaskScreen()
 }

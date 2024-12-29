@@ -51,4 +51,5 @@
     <string name="addTaskAction">課題を追加</string>
     <string name="addPracticeNoteAction">練習ノートを追加</string>
     <string name="addTournamentNoteAction">大会ノートを追加</string>
+    <string name="completedTask">完了した課題</string>
 </resources>

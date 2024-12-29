@@ -35,7 +35,7 @@ fun GroupHeaderView(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(40.dp)
+            .height(50.dp)
             .background(MaterialTheme.colors.surface),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
