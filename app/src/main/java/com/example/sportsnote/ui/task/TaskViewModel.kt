@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.TaskData
+import com.example.sportsnote.model.TaskDetailData
 import com.example.sportsnote.model.TaskListData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -73,6 +74,23 @@ class TaskViewModel : ViewModel() {
             taskListDatas.add(taskListData)
         }
         return taskListDatas
+    }
+
+    /**
+     * taskIDに合致する課題を取得
+     *
+     * @param taskID taskID
+     * @return TaskDetailData
+     */
+    fun getTaskByTaskId(
+        taskID: String
+    ): TaskDetailData {
+        val taskData = realmManager.getObjectById<TaskData>(taskID)
+        val measuresList = realmManager.getMeasuresByTaskID(taskID)
+        return TaskDetailData(
+            task = taskData!!,
+            measuresList = measuresList
+        )
     }
 
     /**

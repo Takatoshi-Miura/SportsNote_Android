@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.accompanist.swiperefresh)
+    implementation(libs.compose.reorderable)
 
     // Composeの依存関係
     implementation("androidx.activity:activity-compose:1.8.0")

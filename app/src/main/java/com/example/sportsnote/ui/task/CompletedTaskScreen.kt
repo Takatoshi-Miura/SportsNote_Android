@@ -24,8 +24,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.sportsnote.R
+import com.example.sportsnote.ui.LocalNavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
@@ -43,6 +46,7 @@ fun CompletedTaskScreen(
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
+    val navController = LocalNavController.current
     val coroutineScope = rememberCoroutineScope()
     val viewModel: TaskViewModel = viewModel()
     var taskListDatas = viewModel.getCompletedTasksByGroupId(groupId)
@@ -90,7 +94,7 @@ fun CompletedTaskScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "完了した課題はありません",
+                                    text = stringResource(R.string.noData),
                                     style = MaterialTheme.typography.body1,
                                     color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
                                 )

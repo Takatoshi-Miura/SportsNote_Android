@@ -88,3 +88,14 @@ data class TaskListData(
     val measures: String,
     val order: Int
 )
+
+/**
+ * 課題詳細用データ
+ *
+ * @param task TaskData
+ * @param measuresList 対策リスト
+ */
+data class  TaskDetailData(
+    val task: TaskData,
+    val measuresList: List<Measures>,
+)

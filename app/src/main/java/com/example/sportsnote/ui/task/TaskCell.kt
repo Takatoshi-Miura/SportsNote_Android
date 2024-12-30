@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.model.TaskListData
+import com.example.sportsnote.ui.LocalNavController
 
 /**
  * 課題セル
@@ -21,13 +22,18 @@ import com.example.sportsnote.model.TaskListData
  * @param task TaskListData
  */
 @Composable
-fun TaskCell(task: TaskListData) {
+fun TaskCell(
+    task: TaskListData
+) {
+    val navController = LocalNavController.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
             .clickable {
-                // セルクリック時の処理を記述
+                // TaskDetailScreenに遷移する
+                navController.navigate("detail_task/${task.taskID}")
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
