@@ -15,6 +15,7 @@ import org.burnoutcrew.reorderable.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import com.example.sportsnote.model.Measures
 
 /**
@@ -28,6 +29,8 @@ fun MeasuresListContent(
     measuresList: List<Measures>,
     onOrderChanged: (List<Measures>) -> Unit
 ) {
+    val systemGray6 = Color(0xFFF2F2F7)
+
     // リストの状態を保持
     var list by remember { mutableStateOf(measuresList) }
 
@@ -52,7 +55,7 @@ fun MeasuresListContent(
                 MeasureItem(
                     measure = measure,
                     modifier = Modifier
-                        .background(if (isDragging) MaterialTheme.colors.primary.copy(alpha = 0.1f) else MaterialTheme.colors.surface)
+                        .background(if (isDragging) MaterialTheme.colors.primary.copy(alpha = 0.1f) else systemGray6)
                         .padding(8.dp)
                         .fillMaxWidth()
                 )

@@ -117,4 +117,13 @@ class TaskViewModel : ViewModel() {
         realmManager.saveItem(task)
         return taskId
     }
+
+    /**
+     * TaskDataを論理削除
+     *
+     * @param taskID taskID
+     */
+    suspend fun deleteTaskData(taskID: String) {
+        realmManager.logicalDelete<TaskData>(taskID)
+    }
 }

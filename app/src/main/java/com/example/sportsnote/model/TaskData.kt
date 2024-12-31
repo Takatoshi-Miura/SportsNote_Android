@@ -97,5 +97,5 @@ data class TaskListData(
  */
 data class  TaskDetailData(
     val task: TaskData,
-    val measuresList: List<Measures>,
+    var measuresList: List<Measures>,
 )

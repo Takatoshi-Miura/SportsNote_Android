@@ -25,9 +25,12 @@ import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
+import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.components.TextInputDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 import com.example.sportsnote.ui.measures.MeasuresListContent
+import com.example.sportsnote.ui.measures.MeasuresViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -46,6 +49,7 @@ fun TaskDetailScreen(
     appBarRightIcon: MutableState<(@Composable () -> Unit)?>
 ) {
     val taskViewModel = TaskViewModel()
+    val measuresViewModel = MeasuresViewModel()
     val taskDetail = taskViewModel.getTaskByTaskId(taskId)
     val coroutineScope = rememberCoroutineScope()
 
@@ -53,6 +57,8 @@ fun TaskDetailScreen(
     var title by remember { mutableStateOf(taskDetail.task.title) }
     var cause by remember { mutableStateOf(taskDetail.task.cause) }
     val showDialog = remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
+    val inputText = remember { mutableStateOf("") }
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // タイトル
@@ -82,9 +88,7 @@ fun TaskDetailScreen(
             MeasuresListContent(
                 measuresList = taskDetail.measuresList,
                 onOrderChanged = {
-                    taskDetail.measuresList.forEachIndexed { index, measure ->
-                        measure.order = index
-                    }
+                    // TODO: 対策の並び順を更新
                 }
             )
         }
@@ -100,9 +104,16 @@ fun TaskDetailScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
-                    // TODO: 保存処理
+                    // 保存処理
+                    taskViewModel.saveTask(
+                        taskId = taskId,
+                        title = title,
+                        cause = cause,
+                        groupId = taskDetail.task.groupID
+                    )
                 },
                 onDelete = {
+                    dialogType = DialogType.Delete
                     showDialog.value = true
                 },
                 updateAppBar = { navigationIcon, rightIcon ->
@@ -119,7 +130,8 @@ fun TaskDetailScreen(
         FloatingActionButton(
             onClick = {
                 coroutineScope.launch {
-                    // TODO: 対策追加ダイアログ
+                    dialogType = DialogType.AddMeasure
+                    showDialog.value = true
                 }
             },
             modifier = Modifier
@@ -133,21 +145,50 @@ fun TaskDetailScreen(
         }
     }
 
-    // 削除確認ダイアログの表示
     if (showDialog.value) {
-        CustomAlertDialog(
-            title = stringResource(R.string.deleteTask),
-            message = stringResource(R.string.deleteTaskMessage),
-            confirmButtonText = stringResource(R.string.delete),
-            onConfirm = {
-                coroutineScope.launch {
-                    // TODO: 削除処理
-//                    viewModel.deleteGroup(groupId)
-                    showDialog.value = false
-                    onBack()
-                }
-            },
-            showDialog = showDialog
-        )
+        when (dialogType) {
+            DialogType.None -> {
+                // 何もしない
+            }
+
+            // 削除確認ダイアログの表示
+            DialogType.Delete -> {
+                CustomAlertDialog(
+                    title = stringResource(R.string.deleteTask),
+                    message = stringResource(R.string.deleteTaskMessage),
+                    confirmButtonText = stringResource(R.string.delete),
+                    onConfirm = {
+                        coroutineScope.launch {
+                            // 削除処理
+                            taskViewModel.deleteTaskData(taskId)
+                            showDialog.value = false
+                            onBack()
+                        }
+                    },
+                    showDialog = showDialog
+                )
+            }
+
+            // 対策追加ダイアログ
+            DialogType.AddMeasure -> {
+                TextInputDialog(
+                    title = stringResource(R.string.addMeasures),
+                    message = stringResource(R.string.addMeasuresMessage),
+                    inputTextState = inputText,
+                    onConfirm = { input ->
+                        coroutineScope.launch {
+                            // 対策追加
+                            measuresViewModel.saveMeasures(
+                                title = input,
+                                taskId = taskId
+                            )
+                            // TODO: UIに反映
+                            showDialog.value = false
+                        }
+                    },
+                    showDialog = showDialog
+                )
+            }
+        }
     }
 }

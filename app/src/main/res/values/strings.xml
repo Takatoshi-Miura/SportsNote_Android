@@ -56,4 +56,6 @@
     <string name="taskDetail">課題の詳細</string>
     <string name="deleteTask">課題の削除</string>
     <string name="deleteTaskMessage">課題を削除しますか？\n課題を削除すると復元できません。</string>
+    <string name="addMeasures">対策の追加</string>
+    <string name="addMeasuresMessage">対策を入力して下さい。</string>
 </resources>

@@ -21,12 +21,13 @@ class MeasuresViewModel : ViewModel() {
         measuresId: String = UUID.randomUUID().toString(),
         taskId: String,
         title: String
-    ) {
+    ): Measures {
         val measures = Measures(
             measuresId = measuresId,
             taskId = taskId,
             title = title
         )
         realmManager.saveItem(measures)
+        return measures
     }
 }

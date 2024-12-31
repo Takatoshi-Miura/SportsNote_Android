@@ -174,6 +174,17 @@ class RealmManager {
                     is TaskData -> { it.isDeleted = true }
                 }
                 realmTransaction.insertOrUpdate(it)
+
+                // TaskDataを削除する場合、関連するMeasuresも論理削除
+                if (it is TaskData) {
+                    val relatedMeasures = realmTransaction.where(Measures::class.java)
+                        .equalTo("taskID", id)
+                        .findAll()
+                    relatedMeasures.forEach { measure ->
+                        measure.isDeleted = true
+                        realmTransaction.insertOrUpdate(measure)
+                    }
+                }
             }
         }
     }
