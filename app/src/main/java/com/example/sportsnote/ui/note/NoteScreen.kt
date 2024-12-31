@@ -44,6 +44,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.utils.NoteType
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -62,9 +63,10 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val BOTTOM_NAVIGATION_HEIGHT = 56.dp
-    var isDialogVisible by remember { mutableStateOf(false) } // ダイアログの表示フラグ
     val navController = LocalNavController.current
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
 
     // ノート一覧のリフレッシュ処理
     val onRefresh = {
@@ -76,11 +78,13 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         sheetContent = {
             val actionItems = listOf(
                 stringResource(R.string.addPracticeNoteAction) to {
-                    // 練習ノート追加処理（仮）
+                    isDialogVisible = true
+                    dialogType = DialogType.AddPracticeNote
                     coroutineScope.launch { sheetState.hide() }
                 },
                 stringResource(R.string.addTournamentNoteAction) to {
                     isDialogVisible = true
+                    dialogType = DialogType.AddTournamentNote
                     coroutineScope.launch { sheetState.hide() }
                 },
                 stringResource(R.string.cancel) to {
@@ -128,7 +132,12 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     }
 
     // ダイアログでフルスクリーンモーダルを表示
-    if (isDialogVisible) {
+    if (!isDialogVisible) return
+    if (dialogType == DialogType.AddPracticeNote) {
+        AddPracticeNoteScreen(
+            onDismiss = { isDialogVisible = false }
+        )
+    } else if (dialogType == DialogType.AddTournamentNote) {
         AddTournamentNoteScreen(
             onDismiss = { isDialogVisible = false }
         )

@@ -17,7 +17,9 @@ import com.example.sportsnote.R
 enum class DialogType {
     None,
     Delete,
-    AddMeasure
+    AddMeasure,
+    AddTournamentNote,
+    AddPracticeNote,
 }
 
 /**

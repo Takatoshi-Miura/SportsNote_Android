@@ -150,50 +150,41 @@ fun TaskDetailScreen(
         }
     }
 
-    if (showDialog.value) {
-        when (dialogType) {
-            DialogType.None -> {
-                // 何もしない
-            }
-
-            // 削除確認ダイアログの表示
-            DialogType.Delete -> {
-                CustomAlertDialog(
-                    title = stringResource(R.string.deleteTask),
-                    message = stringResource(R.string.deleteTaskMessage),
-                    confirmButtonText = stringResource(R.string.delete),
-                    onConfirm = {
-                        coroutineScope.launch {
-                            // 削除処理
-                            taskViewModel.deleteTaskData(taskId)
-                            showDialog.value = false
-                            onBack()
-                        }
-                    },
-                    showDialog = showDialog
-                )
-            }
-
-            // 対策追加ダイアログ
-            DialogType.AddMeasure -> {
-                TextInputDialog(
-                    title = stringResource(R.string.addMeasures),
-                    message = stringResource(R.string.addMeasuresMessage),
-                    inputTextState = inputText,
-                    onConfirm = { input ->
-                        coroutineScope.launch {
-                            // 対策追加
-                            measuresViewModel.saveMeasures(
-                                title = input,
-                                taskId = taskId
-                            )
-                            // TODO: UIに反映
-                            showDialog.value = false
-                        }
-                    },
-                    showDialog = showDialog
-                )
-            }
-        }
+    if (!showDialog.value) return
+    if (dialogType == DialogType.Delete) {
+        // 削除確認ダイアログの表示
+        CustomAlertDialog(
+            title = stringResource(R.string.deleteTask),
+            message = stringResource(R.string.deleteTaskMessage),
+            confirmButtonText = stringResource(R.string.delete),
+            onConfirm = {
+                coroutineScope.launch {
+                    // 削除処理
+                    taskViewModel.deleteTaskData(taskId)
+                    showDialog.value = false
+                    onBack()
+                }
+            },
+            showDialog = showDialog
+        )
+    } else if (dialogType == DialogType.AddMeasure) {
+        // 対策追加ダイアログ
+        TextInputDialog(
+            title = stringResource(R.string.addMeasures),
+            message = stringResource(R.string.addMeasuresMessage),
+            inputTextState = inputText,
+            onConfirm = { input ->
+                coroutineScope.launch {
+                    // 対策追加
+                    measuresViewModel.saveMeasures(
+                        title = input,
+                        taskId = taskId
+                    )
+                    // TODO: UIに反映
+                    showDialog.value = false
+                }
+            },
+            showDialog = showDialog
+        )
     }
 }
