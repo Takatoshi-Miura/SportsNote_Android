@@ -58,4 +58,7 @@
     <string name="deleteTaskMessage">課題を削除しますか？\n課題を削除すると復元できません。</string>
     <string name="addMeasures">対策の追加</string>
     <string name="addMeasuresMessage">対策を入力して下さい。</string>
+    <string name="measuresDetail">対策の詳細</string>
+    <string name="deleteMeasures">対策の削除</string>
+    <string name="deleteMeasuresMessage">対策を削除しますか？\n対策を削除するとノートからも関連する情報が全て削除されます。一度削除した対策は復元できません。</string>
 </resources>

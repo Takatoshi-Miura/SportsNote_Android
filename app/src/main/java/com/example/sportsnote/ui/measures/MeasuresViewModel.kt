@@ -9,6 +9,15 @@ class MeasuresViewModel : ViewModel() {
 
     private val realmManager: RealmManager = RealmManager()
 
+    /**
+     * 対策を取得（measuresID指定）
+     *
+     * @param measuresID measuresID
+     * @return `Measures`オブジェクト。存在しない場合やエラーが発生した場合は`null`
+     */
+    fun getMeasuresById(measuresID: String): Measures? {
+        return realmManager.getObjectById<Measures>(measuresID)
+    }
 
     /**
      * 対策を保存する
@@ -29,5 +38,14 @@ class MeasuresViewModel : ViewModel() {
         )
         realmManager.saveItem(measures)
         return measures
+    }
+
+    /**
+     * 対策を論理削除
+     *
+     * @param measuresID measuresID
+     */
+    suspend fun deleteMeasures(measuresID: String) {
+        realmManager.logicalDelete<Measures>(measuresID)
     }
 }

@@ -1,6 +1,7 @@
 package com.example.sportsnote.ui.measures
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -23,11 +24,13 @@ import com.example.sportsnote.model.Measures
  *
  * @param measuresList 対策リスト
  * @param onOrderChanged 並び替え時の処理
+ * @param onItemClick アイテムクリック時の処理
  */
 @Composable
 fun MeasuresListContent(
     measuresList: List<Measures>,
-    onOrderChanged: (List<Measures>) -> Unit
+    onOrderChanged: (List<Measures>) -> Unit,
+    onItemClick: (String) -> Unit
 ) {
     val systemGray6 = Color(0xFFF2F2F7)
 
@@ -56,8 +59,11 @@ fun MeasuresListContent(
                     measure = measure,
                     modifier = Modifier
                         .background(if (isDragging) MaterialTheme.colors.primary.copy(alpha = 0.1f) else systemGray6)
-                        .padding(8.dp)
                         .fillMaxWidth()
+                        .clickable {
+                            onItemClick(measure.measuresID)
+                        }
+                        .padding(8.dp)
                 )
             }
             if (list.size == 1) {

@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.Screen
 import com.example.sportsnote.ui.group.GroupViewScreen
+import com.example.sportsnote.ui.measures.MeasuresScreen
 import com.example.sportsnote.ui.note.NoteScreen
 import com.example.sportsnote.ui.note.TournamentNoteViewScreen
 import com.example.sportsnote.ui.target.TargetScreen
@@ -88,6 +89,16 @@ fun NavigationHost() {
                 val taskId = backStackEntry.arguments?.getString("taskId") ?: ""
                 TaskDetailScreen(
                     taskId = taskId,
+                    onBack = { navController.popBackStack() },
+                    appBarNavigationIcon = appBarNavigationIcon,
+                    appBarRightIcon = appBarRightIcon
+                )
+            }
+            // Measures詳細
+            composable(Screen.Measures.route) { backStackEntry ->
+                val measuresId = backStackEntry.arguments?.getString("measuresId") ?: ""
+                MeasuresScreen(
+                    measuresID =  measuresId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
                     appBarRightIcon = appBarRightIcon

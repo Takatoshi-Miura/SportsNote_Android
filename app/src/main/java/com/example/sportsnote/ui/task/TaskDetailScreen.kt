@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
+import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DialogType
@@ -52,6 +53,7 @@ fun TaskDetailScreen(
     val measuresViewModel = MeasuresViewModel()
     val taskDetail = taskViewModel.getTaskByTaskId(taskId)
     val coroutineScope = rememberCoroutineScope()
+    val navController = LocalNavController.current
 
     // 入力データ
     var title by remember { mutableStateOf(taskDetail.task.title) }
@@ -89,6 +91,9 @@ fun TaskDetailScreen(
                 measuresList = taskDetail.measuresList,
                 onOrderChanged = {
                     // TODO: 対策の並び順を更新
+                },
+                onItemClick = { measuresID ->
+                    navController.navigate("measures/${measuresID}")
                 }
             )
         }

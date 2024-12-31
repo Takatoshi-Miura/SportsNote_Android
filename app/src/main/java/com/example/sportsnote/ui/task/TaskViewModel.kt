@@ -49,11 +49,16 @@ class TaskViewModel : ViewModel() {
      */
     private fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
         val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
+        val measuresTitle = if (measuresList.isNotEmpty()) {
+            measuresList.first().title
+        } else {
+            ""
+        }
         return TaskListData(
             taskID = task.taskID,
             groupID = task.groupID,
             title = task.title,
-            measures = measuresList.first().title,
+            measures = measuresTitle,
             order = task.order
         )
     }
