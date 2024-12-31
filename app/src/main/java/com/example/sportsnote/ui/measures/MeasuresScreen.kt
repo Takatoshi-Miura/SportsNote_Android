@@ -63,6 +63,7 @@ fun MeasuresScreen(
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(8.dp)
             )
+            // TODO: 関連するメモを取得
         }
     )
 
