@@ -40,11 +40,13 @@ fun MultiLineTextInputField(
     val minTextHeight = lineHeight * defaultLines
 
     Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
+        if (title.isNotBlank()) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+        }
         androidx.compose.material.OutlinedTextField(
             value = text,
             onValueChange = {

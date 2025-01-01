@@ -64,7 +64,16 @@ fun AddPracticeNoteScreen(
                 )
 
                 // 共通フォーム
-
+                PracticeNoteFormContent(
+                    note = null,
+                    onDateChange = { selectedDate -> date.value = selectedDate },
+                    onWeatherChange = { selectedWeather -> weather.value = selectedWeather },
+                    onTemperatureChange = { selectedTemperature -> temperature.value = selectedTemperature },
+                    onConditionChange = { updatedCondition -> condition.value = updatedCondition },
+                    onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
+                    onDetailChange = { updateDetail -> detail.value = updateDetail },
+                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection }
+                )
             }
         }
     }

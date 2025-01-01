@@ -62,4 +62,6 @@
     <string name="deleteMeasures">対策の削除</string>
     <string name="deleteMeasuresMessage">対策を削除しますか？\n対策を削除するとノートからも関連する情報が全て削除されます。一度削除した対策は復元できません。</string>
     <string name="addPracticeNote">練習ノートの追加</string>
+    <string name="practicePurpoce">練習の目的</string>
+    <string name="practiceDetail">練習内容</string>
 </resources>
