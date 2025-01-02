@@ -55,6 +55,8 @@ fun SettingScreen() {
                     iconRes = R.drawable.baseline_question_mark_24
                 ) {
                     // チュートリアル画面を表示
+                    isDialogVisible = true
+                    dialogType = DialogType.Tutorial
                 },
                 // お問い合わせ
                 ItemData(
@@ -99,6 +101,10 @@ fun SettingScreen() {
     if (!isDialogVisible) return
     if (dialogType == DialogType.Login) {
         LoginScreen(
+            onDismiss = { isDialogVisible = false }
+        )
+    } else if (dialogType == DialogType.Tutorial) {
+        TutorialScreen(
             onDismiss = { isDialogVisible = false }
         )
     }
