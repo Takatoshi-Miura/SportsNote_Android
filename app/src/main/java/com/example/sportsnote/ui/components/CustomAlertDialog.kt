@@ -20,6 +20,7 @@ enum class DialogType {
     AddMeasure,
     AddTournamentNote,
     AddPracticeNote,
+    Login
 }
 
 /**

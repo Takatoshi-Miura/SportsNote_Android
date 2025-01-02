@@ -1,10 +1,15 @@
 package com.example.sportsnote.ui.setting
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.sportsnote.R
+import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.ui.components.SectionData
 import com.example.sportsnote.ui.components.SectionedColumn
@@ -21,6 +26,8 @@ fun SettingScreen() {
     val buildNo = AppInfo.getBuildNo(context)
     val androidVersion = AppInfo.getAndroidVersionInfo()
     val deviceName = AppInfo.getDeviceName()
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
 
     val sections = listOf(
         // データ
@@ -32,8 +39,9 @@ fun SettingScreen() {
                     title = stringResource(R.string.data_transfer),
                     iconRes = R.drawable.outline_cloud_upload_24
                 ) {
-                    println("データの引継ぎ")
                     // ログイン画面を表示
+                    isDialogVisible = true
+                    dialogType = DialogType.Login
                 }
             )
         ),
@@ -86,6 +94,14 @@ fun SettingScreen() {
         )
     )
     SectionedColumn(sections = sections)
+
+    // ダイアログでフルスクリーンモーダルを表示
+    if (!isDialogVisible) return
+    if (dialogType == DialogType.Login) {
+        LoginScreen(
+            onDismiss = { isDialogVisible = false }
+        )
+    }
 }
 
 @Preview(showBackground = true)
