@@ -72,25 +72,6 @@ fun CustomSpacerColumn(
 }
 
 /**
- * セクションなしのLazyColumnを作成
- *
- * @param items リスト項目
- */
-@Composable
-fun LazyNonSectionedColumn(items: List<ItemData>) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(items) { item ->
-            TextListItem(title = item.title, onClick = item.onClick)
-            Divider(thickness = 1.dp)
-        }
-    }
-}
-
-/**
  * セクション付きのColumnを作成
  *
  * @param sections セクション
@@ -170,27 +151,6 @@ fun SectionItem(item: ItemData) {
             text = item.subTitle,
             fontSize = 14.sp,
             color = Color.Gray
-        )
-    }
-}
-
-/**
- * テキストのみのリストアイテム
- *
- * @param title タイトル
- * @param onClick 押下時の処理
- */
-@Composable
-fun TextListItem(title: String, onClick: () -> Unit = {}) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp)
-    ) {
-        Text(
-            text = title,
-            fontSize = 16.sp
         )
     }
 }

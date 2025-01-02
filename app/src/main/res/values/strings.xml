@@ -64,4 +64,5 @@
     <string name="addPracticeNote">練習ノートの追加</string>
     <string name="practicePurpoce">練習の目的</string>
     <string name="practiceDetail">練習内容</string>
+    <string name="mailerNotFound">メールアプリが見つかりませんでした</string>
 </resources>

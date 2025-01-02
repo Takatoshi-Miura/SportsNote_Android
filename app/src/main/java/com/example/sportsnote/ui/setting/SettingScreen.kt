@@ -9,6 +9,7 @@ import com.example.sportsnote.ui.components.ItemData
 import com.example.sportsnote.ui.components.SectionData
 import com.example.sportsnote.ui.components.SectionedColumn
 import com.example.sportsnote.utils.AppInfo
+import launchMailer
 
 /**
  * 設定画面を作成
@@ -18,6 +19,8 @@ fun SettingScreen() {
     val context = LocalContext.current
     val appVersion = AppInfo.getAppVersion(context)
     val buildNo = AppInfo.getBuildNo(context)
+    val androidVersion = AppInfo.getAndroidVersionInfo()
+    val deviceName = AppInfo.getDeviceName()
 
     val sections = listOf(
         // データ
@@ -51,6 +54,21 @@ fun SettingScreen() {
                     iconRes = R.drawable.baseline_mail_outline_24
                 ) {
                     // メーラーを表示
+                    val email = "SportsNote開発者<it6210ge@gmail.com>"
+                    val subject = "お問い合わせ"
+                    val body = """
+                        お問い合わせ内容をご記入下さい。
+                        
+                        
+                        以下は削除しないでください。
+                        ■ご利用端末:
+                         $deviceName
+                        ■OSバージョン:
+                         $androidVersion
+                        ■アプリバージョン:
+                         $appVersion
+                        """.trimIndent()
+                    launchMailer(context, email, subject, body)
                 }
             )
         ),
