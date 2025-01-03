@@ -72,4 +72,5 @@
     <string name="createAccount">アカウント作成</string>
     <string name="deleteAccount">アカウント削除</string>
     <string name="notLoginMessage">アカウントを作成し、別の端末からログインするとデータを引継ぐことができます。</string>
+    <string name="close">閉じる</string>
 </resources>
