@@ -73,4 +73,10 @@
     <string name="deleteAccount">アカウント削除</string>
     <string name="notLoginMessage">アカウントを作成し、別の端末からログインするとデータを引継ぐことができます。</string>
     <string name="close">閉じる</string>
+    <string name="logout">ログアウト</string>
+    <string name="loginMessage">下記アカウントでログイン済み</string>
+    <string name="loginError">ログインに失敗しました。入力内容を確認して下さい。</string>
+    <string name="loginSuccess">ログインに成功しました</string>
+    <string name="emptyTextError">メールアドレスまたはパスワードが未入力です。</string>
+    <string name="logoutSuccess">ログアウトしました</string>
 </resources>

@@ -1,6 +1,9 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.sportsnote.ui.setting
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +21,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -32,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
+import com.example.sportsnote.model.PreferencesManager
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -43,12 +50,15 @@ import kotlinx.coroutines.CoroutineScope
 fun LoginScreen(
     onDismiss: () -> Unit,
 ) {
-//    val viewModel:
+    val viewModel = LoginViewModel()
+    val context = LocalContext.current
     val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
-    var loginId = remember { mutableStateOf("") }
-    var password = remember { mutableStateOf("") }
+    var email = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.ADDRESS, "")) }
+    var password = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.PASSWORD, "")) }
+    val isLoggedIn by viewModel.isLoggedIn.collectAsState()
+    val message by viewModel.message.collectAsState()
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -88,7 +98,11 @@ fun LoginScreen(
 
                 // ログイン状態によるメッセージ表示
                 Text(
-                    text = stringResource(R.string.notLoginMessage),
+                    text = if (isLoggedIn) {
+                        stringResource(R.string.loginMessage)
+                    } else {
+                        stringResource(R.string.notLoginMessage)
+                    },
                     color = Color.White,
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -98,8 +112,8 @@ fun LoginScreen(
 
                 // メールアドレス入力欄
                 CustomTextField(
-                    value = loginId.value,
-                    onValueChange = { loginId.value = it },
+                    value = email.value,
+                    onValueChange = { email.value = it },
                     label = stringResource(R.string.mailAddress)
                 )
 
@@ -115,9 +129,19 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // ログイン・ログアウトボタン
                 CustomButton(
-                    text = stringResource(R.string.login),
-                    onClick = { /* TODO: ログイン処理 */ }
+                    text = if (isLoggedIn) stringResource(R.string.logout) else stringResource(R.string.login),
+                    onClick = {
+                        if (isLoggedIn) {
+                            viewModel.logout(context)
+                            email.value = ""
+                            password.value = ""
+                        } else {
+                            viewModel.login(email.value, password.value, context)
+                        }
+                    },
+                    backgroundColor = if (isLoggedIn) Color.Red else MaterialTheme.colors.secondary
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -149,6 +173,12 @@ fun LoginScreen(
                     onClick = onDismiss,
                     backgroundColor = Color.Gray
                 )
+            }
+
+            // メッセージ表示
+            if (!message.isNullOrEmpty()) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                viewModel.resetMessage()
             }
         }
     }

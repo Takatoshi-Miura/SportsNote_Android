@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
 
 /**

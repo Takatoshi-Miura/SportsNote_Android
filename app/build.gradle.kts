@@ -67,6 +67,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.0")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation(libs.firebase.auth.ktx)
 
     // テスト用依存関係（オプション）
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
