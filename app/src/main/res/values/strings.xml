@@ -65,4 +65,11 @@
     <string name="practicePurpoce">練習の目的</string>
     <string name="practiceDetail">練習内容</string>
     <string name="mailerNotFound">メールアプリが見つかりませんでした</string>
+    <string name="mailAddress">メールアドレス</string>
+    <string name="password">パスワード</string>
+    <string name="login">ログイン</string>
+    <string name="passwordReset">パスワードリセット</string>
+    <string name="createAccount">アカウント作成</string>
+    <string name="deleteAccount">アカウント削除</string>
+    <string name="notLoginMessage">アカウントを作成し、別の端末からログインするとデータを引継ぐことができます。</string>
 </resources>
