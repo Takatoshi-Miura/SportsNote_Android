@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "300910913096",
+    "firebase_url": "https://sportnote-b2c92.firebaseio.com",
+    "project_id": "sportnote-b2c92",
+    "storage_bucket": "sportnote-b2c92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300910913096:android:0eed0d2127a80990905a7d",
+        "android_client_info": {
+          "package_name": "com.example.sportsnote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "300910913096-n8g7v8r51ph0gmed1kve83gjkshht67m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqqVj_VKwr0ot9-xfRh1aaykiIISHVkmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300910913096-n8g7v8r51ph0gmed1kve83gjkshht67m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "300910913096-rusg14vrdgkooiakcphvldh9pjcdp3e4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Takatoshi-Miura.-11-SportNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
