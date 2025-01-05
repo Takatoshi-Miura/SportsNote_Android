@@ -39,6 +39,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.ui.components.CustomAlertDialog
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -59,6 +60,7 @@ fun LoginScreen(
     var password = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.PASSWORD, "")) }
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     val message by viewModel.message.collectAsState()
+    val showDialog = remember { mutableStateOf(false) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -148,7 +150,9 @@ fun LoginScreen(
 
                 CustomButton(
                     text = stringResource(R.string.passwordReset),
-                    onClick = { /* TODO: パスワードリセット処理 */ }
+                    onClick = {
+                        showDialog.value = true
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -179,6 +183,19 @@ fun LoginScreen(
             if (!message.isNullOrEmpty()) {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 viewModel.resetMessage()
+            }
+
+            // ダイアログ表示
+            if (showDialog.value) {
+                CustomAlertDialog(
+                    title = stringResource(R.string.passwordReset),
+                    message = stringResource(R.string.confirmSendPasswordResetMail),
+                    onConfirm = {
+                        viewModel.sendPasswordResetEmail(email.value, context)
+                        showDialog.value = false
+                    },
+                    showDialog = showDialog
+                )
             }
         }
     }

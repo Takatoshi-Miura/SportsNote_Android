@@ -79,4 +79,8 @@
     <string name="loginSuccess">ログインに成功しました</string>
     <string name="emptyTextError">メールアドレスまたはパスワードが未入力です。</string>
     <string name="logoutSuccess">ログアウトしました</string>
+    <string name="emptyTextErrorPasswordReset">パスワードリセットメール送信先のメールアドレスを入力してください。</string>
+    <string name="sendMail">メールを送信しました。</string>
+    <string name="sendMailFailed">メールの送信に失敗しました。入力内容を確認して下さい。</string>
+    <string name="confirmSendPasswordResetMail">入力したメールアドレス宛にパスワードリセットメールを送信します。よろしいですか？</string>
 </resources>

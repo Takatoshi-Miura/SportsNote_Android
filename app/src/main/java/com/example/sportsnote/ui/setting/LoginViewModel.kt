@@ -115,22 +115,28 @@ class LoginViewModel : ViewModel() {
     }
 
     /**
-     * パスワード変更
+     * パスワードリセットメールを送信
      *
-     * @param newPassword 新しいパスワード
+     * @param email メールアドレス
      */
-    fun changePassword(newPassword: String) {
-        val user = auth.currentUser
-        if (user != null) {
-            user.updatePassword(newPassword).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _message.value = "パスワードが変更されました"
-                } else {
-                    _message.value = task.exception?.message ?: "パスワード変更に失敗しました"
+    fun sendPasswordResetEmail(email: String, context: Context) {
+        if (email.isBlank()) {
+            _message.value = context.getString(R.string.emptyTextErrorPasswordReset)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        _message.value = context.getString(R.string.sendMail)
+                    } else {
+                        _message.value = task.exception?.message ?: context.getString(R.string.sendMailFailed)
+                    }
                 }
+            } catch (e: Exception) {
+                _message.value = e.message
             }
-        } else {
-            _message.value = "ログインしていません"
         }
     }
 }
