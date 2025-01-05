@@ -21,7 +21,9 @@ enum class DialogType {
     AddTournamentNote,
     AddPracticeNote,
     Login,
-    Tutorial
+    Tutorial,
+    PasswordReset,
+    CreateAccount
 }
 
 /**

@@ -83,4 +83,7 @@
     <string name="sendMail">メールを送信しました。</string>
     <string name="sendMailFailed">メールの送信に失敗しました。入力内容を確認して下さい。</string>
     <string name="confirmSendPasswordResetMail">入力したメールアドレス宛にパスワードリセットメールを送信します。よろしいですか？</string>
+    <string name="createAccountMessage">入力した内容でアカウントを作成します。よろしいですか？</string>
+    <string name="createAccountSuccess">アカウント作成に成功しました</string>
+    <string name="createAccountFailed">アカウントの作成に失敗しました。時間をおいて再度お試し下さい。</string>
 </resources>

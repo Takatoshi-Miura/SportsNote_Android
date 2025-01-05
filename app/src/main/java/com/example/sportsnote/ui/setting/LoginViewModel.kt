@@ -78,15 +78,21 @@ class LoginViewModel : ViewModel() {
      * @param email メールアドレス
      * @param password パスワード
      */
-    fun createAccount(email: String, password: String) {
+    fun createAccount(email: String, password: String, context: Context) {
+        if (email.isBlank() || password.isBlank()) {
+            _message.value = context.getString(R.string.emptyTextError)
+            return
+        }
         viewModelScope.launch {
             try {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         _isLoggedIn.value = true
-                        _message.value = "アカウント作成に成功しました"
+                        _message.value = context.getString(R.string.createAccountSuccess)
+                        PreferencesManager.set(key = PreferencesManager.Keys.ADDRESS, value = email)
+                        PreferencesManager.set(key = PreferencesManager.Keys.PASSWORD, value = password)
                     } else {
-                        _message.value = task.exception?.message ?: "アカウント作成に失敗しました"
+                        _message.value = task.exception?.message ?: context.getString(R.string.createAccountFailed)
                     }
                 }
             } catch (e: Exception) {

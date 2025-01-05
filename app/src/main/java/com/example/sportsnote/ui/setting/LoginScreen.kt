@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
+import com.example.sportsnote.ui.components.DialogType
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -61,6 +63,7 @@ fun LoginScreen(
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     val message by viewModel.message.collectAsState()
     val showDialog = remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -151,6 +154,7 @@ fun LoginScreen(
                 CustomButton(
                     text = stringResource(R.string.passwordReset),
                     onClick = {
+                        dialogType = DialogType.PasswordReset
                         showDialog.value = true
                     }
                 )
@@ -159,7 +163,10 @@ fun LoginScreen(
 
                 CustomButton(
                     text = stringResource(R.string.createAccount),
-                    onClick = { /* TODO: アカウント作成処理 */ }
+                    onClick = {
+                        dialogType = DialogType.CreateAccount
+                        showDialog.value = true
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -186,12 +193,32 @@ fun LoginScreen(
             }
 
             // ダイアログ表示
-            if (showDialog.value) {
+            if (!showDialog.value) {
+                return@Dialog
+            }
+
+            // パスワードリセット
+            if (dialogType == DialogType.PasswordReset) {
                 CustomAlertDialog(
                     title = stringResource(R.string.passwordReset),
                     message = stringResource(R.string.confirmSendPasswordResetMail),
                     onConfirm = {
                         viewModel.sendPasswordResetEmail(email.value, context)
+                        dialogType = DialogType.None
+                        showDialog.value = false
+                    },
+                    showDialog = showDialog
+                )
+            }
+
+            // アカウント作成
+            if (dialogType == DialogType.CreateAccount) {
+                CustomAlertDialog(
+                    title = stringResource(R.string.createAccount),
+                    message = stringResource(R.string.createAccountMessage),
+                    onConfirm = {
+                        viewModel.createAccount(email.value, password.value, context)
+                        dialogType = DialogType.None
                         showDialog.value = false
                     },
                     showDialog = showDialog
