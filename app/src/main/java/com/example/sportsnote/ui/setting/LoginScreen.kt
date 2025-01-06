@@ -173,7 +173,10 @@ fun LoginScreen(
 
                 CustomButton(
                     text = stringResource(R.string.deleteAccount),
-                    onClick = { /* TODO: アカウント削除処理 */ }
+                    onClick = {
+                        dialogType = DialogType.DeleteAccount
+                        showDialog.value = true
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -218,6 +221,20 @@ fun LoginScreen(
                     message = stringResource(R.string.createAccountMessage),
                     onConfirm = {
                         viewModel.createAccount(email.value, password.value, context)
+                        dialogType = DialogType.None
+                        showDialog.value = false
+                    },
+                    showDialog = showDialog
+                )
+            }
+
+            // アカウント削除
+            if (dialogType == DialogType.DeleteAccount) {
+                CustomAlertDialog(
+                    title = stringResource(R.string.deleteAccount),
+                    message = stringResource(R.string.deleteAccountMessage),
+                    onConfirm = {
+                        viewModel.deleteAccount(context)
                         dialogType = DialogType.None
                         showDialog.value = false
                     },

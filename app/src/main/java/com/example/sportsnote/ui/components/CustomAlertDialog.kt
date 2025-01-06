@@ -23,7 +23,8 @@ enum class DialogType {
     Login,
     Tutorial,
     PasswordReset,
-    CreateAccount
+    CreateAccount,
+    DeleteAccount
 }
 
 /**

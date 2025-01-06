@@ -104,19 +104,25 @@ class LoginViewModel : ViewModel() {
     /**
      * アカウント削除
      */
-    fun deleteAccount() {
+    fun deleteAccount(context: Context) {
+        if (!_isLoggedIn.value) {
+            _message.value = context.getString(R.string.pleaseLogin)
+            return
+        }
         val user = auth.currentUser
         if (user != null) {
             user.delete().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _isLoggedIn.value = false
-                    _message.value = "アカウントが削除されました"
+                    _message.value = context.getString(R.string.deleteAccountSuccess)
+                    PreferencesManager.remove(PreferencesManager.Keys.ADDRESS)
+                    PreferencesManager.remove(PreferencesManager.Keys.PASSWORD)
                 } else {
-                    _message.value = task.exception?.message ?: "アカウント削除に失敗しました"
+                    _message.value = task.exception?.message ?: context.getString(R.string.deleteAccountFailed)
                 }
             }
         } else {
-            _message.value = "ログインしていません"
+            _message.value = context.getString(R.string.pleaseLogin)
         }
     }
 

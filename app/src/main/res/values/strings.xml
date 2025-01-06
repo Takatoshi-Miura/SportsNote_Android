@@ -86,4 +86,8 @@
     <string name="createAccountMessage">入力した内容でアカウントを作成します。よろしいですか？</string>
     <string name="createAccountSuccess">アカウント作成に成功しました</string>
     <string name="createAccountFailed">アカウントの作成に失敗しました。時間をおいて再度お試し下さい。</string>
+    <string name="pleaseLogin">ログインしてください。</string>
+    <string name="deleteAccountSuccess">アカウントを削除しました</string>
+    <string name="deleteAccountFailed">アカウントの削除に失敗しました。時間をおいて再度お試し下さい。</string>
+    <string name="deleteAccountMessage">現在のアカウントを削除します。データが全て削除され、復元することができなくなります。よろしいですか？</string>
 </resources>
