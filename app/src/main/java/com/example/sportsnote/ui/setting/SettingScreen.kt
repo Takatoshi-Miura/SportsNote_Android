@@ -23,7 +23,6 @@ import launchMailer
 fun SettingScreen() {
     val context = LocalContext.current
     val appVersion = AppInfo.getAppVersion(context)
-    val buildNo = AppInfo.getBuildNo(context)
     val androidVersion = AppInfo.getAndroidVersionInfo()
     val deviceName = AppInfo.getDeviceName()
     var isDialogVisible by remember { mutableStateOf(false) }
@@ -89,7 +88,7 @@ fun SettingScreen() {
                 // アプリバージョン
                 ItemData(
                     title = stringResource(R.string.app_version),
-                    subTitle = "$appVersion（$buildNo）",
+                    subTitle = appVersion,
                     iconRes = R.drawable.baseline_info_outline_24
                 ) { }
             )

@@ -25,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +41,6 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.DialogType
-import kotlinx.coroutines.CoroutineScope
 
 /**
  * ログイン画面
@@ -55,7 +53,6 @@ fun LoginScreen(
 ) {
     val viewModel = LoginViewModel()
     val context = LocalContext.current
-    val coroutineScope: CoroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
     var email = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.ADDRESS, "")) }
