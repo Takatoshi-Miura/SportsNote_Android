@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,6 +63,11 @@ fun TaskScreen(
     var groupDialogVisible by remember { mutableStateOf(false) }
     var taskDialogVisible by remember { mutableStateOf(false) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+
+    LaunchedEffect(taskLists, groups) {
+        groupViewModel.loadData()
+        taskViewModel.loadData()
+    }
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
