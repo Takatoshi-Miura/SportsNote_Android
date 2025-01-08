@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,6 +68,10 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
+
+    LaunchedEffect(notes) {
+        noteViewModel.loadNotes()
+    }
 
     // ノート一覧のリフレッシュ処理
     val onRefresh = {
