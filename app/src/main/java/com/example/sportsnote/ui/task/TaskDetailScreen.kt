@@ -93,7 +93,16 @@ fun TaskDetailScreen(
                     // TODO: 対策の並び順を更新
                 },
                 onItemClick = { measuresID ->
-                    navController.navigate("measures/${measuresID}")
+                    coroutineScope.launch {
+                        // 非同期でsaveTaskを実行
+                        taskViewModel.saveTask(
+                            taskId = taskId,
+                            title = title,
+                            cause = cause,
+                            groupId = taskDetail.task.groupID
+                        )
+                        navController.navigate("measures/${measuresID}")
+                    }
                 }
             )
         }
