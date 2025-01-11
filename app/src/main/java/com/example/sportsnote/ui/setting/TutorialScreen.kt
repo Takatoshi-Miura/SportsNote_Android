@@ -1,6 +1,5 @@
 package com.example.sportsnote.ui.setting
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +40,6 @@ data class TutorialPage(
  *
  * @param onDismiss 閉じる時の処理
  */
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TutorialScreen(
     onDismiss: () -> Unit,
@@ -123,7 +121,7 @@ fun TutorialScreen(
             ) {
                 // ページ表示
                 HorizontalPager(
-                    beyondBoundsPageCount = pages.size,
+                    beyondViewportPageCount = pages.size,
                     state = pagerState,
                     modifier = Modifier.weight(1f)
                 ) { page ->
