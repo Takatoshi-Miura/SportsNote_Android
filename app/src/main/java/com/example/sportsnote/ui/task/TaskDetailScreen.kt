@@ -5,12 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -18,13 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.CustomAlertDialog
+import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -141,21 +137,11 @@ fun TaskDetailScreen(
         }
 
         // +ボタン
-        FloatingActionButton(
-            onClick = {
-                coroutineScope.launch {
-                    dialogType = DialogType.AddMeasure
-                    showDialog.value = true
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(
-                    end = 16.dp,
-                    bottom = 16.dp + 56.dp
-                )
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add Measures")
+        CustomFloatingActionButton {
+            coroutineScope.launch {
+                dialogType = DialogType.AddMeasure
+                showDialog.value = true
+            }
         }
     }
 

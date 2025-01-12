@@ -4,7 +4,6 @@ package com.example.sportsnote.ui.target
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,15 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.rememberModalBottomSheetState
@@ -37,11 +34,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -90,9 +89,6 @@ fun TargetScreen() {
                 .background(systemGray6)
                 .fillMaxSize()
         ) {
-            val coroutineScope = rememberCoroutineScope()
-            val BOTTOM_NAVIGATION_HEIGHT = 56.dp
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -120,18 +116,8 @@ fun TargetScreen() {
             }
 
             // +ボタン
-            FloatingActionButton(
-                onClick = {
-                    coroutineScope.launch { sheetState.show() }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        end = 16.dp,
-                        bottom = 16.dp + BOTTOM_NAVIGATION_HEIGHT
-                    )
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Target")
+            CustomFloatingActionButton {
+                coroutineScope.launch { sheetState.show() }
             }
         }
     }

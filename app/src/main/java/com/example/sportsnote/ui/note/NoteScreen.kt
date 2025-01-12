@@ -16,14 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -45,6 +43,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.utils.NoteType
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -63,7 +62,6 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val notes by noteViewModel.notes.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    val BOTTOM_NAVIGATION_HEIGHT = 56.dp
     val navController = LocalNavController.current
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     var isDialogVisible by remember { mutableStateOf(false) }
@@ -120,18 +118,8 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
             }
 
             // +ボタン
-            FloatingActionButton(
-                onClick = {
-                    coroutineScope.launch { sheetState.show() }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        end = 16.dp,
-                        bottom = 16.dp + BOTTOM_NAVIGATION_HEIGHT
-                    )
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Note")
+            CustomFloatingActionButton {
+                coroutineScope.launch { sheetState.show() }
             }
         }
     }

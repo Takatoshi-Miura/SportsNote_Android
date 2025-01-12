@@ -11,14 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +34,7 @@ import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.group.AddGroupScreen
 import com.example.sportsnote.ui.group.GroupHeaderView
 import com.example.sportsnote.ui.group.GroupViewModel
@@ -59,7 +56,6 @@ fun TaskScreen(
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
-    val BOTTOM_NAVIGATION_HEIGHT = 56.dp
     var groupDialogVisible by remember { mutableStateOf(false) }
     var taskDialogVisible by remember { mutableStateOf(false) }
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
@@ -111,18 +107,8 @@ fun TaskScreen(
             }
 
             // +ボタン
-            FloatingActionButton(
-                onClick = {
-                    coroutineScope.launch { sheetState.show() }
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(
-                        end = 16.dp,
-                        bottom = 16.dp + BOTTOM_NAVIGATION_HEIGHT
-                    )
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add Task")
+            CustomFloatingActionButton {
+                coroutineScope.launch { sheetState.show() }
             }
         }
     }
