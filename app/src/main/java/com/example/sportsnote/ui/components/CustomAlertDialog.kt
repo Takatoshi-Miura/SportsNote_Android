@@ -24,7 +24,9 @@ enum class DialogType {
     Tutorial,
     PasswordReset,
     CreateAccount,
-    DeleteAccount
+    DeleteAccount,
+    AddYearTarget,
+    AddMonthTarget
 }
 
 /**

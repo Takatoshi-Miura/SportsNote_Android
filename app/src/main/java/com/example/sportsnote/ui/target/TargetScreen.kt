@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.sportsnote.ui.target
 
 import androidx.compose.foundation.background
@@ -14,24 +16,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.Text
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
+import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.DialogType
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -44,58 +55,93 @@ import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TargetScreen() {
     val systemGray6 = Color(0xFFF2F2F7)
+    val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
 
-    Box(
-        modifier = Modifier
-            .background(systemGray6)
-            .fillMaxSize()
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetContent = {
+            val actionItems = listOf(
+                stringResource(R.string.AddYearTarget) to {
+                    isDialogVisible = true
+                    dialogType = DialogType.AddYearTarget
+                    coroutineScope.launch { sheetState.hide() }
+                },
+                stringResource(R.string.AddMonthTarget) to {
+                    isDialogVisible = true
+                    dialogType = DialogType.AddMonthTarget
+                    coroutineScope.launch { sheetState.hide() }
+                },
+                stringResource(R.string.cancel) to {
+                    coroutineScope.launch { sheetState.hide() }
+                }
+            )
+            ActionBottomSheetContent(items = actionItems)
+        }
     ) {
-        val coroutineScope = rememberCoroutineScope()
-        val BOTTOM_NAVIGATION_HEIGHT = 56.dp
-
-        Column(
+        Box(
             modifier = Modifier
+                .background(systemGray6)
                 .fillMaxSize()
         ) {
-            // 年間目標と月間目標
-            Box(
+            val coroutineScope = rememberCoroutineScope()
+            val BOTTOM_NAVIGATION_HEIGHT = 56.dp
+
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .padding(8.dp)
+                    .fillMaxSize()
             ) {
-                Column {
-                    TargetLabel(stringResource(R.string.targetYear, "年間目標が入ります"))
-                    TargetLabel(stringResource(R.string.targetMonth, "月間目標が入ります"))
+                // 年間目標と月間目標
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .padding(8.dp)
+                ) {
+                    Column {
+                        TargetLabel(stringResource(R.string.targetYear, "年間目標が入ります"))
+                        TargetLabel(stringResource(R.string.targetMonth, "月間目標が入ります"))
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // カレンダー
+                CalendarDisplay(
+                    modifier = Modifier
+                        .background(Color.White)
+                )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // カレンダー
-            CalendarDisplay(
+            // +ボタン
+            FloatingActionButton(
+                onClick = {
+                    coroutineScope.launch { sheetState.show() }
+                },
                 modifier = Modifier
-                    .background(Color.White)
-            )
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        end = 16.dp,
+                        bottom = 16.dp + BOTTOM_NAVIGATION_HEIGHT
+                    )
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add Target")
+            }
         }
+    }
 
-        // +ボタン
-        FloatingActionButton(
-            onClick = {
-                coroutineScope.launch {  }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(
-                    end = 16.dp,
-                    bottom = 16.dp + BOTTOM_NAVIGATION_HEIGHT
-                )
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add Target")
-        }
+    // ダイアログでフルスクリーンモーダルを表示
+    if (!isDialogVisible) return
+    if (dialogType == DialogType.AddYearTarget) {
+        // 年間目標を追加
+    } else if (dialogType == DialogType.AddMonthTarget) {
+        // 月間目標を追加
     }
 }
 
@@ -159,7 +205,7 @@ fun CalendarDisplay(modifier: Modifier = Modifier) {
                     }
                 }
             ) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Previous Month")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous Month")
             }
 
             // 現在表示中の月を表示
@@ -178,7 +224,7 @@ fun CalendarDisplay(modifier: Modifier = Modifier) {
                     }
                 }
             ) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "Next Month")
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next Month")
             }
         }
 
