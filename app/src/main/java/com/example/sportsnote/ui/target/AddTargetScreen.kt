@@ -1,5 +1,6 @@
 package com.example.sportsnote.ui.target
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -33,6 +35,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.header.AddScreenHeader
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 /**
@@ -46,6 +49,7 @@ fun AddTargetScreen(
     isYearlyTarget: Boolean,
     onDismiss: () -> Unit
 ) {
+    val targetViewModel = TargetViewModel()
     val coroutineScope = rememberCoroutineScope()
     var title by remember { mutableStateOf("") }
     var year by remember { mutableStateOf(2025) }
@@ -57,6 +61,8 @@ fun AddTargetScreen(
             usePlatformDefaultWidth = false
         )
     ) {
+        val context = LocalContext.current
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -68,7 +74,24 @@ fun AddTargetScreen(
                     title = stringResource(R.string.AddTarget),
                     onCancel = onDismiss,
                     onSave = {
-                        // TODO: 保存処理
+                        // タイトル未入力の場合
+                        if (title.isBlank()) {
+                            coroutineScope.launch {
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.ErrorTitleEmpty),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            return@AddScreenHeader
+                        }
+                        // 保存処理
+                        targetViewModel.saveTarget(
+                            title = title,
+                            year = year,
+                            month = month,
+                            isYearlyTarget = isYearlyTarget
+                        )
                         onDismiss()
                     },
                     coroutineScope = coroutineScope
@@ -106,23 +129,26 @@ fun TargetFormContent(
     val year = remember { mutableStateOf(currentDate.year) }
     val month = remember { mutableStateOf(currentDate.monthValue) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
+    val inputFields: List<@Composable () -> Unit> = mutableListOf<@Composable () -> Unit>().apply {
         // タイトル
-        {
+        add {
             MultiLineTextInputField(
                 title = stringResource(R.string.title),
                 onTextChanged = { updatedText -> title.value = updatedText },
                 initialText = title.value
             )
-        },
-        if (isYearlyTarget) {
-            // 年の選択
-            { YearSelection(year = year) }
-        } else {
-            // 月の選択
-            { MonthSelection(month = month) }
         }
-    )
+        // 年の選択
+        add {
+            YearSelection(year = year)
+        }
+        // 月の選択
+        if (!isYearlyTarget) {
+            add {
+                MonthSelection(month = month)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
