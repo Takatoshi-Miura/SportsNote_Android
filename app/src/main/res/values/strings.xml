@@ -94,4 +94,7 @@
     <string name="targetMonth">月間目標：%s</string>
     <string name="AddYearTarget">年間目標を追加</string>
     <string name="AddMonthTarget">月間目標を追加</string>
+    <string name="AddTarget">目標の追加</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
 </resources>

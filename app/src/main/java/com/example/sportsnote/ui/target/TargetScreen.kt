@@ -105,8 +105,16 @@ fun TargetScreen() {
     if (!isDialogVisible) return
     if (dialogType == DialogType.AddYearTarget) {
         // 年間目標を追加
+        AddTargetScreen(
+            isYearlyTarget = true,
+            onDismiss = { isDialogVisible = false }
+        )
     } else if (dialogType == DialogType.AddMonthTarget) {
         // 月間目標を追加
+        AddTargetScreen(
+            isYearlyTarget = false,
+            onDismiss = { isDialogVisible = false }
+        )
     }
 }
 

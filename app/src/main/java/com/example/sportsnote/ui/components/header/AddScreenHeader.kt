@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -52,6 +53,7 @@ fun AddScreenHeader(
         Text(
             text = title,
             color = MaterialTheme.colors.onPrimary,
+            style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.align(Alignment.Center)
         )
 
