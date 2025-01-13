@@ -169,13 +169,14 @@ class RealmManager {
             .equalTo("isYearlyTarget", false)
             .equalTo("year", year)
             .equalTo("month", month)
+            .equalTo("isDeleted", false)
             .endGroup()
             .or()
             .beginGroup()
             .equalTo("isYearlyTarget", true)
             .equalTo("year", year)
+            .equalTo("isDeleted", false)
             .endGroup()
-            .equalTo("isDeleted", false) // 共通条件
             .findAll()
             .toList()
     }

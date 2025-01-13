@@ -17,6 +17,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,12 +34,12 @@ import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TargetScreen() {
     val targetViewModel = TargetViewModel()
-    val targets by targetViewModel.targets
     val yearlyTarget by targetViewModel.yearlyTarget.collectAsState()
     val monthlyTarget by targetViewModel.monthlyTarget.collectAsState()
     val systemGray6 = Color(0xFFF2F2F7)
@@ -46,6 +47,17 @@ fun TargetScreen() {
     val coroutineScope = rememberCoroutineScope()
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
+    var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
+
+    LaunchedEffect(visibleMonth) {
+        targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
+    }
+
+    LaunchedEffect(isDialogVisible) {
+        if (!isDialogVisible) {
+            targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,

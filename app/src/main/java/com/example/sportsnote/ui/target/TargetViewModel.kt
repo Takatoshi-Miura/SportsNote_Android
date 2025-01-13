@@ -3,6 +3,7 @@ package com.example.sportsnote.ui.target
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,7 +59,21 @@ class TargetViewModel : ViewModel() {
         month: Int,
         isYearlyTarget: Boolean
     ): String {
-        // TODO: 重複する目標を取得して、そのtargetIDをセットして上書き
+        // 重複する目標を削除
+        val fetchedTargets = realmManager.fetchTargetsByYearMonth(year, month)
+        if (isYearlyTarget) {
+            val yearlyTarget = fetchedTargets.firstOrNull { it.isYearlyTarget }
+            if (yearlyTarget != null) {
+                realmManager.logicalDelete<Target>(yearlyTarget.targetID)
+            }
+        } else {
+            val monthlyTarget = fetchedTargets.firstOrNull { !it.isYearlyTarget }
+            if (monthlyTarget != null) {
+                realmManager.logicalDelete<Target>(monthlyTarget.targetID)
+            }
+        }
+
+        // 保存
         val target = Target()
         target.title = title
         target.year = year
