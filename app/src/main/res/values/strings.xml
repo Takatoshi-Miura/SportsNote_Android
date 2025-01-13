@@ -90,12 +90,13 @@
     <string name="deleteAccountSuccess">アカウントを削除しました</string>
     <string name="deleteAccountFailed">アカウントの削除に失敗しました。時間をおいて再度お試し下さい。</string>
     <string name="deleteAccountMessage">現在のアカウントを削除します。データが全て削除され、復元することができなくなります。よろしいですか？</string>
-    <string name="targetYear">年間目標：%s</string>
-    <string name="targetMonth">月間目標：%s</string>
+    <string name="targetYear">年：%s</string>
+    <string name="targetMonth">月：%s</string>
     <string name="AddYearTarget">年間目標を追加</string>
     <string name="AddMonthTarget">月間目標を追加</string>
     <string name="AddTarget">目標の追加</string>
     <string name="year">年</string>
     <string name="month">月</string>
     <string name="ErrorTitleEmpty">タイトルを入力してください。</string>
+    <string name="targetNotFound">目標が未設定です</string>
 </resources>

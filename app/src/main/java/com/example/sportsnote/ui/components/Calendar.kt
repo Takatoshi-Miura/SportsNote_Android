@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.ui.target.TargetViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -41,9 +43,13 @@ import java.util.Locale
  * カレンダーを表示するコンポーネント
  *
  * @param modifier Modifier
+ * @param targetViewModel TargetViewModel
  */
 @Composable
-fun CalendarDisplay(modifier: Modifier = Modifier) {
+fun CalendarDisplay(
+    modifier: Modifier = Modifier,
+    targetViewModel: TargetViewModel
+) {
     val coroutineScope = rememberCoroutineScope()
     // 現在の年月
     val currentMonth = remember { YearMonth.now() }
@@ -61,6 +67,12 @@ fun CalendarDisplay(modifier: Modifier = Modifier) {
         firstDayOfWeek = daysOfWeek.first(),
         outDateStyle = OutDateStyle.EndOfGrid
     )
+
+    // 表示中の年月が変わるたびに ViewModel にリクエスト
+    val visibleMonth = state.firstVisibleMonth.yearMonth
+    LaunchedEffect(visibleMonth) {
+        targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
+    }
 
     Column(modifier = modifier) {
         val visibleMonth = state.firstVisibleMonth.yearMonth

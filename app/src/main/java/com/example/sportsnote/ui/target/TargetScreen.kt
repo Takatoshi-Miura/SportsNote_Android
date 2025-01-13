@@ -17,6 +17,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TargetScreen() {
+    val targetViewModel = TargetViewModel()
+    val targets by targetViewModel.targets
+    val yearlyTarget by targetViewModel.yearlyTarget.collectAsState()
+    val monthlyTarget by targetViewModel.monthlyTarget.collectAsState()
     val systemGray6 = Color(0xFFF2F2F7)
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -80,8 +85,15 @@ fun TargetScreen() {
                         .padding(8.dp)
                 ) {
                     Column {
-                        TargetLabel(stringResource(R.string.targetYear, "年間目標が入ります"))
-                        TargetLabel(stringResource(R.string.targetMonth, "月間目標が入ります"))
+                        // 年間目標の表示
+                        yearlyTarget?.let {
+                            TargetLabel(stringResource(R.string.targetYear, it.title))
+                        } ?: TargetLabel(stringResource(R.string.targetYear, stringResource(R.string.targetNotFound)))
+
+                        // 月間目標の表示
+                        monthlyTarget?.let {
+                            TargetLabel(stringResource(R.string.targetMonth, it.title))
+                        } ?: TargetLabel(stringResource(R.string.targetMonth, stringResource(R.string.targetNotFound)))
                     }
                 }
 
@@ -89,8 +101,8 @@ fun TargetScreen() {
 
                 // カレンダー
                 CalendarDisplay(
-                    modifier = Modifier
-                        .background(Color.White)
+                    modifier = Modifier.background(Color.White),
+                    targetViewModel = targetViewModel
                 )
             }
 

@@ -6,6 +6,7 @@ import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
+import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
 
 object RealmConstants {
@@ -151,6 +152,30 @@ class RealmManager {
             .equalTo("taskID", taskID)
             .equalTo("isDeleted", false)
             .sort("order", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
+     * 指定した年と月に合致し、削除されていない目標を取得
+     *
+     * @param year 取得したい目標の年
+     * @param month 取得したい目標の月
+     * @return 条件に一致する目標のリスト
+     */
+    fun fetchTargetsByYearMonth(year: Int, month: Int): List<Target> {
+        return realm.where<Target>()
+            .beginGroup()
+            .equalTo("isYearlyTarget", false)
+            .equalTo("year", year)
+            .equalTo("month", month)
+            .endGroup()
+            .or()
+            .beginGroup()
+            .equalTo("isYearlyTarget", true)
+            .equalTo("year", year)
+            .endGroup()
+            .equalTo("isDeleted", false) // 共通条件
             .findAll()
             .toList()
     }
