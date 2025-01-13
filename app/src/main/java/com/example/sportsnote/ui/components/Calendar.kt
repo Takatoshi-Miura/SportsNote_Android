@@ -1,6 +1,7 @@
 package com.example.sportsnote.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -19,8 +19,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -67,6 +70,7 @@ fun CalendarDisplay(
         firstDayOfWeek = daysOfWeek.first(),
         outDateStyle = OutDateStyle.EndOfGrid
     )
+    var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
     // 表示中の年月が変わるたびに ViewModel にリクエスト
     val visibleMonth = state.firstVisibleMonth.yearMonth
@@ -75,7 +79,6 @@ fun CalendarDisplay(
     }
 
     Column(modifier = modifier) {
-        val visibleMonth = state.firstVisibleMonth.yearMonth
         val formattedMonth = "${visibleMonth.year} / ${"%02d".format(visibleMonth.monthValue)}"
 
         Row(
@@ -119,7 +122,15 @@ fun CalendarDisplay(
         // 横スクロールのカレンダーを作成
         HorizontalCalendar(
             state = state,
-            dayContent = { Day(it) },
+            dayContent = { day ->
+                Day(
+                    day = day,
+                    isSelected = selectedDate == day.date,
+                    onClick = {
+                        selectedDate = day.date
+                    }
+                )
+            },
             monthHeader = { DaysOfWeekTitle(daysOfWeek = daysOfWeek) }
         )
     }
@@ -165,27 +176,32 @@ fun getDayOfWeekTextColor(dayOfWeek: DayOfWeek): Color {
  * カレンダーの日付を表示するコンポーネント
  *
  * @param day カレンダー日付
+ * @param isSelected 選択状態
+ * @param onClick 押下時の処理
  */
 @Composable
-fun Day(day: CalendarDay) {
+fun Day(
+    day: CalendarDay,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
     val today = remember { java.time.LocalDate.now() }
     val isToday = day.date.isEqual(today)
 
     Box(
         modifier = Modifier
-            .aspectRatio(1f),
+            .aspectRatio(1f)
+            .background(
+                color = when {
+                    isToday -> MaterialTheme.colors.primary
+                    isSelected -> Color(0xFFFFC0CB) // ピンク色
+                    else -> Color.Transparent
+                },
+                shape = CircleShape
+            )
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        // 背景色を付与
-        if (isToday) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(MaterialTheme.colors.primary, shape = CircleShape)
-            )
-        }
-
-        // 数字
         Text(
             text = day.date.dayOfMonth.toString(),
             color = getDayTextColor(day),
