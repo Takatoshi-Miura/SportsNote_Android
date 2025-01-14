@@ -3,7 +3,6 @@ package com.example.sportsnote.ui.target
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
-import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
 import kotlinx.coroutines.flow.MutableStateFlow

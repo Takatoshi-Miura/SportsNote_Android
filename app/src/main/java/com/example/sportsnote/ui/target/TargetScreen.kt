@@ -33,6 +33,7 @@ import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
+import com.example.sportsnote.model.Target
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
@@ -90,24 +91,7 @@ fun TargetScreen() {
                     .fillMaxSize()
             ) {
                 // 年間目標と月間目標
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                        .padding(8.dp)
-                ) {
-                    Column {
-                        // 年間目標の表示
-                        yearlyTarget?.let {
-                            TargetLabel(stringResource(R.string.targetYear, it.title))
-                        } ?: TargetLabel(stringResource(R.string.targetYear, stringResource(R.string.targetNotFound)))
-
-                        // 月間目標の表示
-                        monthlyTarget?.let {
-                            TargetLabel(stringResource(R.string.targetMonth, it.title))
-                        } ?: TargetLabel(stringResource(R.string.targetMonth, stringResource(R.string.targetNotFound)))
-                    }
-                }
+                TargetDisplaySection(yearlyTarget, monthlyTarget)
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -139,6 +123,37 @@ fun TargetScreen() {
             isYearlyTarget = false,
             onDismiss = { isDialogVisible = false }
         )
+    }
+}
+
+/**
+ * 年間目標と月間目標を表示するコンポーネント
+ *
+ * @param yearlyTarget 年間目標
+ * @param monthlyTarget 月間目標
+ */
+@Composable
+fun TargetDisplaySection(
+    yearlyTarget: Target?,
+    monthlyTarget: Target?
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(8.dp)
+    ) {
+        Column {
+            // 年間目標
+            yearlyTarget?.let {
+                TargetLabel(stringResource(R.string.targetYear, it.title))
+            } ?: TargetLabel(stringResource(R.string.targetYear, stringResource(R.string.targetNotFound)))
+
+            // 月間目標
+            monthlyTarget?.let {
+                TargetLabel(stringResource(R.string.targetMonth, it.title))
+            } ?: TargetLabel(stringResource(R.string.targetMonth, stringResource(R.string.targetNotFound)))
+        }
     }
 }
 
