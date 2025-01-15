@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
@@ -29,11 +32,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
+import com.example.sportsnote.model.Note
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.model.Target
+import com.example.sportsnote.ui.LocalNavController
+import com.example.sportsnote.ui.note.NoteListItem
+import com.example.sportsnote.ui.note.NoteViewModel
+import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
@@ -41,11 +49,14 @@ import java.time.YearMonth
 @Composable
 fun TargetScreen() {
     val targetViewModel = TargetViewModel()
+    val noteViewModel = NoteViewModel()
+    val notes by noteViewModel.notes.collectAsState()
     val yearlyTarget by targetViewModel.yearlyTarget.collectAsState()
     val monthlyTarget by targetViewModel.monthlyTarget.collectAsState()
     val systemGray6 = Color(0xFFF2F2F7)
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+    val navController = LocalNavController.current
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
@@ -59,6 +70,9 @@ fun TargetScreen() {
             targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
         }
     }
+
+    // TODO: 選択した日付のノートを取得
+
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -99,6 +113,22 @@ fun TargetScreen() {
                 CalendarDisplay(
                     modifier = Modifier.background(Color.White),
                     targetViewModel = targetViewModel
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // ノートリスト
+                NoteListSection(
+                    notes = notes,
+                    onNoteClick = { note ->
+                        when(NoteType.fromInt(note.noteType)) {
+                            NoteType.FREE -> { }
+                            NoteType.PRACTICE -> { }
+                            NoteType.TOURNAMENT -> {
+                                navController.navigate("tournament_note_view/${note.noteID}")
+                            }
+                        }
+                    }
                 )
             }
 
@@ -171,4 +201,31 @@ fun TargetLabel(text: String) {
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     )
+}
+
+/**
+ * ノートリストを縦にスクロール表示するコンポーネント
+ *
+ * @param notes ノートリスト
+ * @param onNoteClick ノート押下時の処理
+ */
+@Composable
+fun NoteListSection(
+    notes: List<Note>,
+    onNoteClick: (Note) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(8.dp)
+    ) {
+        items(notes) { note ->
+            NoteListItem(
+                note = note,
+                onClick = { onNoteClick(note) }
+            )
+            Divider()
+        }
+    }
 }
