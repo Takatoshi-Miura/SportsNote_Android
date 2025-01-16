@@ -19,11 +19,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,11 +44,15 @@ import java.util.Locale
  *
  * @param modifier Modifier
  * @param targetViewModel TargetViewModel
+ * @param selectedDate 選択した日付
+ * @param onDateSelected 日付を選択した時の処理
  */
 @Composable
 fun CalendarDisplay(
     modifier: Modifier = Modifier,
-    targetViewModel: TargetViewModel
+    targetViewModel: TargetViewModel,
+    selectedDate: java.time.LocalDate?,
+    onDateSelected: (java.time.LocalDate) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     // 現在の年月
@@ -70,7 +71,6 @@ fun CalendarDisplay(
         firstDayOfWeek = daysOfWeek.first(),
         outDateStyle = OutDateStyle.EndOfGrid
     )
-    var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
     // 表示中の年月が変わるたびに ViewModel にリクエスト
     val visibleMonth = state.firstVisibleMonth.yearMonth
@@ -127,7 +127,7 @@ fun CalendarDisplay(
                     day = day,
                     isSelected = selectedDate == day.date,
                     onClick = {
-                        selectedDate = day.date
+                        onDateSelected(day.date)
                     }
                 )
             },

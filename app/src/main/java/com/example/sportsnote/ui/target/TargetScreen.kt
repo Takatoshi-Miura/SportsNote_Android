@@ -60,6 +60,7 @@ fun TargetScreen() {
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
+    var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
     LaunchedEffect(visibleMonth) {
         targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
@@ -112,7 +113,13 @@ fun TargetScreen() {
                 // カレンダー
                 CalendarDisplay(
                     modifier = Modifier.background(Color.White),
-                    targetViewModel = targetViewModel
+                    targetViewModel = targetViewModel,
+                    selectedDate = selectedDate,
+                    onDateSelected = { date ->
+                        selectedDate = date
+                        // TODO: 必要なら選択された日付での処理を追加
+                        println(selectedDate)
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
