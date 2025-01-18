@@ -8,6 +8,9 @@ import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
 import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Date
 
 object RealmConstants {
     const val DATABASE_NAME = "sportsnote.realm"
@@ -152,6 +155,25 @@ class RealmManager {
             .equalTo("taskID", taskID)
             .equalTo("isDeleted", false)
             .sort("order", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
+     * 指定した日付に合致するノートを取得
+     *
+     * @param selectedDate 日付
+     * @return List<Note>
+     */
+    fun getNotesByDate(selectedDate: LocalDate): List<Note> {
+        val realm = Realm.getDefaultInstance()
+        val startOfDay = Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+        val endOfDay = Date.from(selectedDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+
+        return realm.where(Note::class.java)
+            .equalTo("isDeleted", false)
+            .greaterThanOrEqualTo("date", startOfDay)
+            .lessThan("date", endOfDay)
             .findAll()
             .toList()
     }

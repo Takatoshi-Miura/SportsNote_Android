@@ -224,6 +224,32 @@ fun NoteListItem(
 }
 
 /**
+ * 「ノートがありません。」と表示するコンポーネント
+ */
+@Composable
+fun NoteEmptyItem() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp)
+                .align(Alignment.CenterVertically)
+        ) {
+            // 情報表示
+            Text(
+                text = stringResource(R.string.emptyNote),
+                fontSize = 16.sp,
+                style = MaterialTheme.typography.body1
+            )
+        }
+    }
+}
+
+/**
  * 日付をyyyy/MM/dd (曜日)形式でフォーマットする
  */
 fun formatDate(date: Date): String {

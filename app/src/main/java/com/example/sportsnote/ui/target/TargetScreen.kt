@@ -33,12 +33,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.Target
+import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
-import com.example.sportsnote.model.Target
-import com.example.sportsnote.ui.LocalNavController
+import com.example.sportsnote.ui.note.NoteEmptyItem
 import com.example.sportsnote.ui.note.NoteListItem
 import com.example.sportsnote.ui.note.NoteViewModel
 import com.example.sportsnote.utils.NoteType
@@ -50,7 +51,7 @@ import java.time.YearMonth
 fun TargetScreen() {
     val targetViewModel = TargetViewModel()
     val noteViewModel = NoteViewModel()
-    val notes by noteViewModel.notes.collectAsState()
+    val targetNotes by noteViewModel.targetNotes.collectAsState()
     val yearlyTarget by targetViewModel.yearlyTarget.collectAsState()
     val monthlyTarget by targetViewModel.monthlyTarget.collectAsState()
     val systemGray6 = Color(0xFFF2F2F7)
@@ -72,8 +73,12 @@ fun TargetScreen() {
         }
     }
 
-    // TODO: 選択した日付のノートを取得
-
+    // 選択した日付のノートを取得
+    LaunchedEffect(selectedDate) {
+        if (selectedDate != null) {
+            noteViewModel.getNoteListByDate(selectedDate!!)
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -117,8 +122,7 @@ fun TargetScreen() {
                     selectedDate = selectedDate,
                     onDateSelected = { date ->
                         selectedDate = date
-                        // TODO: 必要なら選択された日付での処理を追加
-                        println(selectedDate)
+                        noteViewModel.getNoteListByDate(date)
                     }
                 )
 
@@ -126,7 +130,7 @@ fun TargetScreen() {
 
                 // ノートリスト
                 NoteListSection(
-                    notes = notes,
+                    notes = targetNotes,
                     onNoteClick = { note ->
                         when(NoteType.fromInt(note.noteType)) {
                             NoteType.FREE -> { }
@@ -227,6 +231,11 @@ fun NoteListSection(
             .background(Color.White)
             .padding(8.dp)
     ) {
+        if (notes.isEmpty()) {
+            item {
+                NoteEmptyItem()
+            }
+        }
         items(notes) { note ->
             NoteListItem(
                 note = note,

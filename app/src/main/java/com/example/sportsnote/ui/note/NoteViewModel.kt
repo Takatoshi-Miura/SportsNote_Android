@@ -9,6 +9,7 @@ import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Date
 import java.util.UUID
 
@@ -17,6 +18,8 @@ class NoteViewModel : ViewModel() {
     private val realmManager: RealmManager = RealmManager()
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
+    private val _targetNotes = MutableStateFlow<List<Note>>(emptyList())
+    val targetNotes: StateFlow<List<Note>> = _targetNotes
 
     init {
         loadNotes()
@@ -48,6 +51,15 @@ class NoteViewModel : ViewModel() {
      */
     fun getNoteById(noteId: String): Note? {
         return realmManager.getObjectById<Note>(noteId)
+    }
+
+    /**
+     * 指定した日付に合致するノートを取得
+     *
+     * @param selectedDate 日付
+     */
+    fun getNoteListByDate(selectedDate: LocalDate) {
+        _targetNotes.value = realmManager.getNotesByDate(selectedDate)
     }
 
     /**
