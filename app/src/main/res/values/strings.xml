@@ -100,4 +100,6 @@
     <string name="ErrorTitleEmpty">タイトルを入力してください。</string>
     <string name="targetNotFound">目標が未設定です</string>
     <string name="emptyNote">ノートがありません。</string>
+    <string name="freeNote">フリーノート</string>
+    <string name="defaltFreeNoteDetail">常に最上位に表示されるノートです。</string>
 </resources>

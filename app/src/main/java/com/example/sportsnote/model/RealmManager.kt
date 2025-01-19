@@ -1,6 +1,7 @@
 package com.example.sportsnote.model
 
 import android.content.Context
+import com.example.sportsnote.utils.NoteType
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
@@ -157,6 +158,17 @@ class RealmManager {
             .sort("order", Sort.ASCENDING)
             .findAll()
             .toList()
+    }
+
+    /**
+     * フリーノートを取得
+     */
+    fun getFreeNote(): Note? {
+        return realm.where(Note::class.java)
+            .equalTo("noteType", NoteType.FREE.value)
+            .equalTo("isDeleted", false)
+            .findAll()
+            .firstOrNull()
     }
 
     /**

@@ -63,6 +63,38 @@ class NoteViewModel : ViewModel() {
     }
 
     /**
+     * フリーノートを取得
+     */
+    fun getFreeNote(): Note? {
+        return realmManager.getFreeNote()
+    }
+
+    /**
+     * フリーノートを保存
+     *
+     * @param noteId NoteID
+     * @param title タイトル
+     * @param detail ノート内容
+     */
+    suspend fun saveFreeNote(
+        noteId: String = UUID.randomUUID().toString(),
+        title: String,
+        detail: String
+    ) {
+        val note = Note().apply {
+            this.noteID = noteId
+            this.userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+            this.noteType = NoteType.FREE.value
+            this.isDeleted = false
+            this.created_at = Date()
+            this.updated_at = Date()
+            this.title = title
+            this.detail = detail
+        }
+        realmManager.saveItem(note)
+    }
+
+    /**
      * 大会ノートを保存する処理
      *
      * @param noteId ノートID

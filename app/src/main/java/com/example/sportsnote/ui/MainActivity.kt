@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.example.sportsnote.model.PreferencesManager
-import com.example.sportsnote.model.RealmManager
-import java.util.UUID
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +17,9 @@ class MainActivity : ComponentActivity() {
 
         // アプリの初期化
         val initializationManager = InitializationManager(applicationContext)
-        initializationManager.initializeApp()
+        lifecycleScope.launch {
+            initializationManager.initializeApp()
+        }
 
         setContent {
             SportsNoteTheme{
