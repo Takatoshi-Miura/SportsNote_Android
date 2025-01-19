@@ -63,21 +63,11 @@ fun TargetScreen() {
     var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
-    LaunchedEffect(visibleMonth) {
-        targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
-    }
-
-    LaunchedEffect(isDialogVisible) {
-        if (!isDialogVisible) {
-            targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
-        }
-    }
-
-    // 選択した日付のノートを取得
-    LaunchedEffect(selectedDate) {
+    LaunchedEffect(selectedDate, visibleMonth, isDialogVisible) {
         if (selectedDate != null) {
             noteViewModel.getNoteListByDate(selectedDate!!)
         }
+        targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
     }
 
     ModalBottomSheetLayout(
