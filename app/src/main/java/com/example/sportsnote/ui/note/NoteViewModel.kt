@@ -41,6 +41,10 @@ class NoteViewModel : ViewModel() {
      */
     private fun getNoteList(): List<Note> {
         return realmManager.getDataList(Note::class.java)
+            .sortedWith(
+                compareByDescending<Note> { it.noteType == NoteType.FREE.value }
+                    .thenByDescending { it.date }
+            )
     }
 
     /**
