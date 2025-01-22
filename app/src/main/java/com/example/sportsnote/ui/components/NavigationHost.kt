@@ -20,6 +20,7 @@ import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.Screen
 import com.example.sportsnote.ui.group.GroupViewScreen
 import com.example.sportsnote.ui.measures.MeasuresScreen
+import com.example.sportsnote.ui.note.FreeNoteScreen
 import com.example.sportsnote.ui.note.NoteScreen
 import com.example.sportsnote.ui.note.TournamentNoteViewScreen
 import com.example.sportsnote.ui.target.TargetScreen
@@ -126,6 +127,16 @@ fun NavigationHost() {
                 val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
                 TournamentNoteViewScreen(
                     noteId = noteId,
+                    onBack = { navController.popBackStack() },
+                    appBarNavigationIcon = appBarNavigationIcon,
+                    appBarRightIcon = appBarRightIcon
+                )
+            }
+            // フリーノート
+            composable(Screen.FreeNoteView.route) { backStackEntry ->
+                val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
+                FreeNoteScreen(
+                    noteID = noteId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
                     appBarRightIcon = appBarRightIcon

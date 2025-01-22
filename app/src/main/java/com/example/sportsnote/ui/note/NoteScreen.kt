@@ -107,7 +107,9 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                     notes = notes,
                     onNoteClick = { note ->
                         when(NoteType.fromInt(note.noteType)) {
-                            NoteType.FREE -> { }
+                            NoteType.FREE -> {
+                                navController.navigate("free_note_view/${note.noteID}")
+                            }
                             NoteType.PRACTICE -> { }
                             NoteType.TOURNAMENT -> {
                                 navController.navigate("tournament_note_view/${note.noteID}")
