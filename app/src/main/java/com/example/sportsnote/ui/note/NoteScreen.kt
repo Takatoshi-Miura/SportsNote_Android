@@ -21,7 +21,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -200,12 +199,20 @@ fun NoteListItem(
             )
         }
 
-        // テキスト表示
+        // メインテキスト表示
         val displayText = when (NoteType.fromInt(note.noteType)) {
             NoteType.FREE -> note.title
             NoteType.PRACTICE -> note.detail
             NoteType.TOURNAMENT -> note.result
         }
+
+        // サブテキスト表示
+        val displaySubText = when (NoteType.fromInt(note.noteType)) {
+            NoteType.FREE -> note.detail
+            NoteType.PRACTICE -> formatDate(note.date)
+            NoteType.TOURNAMENT -> formatDate(note.date)
+        }
+
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -218,11 +225,9 @@ fun NoteListItem(
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.body1
             )
-
             // ノートの日付
-            val formattedDate = formatDate(note.date)
             Text(
-                text = formattedDate,
+                text = displaySubText,
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.body2,
                 color = Color.Gray
