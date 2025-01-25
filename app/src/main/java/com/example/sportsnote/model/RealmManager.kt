@@ -184,6 +184,7 @@ class RealmManager {
 
         return realm.where(Note::class.java)
             .equalTo("isDeleted", false)
+            .notEqualTo("noteType", NoteType.FREE.value)
             .greaterThanOrEqualTo("date", startOfDay)
             .lessThan("date", endOfDay)
             .findAll()
