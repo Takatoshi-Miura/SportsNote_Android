@@ -8,6 +8,7 @@ import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Date
@@ -45,6 +46,27 @@ class NoteViewModel : ViewModel() {
                 compareByDescending<Note> { it.noteType == NoteType.FREE.value }
                     .thenByDescending { it.date }
             )
+    }
+
+    /**
+     * ノートリストを取得（検索）
+     *
+     * @param query 検索文字列
+     */
+    fun searchNotesByQuery(query: String) {
+        // クエリが空の場合は全件取得
+        if (query.isBlank()) {
+            loadNotes()
+            return
+        }
+
+        _notes.update {
+            realmManager.searchNotesByQuery(query)
+                .sortedWith(
+                    compareByDescending<Note> { it.noteType == NoteType.FREE.value }
+                        .thenByDescending { it.date }
+                )
+        }
     }
 
     /**

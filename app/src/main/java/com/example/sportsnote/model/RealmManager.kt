@@ -2,6 +2,7 @@ package com.example.sportsnote.model
 
 import android.content.Context
 import com.example.sportsnote.utils.NoteType
+import io.realm.Case
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
@@ -169,6 +170,37 @@ class RealmManager {
             .equalTo("isDeleted", false)
             .findAll()
             .firstOrNull()
+    }
+
+    /**
+     * 指定された文字列を含むノートを検索
+     *
+     * @param query 検索する文字列
+     * @return 検索結果のノートリスト
+     */
+    fun searchNotesByQuery(query: String): List<Note> {
+        return realm.where(Note::class.java)
+            .equalTo("isDeleted", false)
+            .and()
+            .beginGroup()
+            .equalTo("noteType", NoteType.FREE.value)
+            .or()
+            .contains("condition", query, Case.INSENSITIVE)
+            .or()
+            .contains("reflection", query, Case.INSENSITIVE)
+            .or()
+            .contains("purpose", query, Case.INSENSITIVE)
+            .or()
+            .contains("detail", query, Case.INSENSITIVE)
+            .or()
+            .contains("target", query, Case.INSENSITIVE)
+            .or()
+            .contains("consciousness", query, Case.INSENSITIVE)
+            .or()
+            .contains("result", query, Case.INSENSITIVE)
+            .endGroup()
+            .findAll()
+            .toList()
     }
 
     /**

@@ -110,7 +110,10 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                 // 検索バー
                 SearchBar(
                     query = searchQuery,
-                    onQueryChanged = { searchQuery = it }
+                    onQueryChanged = {
+                        searchQuery = it
+                        noteViewModel.searchNotesByQuery(searchQuery)
+                    }
                 )
                 SwipeRefresh(
                     state = swipeRefreshState,
