@@ -17,10 +17,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,6 +68,8 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
+    var searchQuery by remember { mutableStateOf("") }
+    val systemGray6 = Color(0xFFF2F2F7)
 
     LaunchedEffect(notes) {
         noteViewModel.loadNotes()
@@ -96,26 +101,37 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
             ActionBottomSheetContent(items = actionItems)
         }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            SwipeRefresh(
-                state = swipeRefreshState,
-                onRefresh = onRefresh
-            ) {
-                // ノート一覧
-                NoteListScreen(
-                    notes = notes,
-                    onNoteClick = { note ->
-                        when(NoteType.fromInt(note.noteType)) {
-                            NoteType.FREE -> {
-                                navController.navigate("free_note_view/${note.noteID}")
-                            }
-                            NoteType.PRACTICE -> { }
-                            NoteType.TOURNAMENT -> {
-                                navController.navigate("tournament_note_view/${note.noteID}")
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(systemGray6)
+        ) {
+            Column {
+                // 検索バー
+                SearchBar(
+                    query = searchQuery,
+                    onQueryChanged = { searchQuery = it }
+                )
+                SwipeRefresh(
+                    state = swipeRefreshState,
+                    onRefresh = onRefresh
+                ) {
+                    // ノート一覧
+                    NoteListScreen(
+                        notes = notes,
+                        onNoteClick = { note ->
+                            when (NoteType.fromInt(note.noteType)) {
+                                NoteType.FREE -> {
+                                    navController.navigate("free_note_view/${note.noteID}")
+                                }
+                                NoteType.PRACTICE -> {}
+                                NoteType.TOURNAMENT -> {
+                                    navController.navigate("tournament_note_view/${note.noteID}")
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
 
             // +ボタン
@@ -138,6 +154,53 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     }
 }
 
+/**
+ * 検索バーのコンポーネント
+ *
+ * @param query 検索文字列
+ * @param onQueryChanged 文字列変化時の処理
+ */
+@Composable
+fun SearchBar(
+    query: String,
+    onQueryChanged: (String) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // 虫眼鏡アイコン
+        Icon(
+            painter = painterResource(id = R.drawable.search_24px),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(start = 4.dp)
+                .size(24.dp),
+            tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+        )
+
+        // テキスト入力フィールド
+        TextField(
+            value = query,
+            onValueChange = onQueryChanged,
+            modifier = Modifier.weight(1f),
+            placeholder = {
+                Text(text = stringResource(R.string.searchNote))
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            singleLine = true
+        )
+    }
+}
+
 @Composable
 fun NoteListScreen(
     notes: List<Note>,
@@ -145,6 +208,7 @@ fun NoteListScreen(
 ) {
     LazyColumn(
         modifier = Modifier
+            .background(Color.White)
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
