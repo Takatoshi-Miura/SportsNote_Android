@@ -179,12 +179,15 @@ class RealmManager {
      * @return 検索結果のノートリスト
      */
     fun searchNotesByQuery(query: String): List<Note> {
-        return realm.where(Note::class.java)
+        val freeNotes = realm.where(Note::class.java)
+            .equalTo("noteType", NoteType.FREE.value)
+            .equalTo("isDeleted", false)
+            .findAll()
+
+        val queryNotes = realm.where(Note::class.java)
             .equalTo("isDeleted", false)
             .and()
             .beginGroup()
-            .equalTo("noteType", NoteType.FREE.value)
-            .or()
             .contains("condition", query, Case.INSENSITIVE)
             .or()
             .contains("reflection", query, Case.INSENSITIVE)
@@ -200,7 +203,7 @@ class RealmManager {
             .contains("result", query, Case.INSENSITIVE)
             .endGroup()
             .findAll()
-            .toList()
+        return (freeNotes + queryNotes).distinct()
     }
 
     /**

@@ -72,12 +72,12 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val systemGray6 = Color(0xFFF2F2F7)
 
     LaunchedEffect(notes) {
-        noteViewModel.loadNotes()
+        noteViewModel.searchNotesByQuery(searchQuery)
     }
 
     // ノート一覧のリフレッシュ処理
     val onRefresh = {
-        noteViewModel.loadNotes()
+        noteViewModel.searchNotesByQuery(searchQuery)
     }
 
     ModalBottomSheetLayout(

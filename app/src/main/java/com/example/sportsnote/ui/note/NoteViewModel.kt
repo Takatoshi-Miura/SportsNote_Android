@@ -8,7 +8,6 @@ import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Date
@@ -29,7 +28,7 @@ class NoteViewModel : ViewModel() {
     /**
      * ノート一覧データを取得
      */
-    fun loadNotes() {
+    private fun loadNotes() {
         viewModelScope.launch {
             _notes.value = getNoteList()
         }
@@ -60,12 +59,12 @@ class NoteViewModel : ViewModel() {
             return
         }
 
-        _notes.update {
-            realmManager.searchNotesByQuery(query)
-                .sortedWith(
-                    compareByDescending<Note> { it.noteType == NoteType.FREE.value }
-                        .thenByDescending { it.date }
-                )
+        viewModelScope.launch {
+            val searchedNoteList = realmManager.searchNotesByQuery(query)
+            _notes.value = searchedNoteList.sortedWith(
+                compareByDescending<Note> { it.noteType == NoteType.FREE.value }
+                    .thenByDescending { it.date }
+            )
         }
     }
 
