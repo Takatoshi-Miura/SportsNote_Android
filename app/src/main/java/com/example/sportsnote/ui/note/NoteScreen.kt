@@ -65,19 +65,20 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
+    val isLoading by noteViewModel.isLoading.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     var searchQuery by remember { mutableStateOf("") }
     val systemGray6 = Color(0xFFF2F2F7)
 
-    LaunchedEffect(notes) {
+    // 一覧のリフレッシュ処理
+    val onRefresh = {
         noteViewModel.searchNotesByQuery(searchQuery)
     }
 
-    // ノート一覧のリフレッシュ処理
-    val onRefresh = {
-        noteViewModel.searchNotesByQuery(searchQuery)
+    LaunchedEffect(Unit) {
+        onRefresh()
     }
 
     ModalBottomSheetLayout(
@@ -112,7 +113,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                     query = searchQuery,
                     onQueryChanged = {
                         searchQuery = it
-                        noteViewModel.searchNotesByQuery(searchQuery)
+                        onRefresh()
                     }
                 )
                 SwipeRefresh(
@@ -148,11 +149,17 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
     if (!isDialogVisible) return
     if (dialogType == DialogType.AddPracticeNote) {
         AddPracticeNoteScreen(
-            onDismiss = { isDialogVisible = false }
+            onDismiss = {
+                isDialogVisible = false
+                onRefresh()
+            }
         )
     } else if (dialogType == DialogType.AddTournamentNote) {
         AddTournamentNoteScreen(
-            onDismiss = { isDialogVisible = false }
+            onDismiss = {
+                isDialogVisible = false
+                onRefresh()
+            }
         )
     }
 }

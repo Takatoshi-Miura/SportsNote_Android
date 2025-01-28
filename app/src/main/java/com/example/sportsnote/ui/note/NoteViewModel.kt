@@ -20,31 +20,11 @@ class NoteViewModel : ViewModel() {
     val notes: StateFlow<List<Note>> = _notes
     private val _targetNotes = MutableStateFlow<List<Note>>(emptyList())
     val targetNotes: StateFlow<List<Note>> = _targetNotes
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
-        loadNotes()
-    }
-
-    /**
-     * ノート一覧データを取得
-     */
-    private fun loadNotes() {
-        viewModelScope.launch {
-            _notes.value = getNoteList()
-        }
-    }
-
-    /**
-     * ノートリストを取得
-     *
-     * @return List<Note>
-     */
-    private fun getNoteList(): List<Note> {
-        return realmManager.getDataList(Note::class.java)
-            .sortedWith(
-                compareByDescending<Note> { it.noteType == NoteType.FREE.value }
-                    .thenByDescending { it.date }
-            )
+        searchNotesByQuery("")
     }
 
     /**
@@ -53,18 +33,19 @@ class NoteViewModel : ViewModel() {
      * @param query 検索文字列
      */
     fun searchNotesByQuery(query: String) {
-        // クエリが空の場合は全件取得
-        if (query.isBlank()) {
-            loadNotes()
-            return
-        }
-
         viewModelScope.launch {
-            val searchedNoteList = realmManager.searchNotesByQuery(query)
-            _notes.value = searchedNoteList.sortedWith(
+            _isLoading.value = true
+            val result = if (query.isBlank()) {
+                // クエリが空の場合は全件取得
+                realmManager.getDataList(Note::class.java)
+            } else {
+                realmManager.searchNotesByQuery(query)
+            }
+            _notes.value = result.sortedWith(
                 compareByDescending<Note> { it.noteType == NoteType.FREE.value }
                     .thenByDescending { it.date }
             )
+            _isLoading.value = false
         }
     }
 

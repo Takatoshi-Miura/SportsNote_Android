@@ -14,6 +14,8 @@ class GroupViewModel : ViewModel() {
     private val realmManager: RealmManager = RealmManager()
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         loadData()
@@ -24,7 +26,9 @@ class GroupViewModel : ViewModel() {
      */
     fun loadData() {
         viewModelScope.launch {
+            _isLoading.value = true
             _groups.value = realmManager.getDataList(Group::class.java)
+            _isLoading.value = false
         }
     }
 

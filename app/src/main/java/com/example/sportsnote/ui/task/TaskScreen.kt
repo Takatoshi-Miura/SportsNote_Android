@@ -58,17 +58,19 @@ fun TaskScreen(
     val navController = LocalNavController.current
     var groupDialogVisible by remember { mutableStateOf(false) }
     var taskDialogVisible by remember { mutableStateOf(false) }
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
-
-    LaunchedEffect(taskLists, groups) {
-        groupViewModel.loadData()
-        taskViewModel.loadData()
-    }
+    val isTaskLoading by taskViewModel.isLoading.collectAsState()
+    val isGroupLoading by groupViewModel.isLoading.collectAsState()
+    val isRefreshing = isTaskLoading || isGroupLoading
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
         groupViewModel.loadData()
         taskViewModel.loadData()
+    }
+
+    LaunchedEffect(Unit) {
+        onRefresh()
     }
 
     ModalBottomSheetLayout(
@@ -116,13 +118,19 @@ fun TaskScreen(
     // グループ追加モーダル表示
     if (groupDialogVisible) {
         AddGroupScreen(
-            onDismiss = { groupDialogVisible = false }
+            onDismiss = {
+                groupDialogVisible = false
+                onRefresh()
+            }
         )
     }
     // 課題追加モーダル表示
     if (taskDialogVisible) {
         AddTaskScreen(
-            onDismiss = { taskDialogVisible = false }
+            onDismiss = {
+                taskDialogVisible = false
+                onRefresh()
+            }
         )
     }
 }

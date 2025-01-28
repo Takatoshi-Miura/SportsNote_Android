@@ -19,6 +19,8 @@ class TaskViewModel : ViewModel() {
     val tasks: StateFlow<List<TaskData>> = _tasks
     private val _taskLists = MutableStateFlow<List<TaskListData>>(emptyList())
     val taskLists: StateFlow<List<TaskListData>> = _taskLists
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     init {
         loadData()
@@ -29,6 +31,7 @@ class TaskViewModel : ViewModel() {
      */
     fun loadData() {
         viewModelScope.launch {
+            _isLoading.value = true
             _tasks.value = realmManager.getDataList(TaskData::class.java)
 
             // 課題一覧用データを取得
@@ -38,6 +41,7 @@ class TaskViewModel : ViewModel() {
                 taskListDatas.add(taskListData)
             }
             _taskLists.value = taskListDatas
+            _isLoading.value = false
         }
     }
 
