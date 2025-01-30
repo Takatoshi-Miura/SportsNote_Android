@@ -18,11 +18,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,9 +48,7 @@ import java.time.YearMonth
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TargetScreen(
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
-) {
+fun TargetScreen() {
     val targetViewModel = TargetViewModel()
     val noteViewModel = NoteViewModel()
     val targetNotes by noteViewModel.targetNotes.collectAsState()
@@ -66,22 +62,6 @@ fun TargetScreen(
     var dialogType by remember { mutableStateOf(DialogType.None) }
     var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
-
-    // 画面表示時に「今日」ボタンをセット
-    LaunchedEffect(Unit) {
-        appBarRightIcon.value = {
-            TextButton(
-                onClick = {
-
-                }
-            ) {
-                Text(
-                    text = "今日",
-                    color = Color.White
-                )
-            }
-        }
-    }
 
     LaunchedEffect(selectedDate, visibleMonth, isDialogVisible) {
         if (selectedDate != null) {

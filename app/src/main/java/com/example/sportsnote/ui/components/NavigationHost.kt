@@ -147,7 +147,7 @@ fun NavigationHost() {
                 appBarNavigationIcon.value = {
                     DrawerToggleButton(coroutineScope, drawerState)
                 }
-                TargetScreen(appBarRightIcon = appBarRightIcon)
+                TargetScreen()
             }
         }
     }

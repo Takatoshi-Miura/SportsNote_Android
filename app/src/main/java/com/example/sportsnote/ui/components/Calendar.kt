@@ -14,6 +14,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -98,7 +99,10 @@ fun CalendarDisplay(
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous Month")
             }
-
+            // スペース調整
+            TextButton(onClick = {}) {
+                Text(text = "")
+            }
             // 現在表示中の月を表示
             Text(
                 text = formattedMonth,
@@ -106,7 +110,18 @@ fun CalendarDisplay(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
             )
-
+            // 「今日」ボタンを追加（右矢印の左側）
+            TextButton(
+                onClick = {
+                    val today = java.time.LocalDate.now()
+                    coroutineScope.launch {
+                        state.scrollToMonth(YearMonth.from(today))
+                    }
+                    onDateSelected(today)
+                }
+            ) {
+                Text(text = "今日")
+            }
             // 右矢印
             IconButton(
                 onClick = {
