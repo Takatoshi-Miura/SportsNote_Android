@@ -60,13 +60,10 @@ fun TargetScreen() {
     val navController = LocalNavController.current
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
-    var visibleMonth by remember { mutableStateOf(YearMonth.now()) }
+    val visibleMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
-    LaunchedEffect(selectedDate, visibleMonth, isDialogVisible) {
-        if (selectedDate != null) {
-            noteViewModel.getNoteListByDate(selectedDate!!)
-        }
+    LaunchedEffect(visibleMonth, isDialogVisible) {
         targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
     }
 
