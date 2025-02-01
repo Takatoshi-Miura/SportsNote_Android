@@ -1,5 +1,6 @@
 package com.example.sportsnote.model
 
+import androidx.compose.ui.graphics.Color
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.Date
@@ -77,6 +78,7 @@ data class AddTaskData(
  *
  * @param taskID 課題ID
  * @param groupID グループID
+ * @param groupColor グループカラー
  * @param title タイトル
  * @param measures 最優先の対策
  * @param order 並び順
@@ -84,6 +86,7 @@ data class AddTaskData(
 data class TaskListData(
     val taskID: String,
     val groupID: String,
+    val groupColor: Color,
     val title: String,
     val measures: String,
     val order: Int

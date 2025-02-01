@@ -2,10 +2,12 @@ package com.example.sportsnote.ui.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.TaskData
 import com.example.sportsnote.model.TaskDetailData
 import com.example.sportsnote.model.TaskListData
+import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -52,15 +54,21 @@ class TaskViewModel : ViewModel() {
      * @return TaskListData
      */
     private fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
+        // 最優先の対策を取得
         val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
         val measuresTitle = if (measuresList.isNotEmpty()) {
             measuresList.first().title
         } else {
             ""
         }
+
+        // グループカラーを取得
+        val group = realmManager.getObjectById<Group>(task.groupID) ?: Group()
+
         return TaskListData(
             taskID = task.taskID,
             groupID = task.groupID,
+            groupColor = Color.fromInt(group.color).toComposeColor(),
             title = task.title,
             measures = measuresTitle,
             order = task.order

@@ -103,4 +103,5 @@
     <string name="freeNote">フリーノート</string>
     <string name="defaltFreeNoteDetail">常に最上位に表示されるノートです。</string>
     <string name="searchNote">ノートを検索</string>
+    <string name="measuresLabel">対策：%1$s</string>
 </resources>

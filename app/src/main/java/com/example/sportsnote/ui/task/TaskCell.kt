@@ -11,8 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.R
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.LocalNavController
 
@@ -51,7 +53,7 @@ fun TaskCell(
             )
             // 対策
             Text(
-                text = "対策：${task.measures}",
+                text = stringResource(R.string.measuresLabel, task.measures),
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
             )

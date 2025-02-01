@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
-import com.example.sportsnote.model.TaskData
+import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.TemperatureSlider
 import com.example.sportsnote.ui.components.WeatherPickerField
+import com.example.sportsnote.ui.task.TaskViewModel
 import com.example.sportsnote.utils.Weather
 import java.util.Date
 
@@ -71,21 +72,9 @@ fun PracticeNoteFormContent(
     val detail = remember { mutableStateOf(note?.consciousness ?: "") }
     val reflection = remember { mutableStateOf(note?.reflection ?: "") }
 
-    // TODO: 未解決の課題を取得
-    val sampleData = listOf(
-        TaskData(
-            taskId = "task1",
-            title = "課題1",
-            cause = "原因",
-            groupId = "グループID"
-        ),
-        TaskData(
-            taskId = "task12",
-            title = "課題2",
-            cause = "原因",
-            groupId = "グループID"
-        )
-    )
+    // TODO: ノート詳細なら当時取り込んだ課題を取得
+    val taskViewModel = TaskViewModel()
+    val taskList = taskViewModel.taskLists
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // 日付
@@ -157,7 +146,7 @@ fun PracticeNoteFormContent(
             }
         },
         {
-            TaskListInput(taskDataList = sampleData)
+            TaskListInput(taskDataList = taskList.value)
         },
         // 反省
         {
@@ -190,7 +179,7 @@ fun PracticeNoteFormContent(
 
 @Composable
 fun TaskListInput(
-    taskDataList: List<TaskData>
+    taskDataList: List<TaskListData>
 ) {
     Column(
         modifier = Modifier
@@ -206,7 +195,7 @@ fun TaskListInput(
 
 @Composable
 fun TaskInputItem(
-    taskData: TaskData,
+    taskData: TaskListData,
     onOptionClick: () -> Unit
 ) {
     Column(
@@ -224,17 +213,18 @@ fun TaskInputItem(
                     .padding(start = 12.dp)
                     .width(20.dp)
                     .height(50.dp)
-                    .background(Color.Gray)
+                    .background(taskData.groupColor)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(text = taskData.title, fontSize = 16.sp)
-//                taskData.measures.forEach { measure ->
-//                    Text(text = "対策: ${measure.title}", fontSize = 14.sp, color = Color.Gray)
-//                }
-                Text(text = "対策: ", fontSize = 14.sp, color = Color.Gray)
+                Text(
+                    text = stringResource(R.string.measuresLabel, taskData.measures),
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
             }
             // オプションボタン
             Icon(
