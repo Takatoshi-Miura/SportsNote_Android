@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
@@ -276,11 +277,20 @@ fun TaskInputItem(
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                Text(text = taskData.title, fontSize = 16.sp)
+                // 課題タイトル
+                Text(
+                    text = taskData.title,
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                // 最優先の対策
                 Text(
                     text = stringResource(R.string.measuresLabel, taskData.measures),
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.Gray,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
             // オプションボタン

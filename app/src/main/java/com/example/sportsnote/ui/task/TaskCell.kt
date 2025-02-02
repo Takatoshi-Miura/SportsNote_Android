@@ -55,7 +55,9 @@ fun TaskCell(
             Text(
                 text = stringResource(R.string.measuresLabel, task.measures),
                 style = MaterialTheme.typography.body2,
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
