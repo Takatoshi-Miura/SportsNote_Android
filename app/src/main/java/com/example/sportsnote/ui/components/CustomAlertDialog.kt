@@ -9,6 +9,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import com.example.sportsnote.R
 import com.example.sportsnote.model.TaskListData
 
@@ -157,7 +158,11 @@ fun TaskSelectionDialog(
                             TextButton(
                                 onClick = { onTaskSelected(task) }
                             ) {
-                                Text(text = task.title)
+                                Text(
+                                    text = task.title,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
                         }
                     }

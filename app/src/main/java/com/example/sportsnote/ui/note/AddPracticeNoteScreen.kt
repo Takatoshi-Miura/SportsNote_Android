@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
+import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.header.AddScreenHeader
 import com.example.sportsnote.utils.Weather
 import java.util.Date
@@ -28,16 +29,16 @@ fun AddPracticeNoteScreen(
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val noteViewModel = NoteViewModel()
 
     // 入力データの状態管理
-    var date = remember { mutableStateOf(Date()) }
-    var weather = remember { mutableStateOf(Weather.SUNNY.id) }
-    var temperature = remember { mutableStateOf(20) }
-    var condition = remember { mutableStateOf("") }
-    var purpose = remember { mutableStateOf("") }
-    var detail = remember { mutableStateOf("") }
-    var reflection = remember { mutableStateOf("") }
+    val date = remember { mutableStateOf(Date()) }
+    val weather = remember { mutableStateOf(Weather.SUNNY.id) }
+    val temperature = remember { mutableStateOf(20) }
+    val condition = remember { mutableStateOf("") }
+    val purpose = remember { mutableStateOf("") }
+    val detail = remember { mutableStateOf("") }
+    val reflection = remember { mutableStateOf("") }
+    val taskReflections = remember { mutableStateOf<Map<TaskListData, String>>(emptyMap()) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -56,8 +57,8 @@ fun AddPracticeNoteScreen(
                     title = stringResource(R.string.addPracticeNote),
                     onCancel = onDismiss,
                     onSave = {
-                        // 保存処理
-
+                        // TODO: 保存処理
+                        println("保存するデータ: $taskReflections")
                         onDismiss()
                     },
                     coroutineScope = coroutineScope
@@ -72,7 +73,8 @@ fun AddPracticeNoteScreen(
                     onConditionChange = { updatedCondition -> condition.value = updatedCondition },
                     onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
                     onDetailChange = { updateDetail -> detail.value = updateDetail },
-                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection }
+                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
+                    onTaskReflectionsChange = { taskReflections.value = it }
                 )
             }
         }

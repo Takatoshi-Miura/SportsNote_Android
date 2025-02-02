@@ -57,6 +57,7 @@ import java.util.Date
  * @param onPurposeChange 練習の目的変更時の処理
  * @param onDetailChange 練習内容変更時の処理
  * @param onReflectionChange 反省変更時の処理
+ * @param onTaskReflectionsChange 課題メモ変更時の処理
  */
 @Composable
 fun PracticeNoteFormContent(
@@ -67,7 +68,8 @@ fun PracticeNoteFormContent(
     onConditionChange: (String) -> Unit,
     onPurposeChange: (String) -> Unit,
     onDetailChange: (String) -> Unit,
-    onReflectionChange: (String) -> Unit
+    onReflectionChange: (String) -> Unit,
+    onTaskReflectionsChange: (Map<TaskListData, String>) -> Unit
 ) {
     val date = remember { mutableStateOf(note?.date ?: Date()) }
     val weather = remember { mutableStateOf(note?.weather ?: Weather.SUNNY.id) }
@@ -79,7 +81,9 @@ fun PracticeNoteFormContent(
 
     // TODO: ノート詳細なら当時取り込んだ課題を取得
     val taskViewModel = TaskViewModel()
-    val taskListState = remember { mutableStateOf(taskViewModel.taskLists.value) }
+    val taskLists by taskViewModel.taskLists.collectAsState()
+    val taskListMap: Map<TaskListData, String> = taskLists.associateWith { "" }
+    val taskListState = remember { mutableStateOf(taskListMap) }
 
     // ノートに未追加の課題を取得
     val allTasks by taskViewModel.taskLists.collectAsState(emptyList())
@@ -161,8 +165,9 @@ fun PracticeNoteFormContent(
         {
             TaskListInput(
                 taskDataList = taskListState.value,
-                onTaskRemoved = { removedTask ->
-                    taskListState.value = taskListState.value.filter { it != removedTask }
+                onTaskRemoved = { task -> taskListState.value -= task },
+                onReflectionChanged = { task, reflection ->
+                    taskListState.value += (task to reflection)
                 }
             )
         },
@@ -192,6 +197,7 @@ fun PracticeNoteFormContent(
         onPurposeChange(purpose.value)
         onDetailChange(detail.value)
         onReflectionChange(reflection.value)
+        onTaskReflectionsChange(taskListState.value)
     }
 
     // 課題追加ダイアログ
@@ -199,7 +205,7 @@ fun PracticeNoteFormContent(
         TaskSelectionDialog(
             tasks = unaddedTasks,
             onTaskSelected = { selectedTask ->
-                taskListState.value += selectedTask
+                taskListState.value += selectedTask to ""
                 showDialog.value = false
             },
             onDismiss = { showDialog.value = false }
@@ -210,13 +216,15 @@ fun PracticeNoteFormContent(
 /**
  * 取り組んだ課題セルのコンポーネント
  *
- * @param taskDataList 取り組んだ課題データ
+ * @param taskDataList 取り組んだ課題データとそのメモのMap
  * @param onTaskRemoved 課題削除処理
+ * @param onReflectionChanged メモ変更時の処理
  */
 @Composable
 fun TaskListInput(
-    taskDataList: List<TaskListData>,
-    onTaskRemoved: (TaskListData) -> Unit
+    taskDataList: Map<TaskListData, String>, // 課題と入力テキストのマップ
+    onTaskRemoved: (TaskListData) -> Unit,
+    onReflectionChanged: (TaskListData, String) -> Unit
 ) {
     val showDialog = remember { mutableStateOf(false) }
     val selectedTask = remember { mutableStateOf<TaskListData?>(null) }
@@ -225,19 +233,23 @@ fun TaskListInput(
         modifier = Modifier.fillMaxWidth()
     ) {
         Divider()
-        taskDataList.forEach { taskData ->
+        taskDataList.forEach { (taskData, reflectionText) ->
             TaskInputItem(
                 taskData = taskData,
+                initialReflection = reflectionText,
                 onOptionClick = {
                     selectedTask.value = taskData
                     showDialog.value = true
+                },
+                onReflectionChanged = { updatedText ->
+                    onReflectionChanged(taskData, updatedText)
                 }
             )
             Divider()
         }
     }
 
-    // 取り組んだ課題の削除ダイアログ
+    // 削除ダイアログ
     if (showDialog.value) {
         CustomAlertDialog(
             title = stringResource(R.string.deleteTaskFromNote),
@@ -251,14 +263,25 @@ fun TaskListInput(
     }
 }
 
+/**
+ * 取り組んだ課題セルのコンポーネント
+ *
+ * @param taskData 課題データ
+ * @param initialReflection メモの初期値
+ * @param onOptionClick オプションボタン押下時の処理
+ * @param onReflectionChanged メモ変更時の処理
+ */
 @Composable
 fun TaskInputItem(
     taskData: TaskListData,
-    onOptionClick: () -> Unit
+    initialReflection: String,
+    onOptionClick: () -> Unit,
+    onReflectionChanged: (String) -> Unit
 ) {
+    val reflectionText = remember { mutableStateOf(initialReflection) }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
@@ -266,6 +289,7 @@ fun TaskInputItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // グループカラー
             Box(
                 modifier = Modifier
                     .padding(start = 12.dp)
@@ -302,12 +326,14 @@ fun TaskInputItem(
                     .clickable { onOptionClick() }
             )
         }
-
-        val reflectionText = remember { mutableStateOf("") }
+        // メモ欄
         MultiLineTextInputField(
             title = "",
             placeholder = "入力してください",
-            onTextChanged = { reflectionText.value = it },
+            onTextChanged = { text ->
+                reflectionText.value = text
+                onReflectionChanged(text)
+            },
             initialText = reflectionText.value
         )
     }
