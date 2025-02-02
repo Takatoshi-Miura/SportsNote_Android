@@ -106,4 +106,6 @@
     <string name="measuresLabel">対策：%1$s</string>
     <string name="deleteTaskFromNote">ノートから課題を削除</string>
     <string name="deleteTaskFromNoteMessage">この課題をノートから削除しますか？ 削除しても課題データ自体は残り、ノートには表示されなくなるだけです。</string>
+    <string name="addDoneTask">取り組んだ課題を追加</string>
+    <string name="noAddTask">追加できる課題がありません。</string>
 </resources>

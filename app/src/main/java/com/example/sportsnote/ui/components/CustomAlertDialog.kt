@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
+import com.example.sportsnote.model.TaskListData
 
 /**
  * ダイアログタイプ
@@ -125,6 +126,47 @@ fun TextInputDialog(
                 }
             ) {
                 Text(dismissButtonText)
+            }
+        }
+    )
+}
+
+/**
+ * 取り組んだ課題を追加するダイアログ
+ *
+ * @param tasks 取り組んだ課題データ
+ * @param onTaskSelected 課題選択時の処理
+ * @param onDismiss 閉じるボタンの処理
+ */
+@Composable
+fun TaskSelectionDialog(
+    tasks: List<TaskListData>,
+    onTaskSelected: (TaskListData) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.addDoneTask)) },
+        text = {
+            Column {
+                if (tasks.isEmpty()) {
+                    Text(stringResource(R.string.noAddTask))
+                } else {
+                    Column {
+                        tasks.forEach { task ->
+                            TextButton(
+                                onClick = { onTaskSelected(task) }
+                            ) {
+                                Text(text = task.title)
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.close))
             }
         }
     )

@@ -21,6 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,6 +38,7 @@ import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.components.TaskSelectionDialog
 import com.example.sportsnote.ui.components.TemperatureSlider
 import com.example.sportsnote.ui.components.WeatherPickerField
 import com.example.sportsnote.ui.task.TaskViewModel
@@ -76,6 +79,14 @@ fun PracticeNoteFormContent(
     // TODO: ノート詳細なら当時取り込んだ課題を取得
     val taskViewModel = TaskViewModel()
     val taskListState = remember { mutableStateOf(taskViewModel.taskLists.value) }
+
+    // ノートに未追加の課題を取得
+    val allTasks by taskViewModel.taskLists.collectAsState(emptyList())
+    val unaddedTasks = remember(taskListState.value, allTasks) {
+        allTasks.filter { it !in taskListState.value }
+    }
+
+    val showDialog = remember { mutableStateOf(false) }
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // 日付
@@ -137,7 +148,7 @@ fun PracticeNoteFormContent(
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(
-                    onClick = { } // TODO: ノートに取り込まれてない未解決の課題リストを表示
+                    onClick = { showDialog.value = true }
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
@@ -181,6 +192,18 @@ fun PracticeNoteFormContent(
         onDetailChange(detail.value)
         onReflectionChange(reflection.value)
     }
+
+    // 課題追加ダイアログ
+    if (showDialog.value) {
+        TaskSelectionDialog(
+            tasks = unaddedTasks,
+            onTaskSelected = { selectedTask ->
+                taskListState.value += selectedTask
+                showDialog.value = false
+            },
+            onDismiss = { showDialog.value = false }
+        )
+    }
 }
 
 /**
@@ -213,6 +236,7 @@ fun TaskListInput(
         }
     }
 
+    // 取り組んだ課題の削除ダイアログ
     if (showDialog.value) {
         CustomAlertDialog(
             title = stringResource(R.string.deleteTaskFromNote),
