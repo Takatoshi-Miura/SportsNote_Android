@@ -104,4 +104,6 @@
     <string name="defaltFreeNoteDetail">常に最上位に表示されるノートです。</string>
     <string name="searchNote">ノートを検索</string>
     <string name="measuresLabel">対策：%1$s</string>
+    <string name="deleteTaskFromNote">ノートから課題を削除</string>
+    <string name="deleteTaskFromNoteMessage">この課題をノートから削除しますか？ 削除しても課題データ自体は残り、ノートには表示されなくなるだけです。</string>
 </resources>

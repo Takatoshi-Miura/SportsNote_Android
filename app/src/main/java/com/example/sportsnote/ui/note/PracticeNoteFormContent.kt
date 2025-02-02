@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.TaskListData
+import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -74,7 +75,7 @@ fun PracticeNoteFormContent(
 
     // TODO: ノート詳細なら当時取り込んだ課題を取得
     val taskViewModel = TaskViewModel()
-    val taskList = taskViewModel.taskLists
+    val taskListState = remember { mutableStateOf(taskViewModel.taskLists.value) }
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // 日付
@@ -146,7 +147,12 @@ fun PracticeNoteFormContent(
             }
         },
         {
-            TaskListInput(taskDataList = taskList.value)
+            TaskListInput(
+                taskDataList = taskListState.value,
+                onTaskRemoved = { removedTask ->
+                    taskListState.value = taskListState.value.filter { it != removedTask }
+                }
+            )
         },
         // 反省
         {
@@ -177,19 +183,46 @@ fun PracticeNoteFormContent(
     }
 }
 
+/**
+ * 取り組んだ課題セルのコンポーネント
+ *
+ * @param taskDataList 取り組んだ課題データ
+ * @param onTaskRemoved 課題削除処理
+ */
 @Composable
 fun TaskListInput(
-    taskDataList: List<TaskListData>
+    taskDataList: List<TaskListData>,
+    onTaskRemoved: (TaskListData) -> Unit
 ) {
+    val showDialog = remember { mutableStateOf(false) }
+    val selectedTask = remember { mutableStateOf<TaskListData?>(null) }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Divider()
         taskDataList.forEach { taskData ->
-            TaskInputItem(taskData) {}
+            TaskInputItem(
+                taskData = taskData,
+                onOptionClick = {
+                    selectedTask.value = taskData
+                    showDialog.value = true
+                }
+            )
             Divider()
         }
+    }
+
+    if (showDialog.value) {
+        CustomAlertDialog(
+            title = stringResource(R.string.deleteTaskFromNote),
+            message = stringResource(R.string.deleteTaskFromNoteMessage),
+            onConfirm = {
+                selectedTask.value?.let { onTaskRemoved(it) }
+                showDialog.value = false
+            },
+            showDialog = showDialog
+        )
     }
 }
 
