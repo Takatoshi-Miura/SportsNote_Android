@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.model.TaskListData
+import com.example.sportsnote.ui.memo.MemoViewModel
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -141,6 +143,60 @@ class NoteViewModel : ViewModel() {
             this.reflection = reflection
         }
         realmManager.saveItem(note)
+    }
+
+    /**
+     * 練習ノートを保存する処理
+     *
+     * @param noteId ノートID
+     * @param date 日付
+     * @param weather 天気
+     * @param temperature 気温
+     * @param condition 体調
+     * @param purpose 練習の目的
+     * @param detail 練習内容
+     * @param reflection 反省
+     * @param taskReflections 取り組んだ課題のメモ
+     */
+    suspend fun savePracticeNote(
+        noteId: String = UUID.randomUUID().toString(),
+        date: Date,
+        weather: Int,
+        temperature: Int,
+        condition: String,
+        purpose: String,
+        detail: String,
+        reflection: String,
+        taskReflections: Map<TaskListData, String>
+    ) {
+        // 練習ノートを保存
+        val note = Note().apply {
+            this.noteID = noteId
+            this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+            this.noteType = NoteType.PRACTICE.value
+            this.isDeleted = false
+            this.created_at = Date()
+            this.updated_at = Date()
+            this.date = date
+            this.weather = weather
+            this.temperature = temperature
+            this.condition = condition
+            this.purpose = purpose
+            this.detail = detail
+            this.reflection = reflection
+        }
+        realmManager.saveItem(note)
+
+        // 取り組んだ課題のメモを保存
+        val memoViewModel = MemoViewModel()
+        taskReflections.forEach { (taskListData, reflectionText) ->
+            if (reflectionText.isBlank()) return@forEach
+            memoViewModel.saveMemo(
+                measuresID = taskListData.measuresID,
+                noteID = noteId,
+                detail = reflectionText
+            )
+        }
     }
 
     /**

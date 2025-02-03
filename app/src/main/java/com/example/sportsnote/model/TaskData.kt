@@ -80,6 +80,7 @@ data class AddTaskData(
  * @param groupID グループID
  * @param groupColor グループカラー
  * @param title タイトル
+ * @param measuresID 対策ID
  * @param measures 最優先の対策
  * @param order 並び順
  */
@@ -88,6 +89,7 @@ data class TaskListData(
     val groupID: String,
     val groupColor: Color,
     val title: String,
+    val measuresID: String,
     val measures: String,
     val order: Int
 )

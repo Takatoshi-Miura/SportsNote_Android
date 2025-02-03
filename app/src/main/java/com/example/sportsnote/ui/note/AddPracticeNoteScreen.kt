@@ -57,8 +57,18 @@ fun AddPracticeNoteScreen(
                     title = stringResource(R.string.addPracticeNote),
                     onCancel = onDismiss,
                     onSave = {
-                        // TODO: 保存処理
-                        println("保存するデータ: $taskReflections")
+                        // 保存処理
+                        val noteViewModel = NoteViewModel()
+                        noteViewModel.savePracticeNote(
+                            date = date.value,
+                            weather = weather.value,
+                            temperature = temperature.value,
+                            condition = condition.value,
+                            purpose = purpose.value,
+                            detail = detail.value,
+                            reflection = reflection.value,
+                            taskReflections = taskReflections.value
+                        )
                         onDismiss()
                     },
                     coroutineScope = coroutineScope

@@ -56,10 +56,10 @@ class TaskViewModel : ViewModel() {
     private fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
         // 最優先の対策を取得
         val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
-        val measuresTitle = if (measuresList.isNotEmpty()) {
-            measuresList.first().title
+        val (measuresTitle, measuresID) = if (measuresList.isNotEmpty()) {
+            measuresList.first().let { it.title to it.measuresID }
         } else {
-            ""
+            "" to "" // 空の値を設定
         }
 
         // グループカラーを取得
@@ -70,6 +70,7 @@ class TaskViewModel : ViewModel() {
             groupID = task.groupID,
             groupColor = Color.fromInt(group.color).toComposeColor(),
             title = task.title,
+            measuresID = measuresID,
             measures = measuresTitle,
             order = task.order
         )

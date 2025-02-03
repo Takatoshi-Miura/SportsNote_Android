@@ -34,4 +34,22 @@ open class Memo : RealmObject {
         this.noteDate = Date()
     }
 
+    // コンストラクタ
+    constructor(
+        memoID: String = UUID.randomUUID().toString(),
+        measuresID: String,
+        noteID: String,
+        detail: String
+    ) {
+        this.memoID = memoID
+        this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        this.measuresID = measuresID
+        this.noteID = noteID
+        this.detail = detail
+        this.isDeleted = false
+        this.created_at = Date()
+        this.updated_at = Date()
+        this.noteDate = Date()
+    }
+
 }
