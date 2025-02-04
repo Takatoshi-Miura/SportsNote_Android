@@ -82,3 +82,16 @@ open class Note : RealmObject {
     }
 
 }
+
+/** 練習ノート詳細画面表示用 */
+data class PracticeNote(
+    val noteID: String,
+    val date: Date,
+    val weather: Int,
+    val temperature: Int,
+    val condition: String,
+    val purpose: String,
+    val detail: String,
+    val reflection: String,
+    val taskReflections: Map<TaskListData, String>
+)

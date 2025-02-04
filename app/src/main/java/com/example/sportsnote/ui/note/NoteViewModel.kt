@@ -2,11 +2,16 @@ package com.example.sportsnote.ui.note
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sportsnote.model.Memo
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.model.TaskData
 import com.example.sportsnote.model.TaskListData
+import com.example.sportsnote.ui.measures.MeasuresViewModel
 import com.example.sportsnote.ui.memo.MemoViewModel
+import com.example.sportsnote.ui.task.TaskViewModel
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -75,6 +80,43 @@ class NoteViewModel : ViewModel() {
      */
     fun getFreeNote(): Note? {
         return realmManager.getFreeNote()
+    }
+
+    /**
+     * 練習ノート詳細データを取得
+     *
+     * @param noteId ノートID
+     * @return PracticeNote
+     */
+    fun getPracticeNote(noteId: String): PracticeNote {
+        val note: Note? = getNoteById(noteId)
+
+        // 取り組んだ課題セルの内容を取得
+        val taskReflections = mutableMapOf<TaskListData, String>()
+        val memos = realmManager.getMemosByNoteID(noteID = noteId)
+        memos.forEach { memo ->
+            // 対策データを取得
+            val measuresViewModel = MeasuresViewModel()
+            val measures = measuresViewModel.getMeasuresById(measuresID = memo.measuresID)
+            // 課題データを取得
+            val taskViewModel = TaskViewModel()
+            val taskData = realmManager.getObjectById<TaskData>(measures!!.taskID)
+            val taskListData = taskViewModel.convertTaskDataToTaskListData(task = taskData!!)
+            // 取り組んだ課題セルの内容を整理
+            taskReflections[taskListData] = memo.detail
+        }
+
+        return PracticeNote(
+            noteID = note!!.noteID,
+            date = note.date,
+            weather = note.weather,
+            temperature = note.temperature,
+            condition = note.condition,
+            purpose = note.purpose,
+            detail = note.detail,
+            reflection = note.reflection,
+            taskReflections = taskReflections
+        )
     }
 
     /**

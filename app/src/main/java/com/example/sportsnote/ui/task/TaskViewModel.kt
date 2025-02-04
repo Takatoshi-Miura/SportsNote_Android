@@ -53,7 +53,7 @@ class TaskViewModel : ViewModel() {
      * @param task TaskData
      * @return TaskListData
      */
-    private fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
+    fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
         // 最優先の対策を取得
         val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
         val (measuresTitle, measuresID) = if (measuresList.isNotEmpty()) {

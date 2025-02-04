@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
@@ -38,7 +39,7 @@ fun PracticeNoteViewScreen(
     appBarRightIcon: MutableState<(@Composable () -> Unit)?>
 ) {
     val viewModel = NoteViewModel()
-    val note: Note? = viewModel.getNoteById(noteId)
+    val note: PracticeNote = viewModel.getPracticeNote(noteId = noteId)
     val coroutineScope = rememberCoroutineScope()
     val showDialog = remember { mutableStateOf(false) }
 

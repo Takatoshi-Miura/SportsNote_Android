@@ -227,6 +227,21 @@ class RealmManager {
     }
 
     /**
+     * noteIDに合致するメモを取得
+     *
+     * @param noteID ノートID
+     * @return List<Memo>
+     */
+    fun getMemosByNoteID(noteID: String): List<Memo> {
+        return realm.where(Memo::class.java)
+            .equalTo("noteID", noteID)
+            .equalTo("isDeleted", false)
+            .sort("created_at", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
      * 指定した年と月に合致し、削除されていない目標を取得
      *
      * @param year 取得したい目標の年

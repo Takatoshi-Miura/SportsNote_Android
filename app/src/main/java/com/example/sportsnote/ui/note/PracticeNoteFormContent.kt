@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
-import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
@@ -61,7 +61,7 @@ import java.util.Date
  */
 @Composable
 fun PracticeNoteFormContent(
-    note: Note? = null,
+    note: PracticeNote? = null,
     onDateChange: (Date) -> Unit,
     onWeatherChange: (Int) -> Unit,
     onTemperatureChange: (Int) -> Unit,
@@ -79,10 +79,10 @@ fun PracticeNoteFormContent(
     val detail = remember { mutableStateOf(note?.detail ?: "") }
     val reflection = remember { mutableStateOf(note?.reflection ?: "") }
 
-    // TODO: ノート詳細なら当時取り込んだ課題を取得
+    // `note` があればその `taskReflections` を、なければ全課題リストをデフォルトの Map にする
     val taskViewModel = TaskViewModel()
     val taskLists by taskViewModel.taskLists.collectAsState()
-    val taskListMap: Map<TaskListData, String> = taskLists.associateWith { "" }
+    val taskListMap: Map<TaskListData, String> = note?.taskReflections ?: taskLists.associateWith { "" }
     val taskListState = remember { mutableStateOf(taskListMap) }
 
     // ノートに未追加の課題を取得
