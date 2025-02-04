@@ -129,7 +129,9 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
                                 NoteType.FREE -> {
                                     navController.navigate("free_note_view/${note.noteID}")
                                 }
-                                NoteType.PRACTICE -> {}
+                                NoteType.PRACTICE -> {
+                                    navController.navigate("practice_note_view/${note.noteID}")
+                                }
                                 NoteType.TOURNAMENT -> {
                                     navController.navigate("tournament_note_view/${note.noteID}")
                                 }

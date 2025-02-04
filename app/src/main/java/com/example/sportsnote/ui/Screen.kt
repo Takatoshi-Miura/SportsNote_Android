@@ -23,6 +23,7 @@ sealed class Screen(val route: String) {
     object CompletedTask : Screen("completed_task/{groupId}")
     object Note : Screen("note")
     object TournamentNoteView : Screen("tournament_note_view/{noteId}")
+    object PracticeNoteView : Screen("practice_note_view/{noteId}")
     object FreeNoteView : Screen("free_note_view/{noteId}")
     object Target : Screen("target")
 
@@ -37,6 +38,7 @@ sealed class Screen(val route: String) {
             is CompletedTask -> ScreenConfig(stringResource(R.string.completedTask), showBottomBar = true)
             is Note -> ScreenConfig(stringResource(R.string.note), showBottomBar = true)
             is TournamentNoteView -> ScreenConfig(stringResource(R.string.noteDetail), showBottomBar = false)
+            is PracticeNoteView -> ScreenConfig(stringResource(R.string.noteDetail), showBottomBar = false)
             is FreeNoteView -> ScreenConfig(stringResource(R.string.freeNote), showBottomBar = false)
             is Target -> ScreenConfig(stringResource(R.string.target), showBottomBar = true)
         }
@@ -53,6 +55,7 @@ sealed class Screen(val route: String) {
                 route.startsWith(CompletedTask.route) -> CompletedTask
                 route.startsWith(Note.route) -> Note
                 route.startsWith(TournamentNoteView.route) -> TournamentNoteView
+                route.startsWith(PracticeNoteView.route) -> PracticeNoteView
                 route.startsWith(FreeNoteView.route) -> FreeNoteView
                 route.startsWith(Target.route) -> Target
                 else -> Task // デフォルトはTaskに戻る
