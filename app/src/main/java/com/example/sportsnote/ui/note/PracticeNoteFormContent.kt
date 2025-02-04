@@ -75,8 +75,8 @@ fun PracticeNoteFormContent(
     val weather = remember { mutableStateOf(note?.weather ?: Weather.SUNNY.id) }
     val temperature = remember { mutableStateOf(note?.temperature ?: 20) }
     val condition = remember { mutableStateOf(note?.condition ?: "") }
-    val purpose = remember { mutableStateOf(note?.target ?: "") }
-    val detail = remember { mutableStateOf(note?.consciousness ?: "") }
+    val purpose = remember { mutableStateOf(note?.purpose ?: "") }
+    val detail = remember { mutableStateOf(note?.detail ?: "") }
     val reflection = remember { mutableStateOf(note?.reflection ?: "") }
 
     // TODO: ノート詳細なら当時取り込んだ課題を取得
