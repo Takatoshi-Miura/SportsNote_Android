@@ -82,6 +82,7 @@ data class AddTaskData(
  * @param title タイトル
  * @param measuresID 対策ID
  * @param measures 最優先の対策
+ * @param memoID メモID（存在する場合のみ）
  * @param order 並び順
  */
 data class TaskListData(
@@ -91,6 +92,7 @@ data class TaskListData(
     val title: String,
     val measuresID: String,
     val measures: String,
+    var memoID: String?,
     val order: Int
 )
 

@@ -102,6 +102,7 @@ class NoteViewModel : ViewModel() {
             val taskViewModel = TaskViewModel()
             val taskData = realmManager.getObjectById<TaskData>(measures!!.taskID)
             val taskListData = taskViewModel.convertTaskDataToTaskListData(task = taskData!!)
+            taskListData.memoID = memo.memoID
             // 取り組んだ課題セルの内容を整理
             taskReflections[taskListData] = memo.detail
         }
@@ -234,6 +235,7 @@ class NoteViewModel : ViewModel() {
         taskReflections.forEach { (taskListData, reflectionText) ->
             if (reflectionText.isBlank()) return@forEach
             memoViewModel.saveMemo(
+                memoID = taskListData.memoID,
                 measuresID = taskListData.measuresID,
                 noteID = noteId,
                 detail = reflectionText

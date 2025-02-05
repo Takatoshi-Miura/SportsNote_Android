@@ -72,6 +72,7 @@ class TaskViewModel : ViewModel() {
             title = task.title,
             measuresID = measuresID,
             measures = measuresTitle,
+            memoID = null,
             order = task.order
         )
     }

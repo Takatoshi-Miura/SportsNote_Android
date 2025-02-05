@@ -18,18 +18,28 @@ class MemoViewModel : ViewModel() {
      * @param detail
      */
     suspend fun saveMemo(
-        memoID: String = UUID.randomUUID().toString(),
+        memoID: String? = null,
         measuresID: String,
         noteID: String,
         detail: String
     ): Memo {
+        val finalMemoID = memoID ?: UUID.randomUUID().toString()
         val memo = Memo(
-            memoID = memoID,
+            memoID = finalMemoID,
             measuresID = measuresID,
             noteID = noteID,
             detail = detail
         )
         realmManager.saveItem(memo)
         return memo
+    }
+
+    /**
+     * Memoを論理削除
+     *
+     * @param memoID memoID
+     */
+    suspend fun deleteMemo(memoID: String) {
+        realmManager.logicalDelete<Memo>(memoID)
     }
 }

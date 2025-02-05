@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,8 +43,10 @@ import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.TaskSelectionDialog
 import com.example.sportsnote.ui.components.TemperatureSlider
 import com.example.sportsnote.ui.components.WeatherPickerField
+import com.example.sportsnote.ui.memo.MemoViewModel
 import com.example.sportsnote.ui.task.TaskViewModel
 import com.example.sportsnote.utils.Weather
+import kotlinx.coroutines.launch
 import java.util.Date
 
 /**
@@ -92,6 +95,7 @@ fun PracticeNoteFormContent(
     }
 
     val showDialog = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // 日付
@@ -165,7 +169,15 @@ fun PracticeNoteFormContent(
         {
             TaskListInput(
                 taskDataList = taskListState.value,
-                onTaskRemoved = { task -> taskListState.value -= task },
+                onTaskRemoved = { task ->
+                    if (task.memoID != null) {
+                        coroutineScope.launch {
+                            val memoViewModel = MemoViewModel()
+                            memoViewModel.deleteMemo(task.memoID!!)
+                        }
+                    }
+                    taskListState.value -= task
+                },
                 onReflectionChanged = { task, reflection ->
                     taskListState.value += (task to reflection)
                 }
