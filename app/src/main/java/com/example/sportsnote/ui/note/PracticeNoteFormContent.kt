@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -90,9 +91,11 @@ fun PracticeNoteFormContent(
 
     // ノートに未追加の課題を取得
     val allTasks by taskViewModel.taskLists.collectAsState()
-    val taskIDsInMap = taskListMap.keys.map { it.taskID }.toSet()
     val unaddedTasks = remember(taskListState.value, allTasks) {
-        allTasks.filter { it.taskID !in taskIDsInMap }
+        derivedStateOf {
+            val taskIDMap = taskListState.value.keys.map { it.taskID }.toSet()
+            allTasks.filter { it.taskID !in taskIDMap }
+        }
     }
 
     val showDialog = remember { mutableStateOf(false) }
@@ -216,7 +219,7 @@ fun PracticeNoteFormContent(
     // 課題追加ダイアログ
     if (showDialog.value) {
         TaskSelectionDialog(
-            tasks = unaddedTasks,
+            tasks = unaddedTasks.value,
             onTaskSelected = { selectedTask ->
                 taskListState.value += selectedTask to ""
                 showDialog.value = false
