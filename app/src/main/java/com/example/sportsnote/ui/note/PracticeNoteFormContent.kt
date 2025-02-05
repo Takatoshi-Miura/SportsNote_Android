@@ -89,9 +89,10 @@ fun PracticeNoteFormContent(
     val taskListState = remember { mutableStateOf(taskListMap) }
 
     // ノートに未追加の課題を取得
-    val allTasks by taskViewModel.taskLists.collectAsState(emptyList())
+    val allTasks by taskViewModel.taskLists.collectAsState()
+    val taskIDsInMap = taskListMap.keys.map { it.taskID }.toSet()
     val unaddedTasks = remember(taskListState.value, allTasks) {
-        allTasks.filter { it !in taskListState.value }
+        allTasks.filter { it.taskID !in taskIDsInMap }
     }
 
     val showDialog = remember { mutableStateOf(false) }
