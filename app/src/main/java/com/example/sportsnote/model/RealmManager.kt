@@ -286,6 +286,17 @@ class RealmManager {
                 }
                 realmTransaction.insertOrUpdate(it)
 
+                // Noteを削除する場合、関連するMemoも論理削除
+                if (it is Note) {
+                    val relatedMemos = realmTransaction.where(Memo::class.java)
+                        .equalTo("noteID", id)
+                        .findAll()
+                    relatedMemos.forEach { memo ->
+                        memo.isDeleted = true
+                        realmTransaction.insertOrUpdate(memo)
+                    }
+                }
+
                 // TaskDataを削除する場合、関連するMeasuresも論理削除
                 if (it is TaskData) {
                     val relatedMeasures = realmTransaction.where(Measures::class.java)
