@@ -1,9 +1,10 @@
 package com.example.sportsnote.ui.note
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sportsnote.model.Memo
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
@@ -14,10 +15,15 @@ import com.example.sportsnote.ui.memo.MemoViewModel
 import com.example.sportsnote.ui.task.TaskViewModel
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class NoteViewModel : ViewModel() {
@@ -26,9 +32,35 @@ class NoteViewModel : ViewModel() {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
     private val _targetNotes = MutableStateFlow<List<Note>>(emptyList())
-    val targetNotes: StateFlow<List<Note>> = _targetNotes
+//    val targetNotes: StateFlow<List<Note>> = _targetNotes
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    val noteListItems: StateFlow<List<NoteListItem>> = _notes.map { notes ->
+        notes.map { note ->
+            NoteListItem(
+                noteID = note.noteID,
+                noteType = note.noteType,
+                date = note.date,
+                backGroundColor = getBackgroundColor(note),
+                title = getNoteTitle(note),
+                subTitle = getNoteSubTitle(note)
+            )
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val targetNotes: StateFlow<List<NoteListItem>> = _targetNotes.map { notes ->
+        notes.map { note ->
+            NoteListItem(
+                noteID = note.noteID,
+                noteType = note.noteType,
+                date = note.date,
+                backGroundColor = getBackgroundColor(note),
+                title = getNoteTitle(note),
+                subTitle = getNoteSubTitle(note)
+            )
+        }
+    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     init {
         searchNotesByQuery("")
@@ -80,6 +112,59 @@ class NoteViewModel : ViewModel() {
      */
     fun getFreeNote(): Note? {
         return realmManager.getFreeNote()
+    }
+
+    /**
+     * ノート一覧に表示するタイトルを取得
+     *
+     * @param note Note
+     * @return タイトル
+     */
+    private fun getNoteTitle(note: Note): String {
+        val title = when (NoteType.fromInt(note.noteType)) {
+            NoteType.FREE -> note.title
+            NoteType.PRACTICE -> note.detail
+            NoteType.TOURNAMENT -> note.result
+        }
+        return title
+    }
+
+    /**
+     * ノート一覧に表示するサブタイトルを取得
+     *
+     * @param note Note
+     * @return サブタイトル
+     */
+    private fun getNoteSubTitle(note: Note): String {
+        val subTitle = when (NoteType.fromInt(note.noteType)) {
+            NoteType.FREE -> note.detail
+            NoteType.PRACTICE -> formatDate(note.date)
+            NoteType.TOURNAMENT -> formatDate(note.date)
+        }
+        return subTitle
+    }
+
+    /**
+     * 日付をyyyy/MM/dd (曜日)形式でフォーマットする
+     */
+    private fun formatDate(date: Date): String {
+        val format = SimpleDateFormat("yyyy/MM/dd (E)", Locale.getDefault())
+        return format.format(date)
+    }
+
+    /**
+     * ノート一覧に表示する背景色を取得
+     *
+     * @param note Note
+     * @return 背景色
+     */
+    private  fun getBackgroundColor(note: Note): Color {
+        val backgroundColor = when (NoteType.fromInt(note.noteType)) {
+            NoteType.FREE -> Color.White
+            NoteType.PRACTICE -> realmManager.getNoteBackgroundColor(note.noteID)
+            NoteType.TOURNAMENT -> Color.White
+        }
+        return backgroundColor
     }
 
     /**

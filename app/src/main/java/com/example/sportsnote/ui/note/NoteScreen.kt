@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.R
-import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
@@ -52,9 +52,6 @@ import com.example.sportsnote.utils.NoteType
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
  * ノート一覧画面
@@ -62,7 +59,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
-    val notes by noteViewModel.notes.collectAsState()
+    val notes by noteViewModel.noteListItems.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
@@ -216,8 +213,8 @@ fun SearchBar(
 
 @Composable
 fun NoteListScreen(
-    notes: List<Note>,
-    onNoteClick: (Note) -> Unit
+    notes: List<NoteListItem>,
+    onNoteClick: (NoteListItem) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -237,7 +234,7 @@ fun NoteListScreen(
 
 @Composable
 fun NoteListItem(
-    note: Note,
+    note: NoteListItem,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -246,8 +243,8 @@ fun NoteListItem(
             .clickable { onClick() }
             .height(56.dp)
     ) {
-        // 左端部分
         if (NoteType.fromInt(note.noteType) == NoteType.FREE) {
+            // ピン留めアイコン
             Box(
                 modifier = Modifier
                     .width(24.dp)
@@ -262,32 +259,13 @@ fun NoteListItem(
                 )
             }
         } else {
-            val backgroundColor = when (NoteType.fromInt(note.noteType)) {
-                NoteType.FREE -> Color.White
-                NoteType.PRACTICE -> Color.White // TODO: 含まれる課題のグループ色にする
-                NoteType.TOURNAMENT -> Color.White
-            }
             // 背景色だけの部品
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .width(24.dp)
-                    .background(backgroundColor)
+                    .background(note.backGroundColor)
             )
-        }
-
-        // メインテキスト表示
-        val displayText = when (NoteType.fromInt(note.noteType)) {
-            NoteType.FREE -> note.title
-            NoteType.PRACTICE -> note.detail
-            NoteType.TOURNAMENT -> note.result
-        }
-
-        // サブテキスト表示
-        val displaySubText = when (NoteType.fromInt(note.noteType)) {
-            NoteType.FREE -> note.detail
-            NoteType.PRACTICE -> formatDate(note.date)
-            NoteType.TOURNAMENT -> formatDate(note.date)
         }
 
         Column(
@@ -298,15 +276,14 @@ fun NoteListItem(
         ) {
             // 情報表示
             Text(
-                text = displayText,
+                text = note.title,
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.body1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            // ノートの日付
             Text(
-                text = displaySubText,
+                text = note.subTitle,
                 fontSize = 12.sp,
                 style = MaterialTheme.typography.body2,
                 color = Color.Gray,
@@ -341,12 +318,4 @@ fun NoteEmptyItem() {
             )
         }
     }
-}
-
-/**
- * 日付をyyyy/MM/dd (曜日)形式でフォーマットする
- */
-fun formatDate(date: Date): String {
-    val format = SimpleDateFormat("yyyy/MM/dd (E)", Locale.getDefault())
-    return format.format(date)
 }

@@ -1,6 +1,7 @@
 package com.example.sportsnote.model
 
 import android.content.Context
+import androidx.compose.ui.graphics.Color
 import com.example.sportsnote.utils.NoteType
 import io.realm.Case
 import io.realm.Realm
@@ -239,6 +240,20 @@ class RealmManager {
             .sort("created_at", Sort.ASCENDING)
             .findAll()
             .toList()
+    }
+
+    /**
+     * ノートの背景色を取得
+     *
+     * @param noteID ノートID
+     * @return 背景色
+     */
+    fun getNoteBackgroundColor(noteID: String): Color {
+        val memo = getMemosByNoteID(noteID).firstOrNull() ?: return Color.White
+        val measures = getObjectById<Measures>(memo.measuresID)
+        val taskData = getObjectById<TaskData>(measures!!.taskID)
+        val group = getObjectById<Group>(taskData!!.groupID)
+        return com.example.sportsnote.utils.Color.fromInt(group!!.color).toComposeColor()
     }
 
     /**

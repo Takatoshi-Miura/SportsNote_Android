@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.Target
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
@@ -209,8 +210,8 @@ fun TargetLabel(text: String) {
  */
 @Composable
 fun NoteListSection(
-    notes: List<Note>,
-    onNoteClick: (Note) -> Unit
+    notes: List<NoteListItem>,
+    onNoteClick: (NoteListItem) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier

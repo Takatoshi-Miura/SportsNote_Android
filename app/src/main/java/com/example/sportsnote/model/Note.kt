@@ -1,5 +1,6 @@
 package com.example.sportsnote.model
 
+import androidx.compose.ui.graphics.Color
 import com.example.sportsnote.utils.NoteType
 import com.example.sportsnote.utils.Weather
 import io.realm.RealmObject
@@ -82,6 +83,16 @@ open class Note : RealmObject {
     }
 
 }
+
+/** ノート一覧表示用 */
+data class NoteListItem(
+    val noteID: String,
+    val noteType: Int,
+    val date: Date,
+    val backGroundColor: Color,
+    val title: String,
+    val subTitle: String
+)
 
 /** 練習ノート詳細画面表示用 */
 data class PracticeNote(
