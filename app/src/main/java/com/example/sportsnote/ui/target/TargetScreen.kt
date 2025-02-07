@@ -122,7 +122,9 @@ fun TargetScreen() {
                     onNoteClick = { note ->
                         when(NoteType.fromInt(note.noteType)) {
                             NoteType.FREE -> { }
-                            NoteType.PRACTICE -> { }
+                            NoteType.PRACTICE -> {
+                                navController.navigate("practice_note_view/${note.noteID}")
+                            }
                             NoteType.TOURNAMENT -> {
                                 navController.navigate("tournament_note_view/${note.noteID}")
                             }
