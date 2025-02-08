@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -141,6 +142,7 @@ fun CalendarDisplay(
                 Day(
                     day = day,
                     isSelected = selectedDate == day.date,
+                    hasNote = true, // TODO: ノートのある日付だけtrueにする
                     onClick = {
                         onDateSelected(day.date)
                     }
@@ -192,12 +194,14 @@ fun getDayOfWeekTextColor(dayOfWeek: DayOfWeek): Color {
  *
  * @param day カレンダー日付
  * @param isSelected 選択状態
+ * @param hasNote ノートが存在するか
  * @param onClick 押下時の処理
  */
 @Composable
 fun Day(
     day: CalendarDay,
     isSelected: Boolean,
+    hasNote: Boolean,
     onClick: () -> Unit
 ) {
     val today = remember { java.time.LocalDate.now() }
@@ -206,22 +210,29 @@ fun Day(
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .background(
-                color = when {
-                    isToday -> MaterialTheme.colors.primary
-                    isSelected -> Color(0xFFFFC0CB) // ピンク色
-                    else -> Color.Transparent
-                },
-                shape = CircleShape
-            )
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = day.date.dayOfMonth.toString(),
-            color = getDayTextColor(day),
-            style = MaterialTheme.typography.body2
-        )
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    color = when {
+                        isToday -> MaterialTheme.colors.primary
+                        isSelected -> Color(0xFFFFC0CB) // ピンク色
+                        hasNote -> Color(0xFFA8E6CF) // 緑色
+                        else -> Color.Transparent
+                    },
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = day.date.dayOfMonth.toString(),
+                color = getDayTextColor(day),
+                style = MaterialTheme.typography.body2
+            )
+        }
     }
 }
 
