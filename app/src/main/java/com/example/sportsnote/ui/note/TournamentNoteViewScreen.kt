@@ -72,6 +72,7 @@ fun TournamentNoteViewScreen(
                 onDelete = {
                     showDialog.value = true
                 },
+                onEdit = null,
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = rightIcon

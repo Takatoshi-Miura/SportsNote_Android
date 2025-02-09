@@ -108,4 +108,7 @@
     <string name="deleteTaskFromNoteMessage">この課題をノートから削除しますか？ 削除しても課題データ自体は残り、ノートには表示されなくなるだけです。</string>
     <string name="addDoneTask">取り組んだ課題を追加</string>
     <string name="noAddTask">追加できる課題がありません。</string>
+    <string name="taskProgress">課題の進捗</string>
+    <string name="completeTaskMessage">課題を完了にしますか？</string>
+    <string name="notCompleteTask">課題を未完了に戻しますか？</string>
 </resources>

@@ -19,6 +19,7 @@ import com.example.sportsnote.model.TaskListData
 enum class DialogType {
     None,
     Delete,
+    CompleteTask,
     AddMeasure,
     AddTournamentNote,
     AddPracticeNote,

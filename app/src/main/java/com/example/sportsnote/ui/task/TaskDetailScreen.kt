@@ -54,6 +54,7 @@ fun TaskDetailScreen(
     // 入力データ
     var title by remember { mutableStateOf(taskDetail.task.title) }
     var cause by remember { mutableStateOf(taskDetail.task.cause) }
+    var isComplete by remember { mutableStateOf(taskDetail.task.isComplete) }
     val showDialog = remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     val inputText = remember { mutableStateOf("") }
@@ -95,7 +96,8 @@ fun TaskDetailScreen(
                             taskId = taskId,
                             title = title,
                             cause = cause,
-                            groupId = taskDetail.task.groupID
+                            groupId = taskDetail.task.groupID,
+                            isComplete = isComplete
                         )
                         navController.navigate("measures/${measuresID}")
                     }
@@ -119,11 +121,16 @@ fun TaskDetailScreen(
                         taskId = taskId,
                         title = title,
                         cause = cause,
-                        groupId = taskDetail.task.groupID
+                        groupId = taskDetail.task.groupID,
+                        isComplete = isComplete
                     )
                 },
                 onDelete = {
                     dialogType = DialogType.Delete
+                    showDialog.value = true
+                },
+                onEdit = {
+                    dialogType = DialogType.CompleteTask
                     showDialog.value = true
                 },
                 updateAppBar = { navigationIcon, rightIcon ->
@@ -177,6 +184,32 @@ fun TaskDetailScreen(
                     )
                     // TODO: UIに反映
                     showDialog.value = false
+                }
+            },
+            showDialog = showDialog
+        )
+    } else if (dialogType == DialogType.CompleteTask) {
+        val message = if (isComplete) {
+            stringResource(R.string.notCompleteTask)
+        } else {
+            stringResource(R.string.completeTaskMessage)
+        }
+        // 完了確認ダイアログの表示
+        CustomAlertDialog(
+            title = stringResource(R.string.taskProgress),
+            message = message,
+            onConfirm = {
+                coroutineScope.launch {
+                    // 完了処理
+                    taskViewModel.saveTask(
+                        taskId = taskId,
+                        title = title,
+                        cause = cause,
+                        groupId = taskDetail.task.groupID,
+                        isComplete = !isComplete
+                    )
+                    showDialog.value = false
+                    onBack()
                 }
             },
             showDialog = showDialog

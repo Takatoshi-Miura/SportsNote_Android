@@ -79,6 +79,7 @@ fun FreeNoteScreen(
                     )
                 },
                 onDelete = { },
+                onEdit = null,
                 updateAppBar = { navigationIcon, _ ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = null

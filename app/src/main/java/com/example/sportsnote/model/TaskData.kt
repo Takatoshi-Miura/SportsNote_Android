@@ -44,6 +44,7 @@ open class TaskData : RealmObject {
         title: String,
         cause: String,
         groupId: String,
+        isComplete: Boolean
     ) {
         this.taskID = taskId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
@@ -51,7 +52,7 @@ open class TaskData : RealmObject {
         this.title = title
         this.cause = cause
         this.order = 0
-        this.isComplete = false
+        this.isComplete = isComplete
         this.isDeleted = false
         this.created_at = Date()
         this.updated_at = Date()

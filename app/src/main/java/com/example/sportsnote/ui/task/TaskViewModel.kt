@@ -39,6 +39,7 @@ class TaskViewModel : ViewModel() {
             // 課題一覧用データを取得
             val taskListDatas = mutableListOf<TaskListData>()
             _tasks.value.forEach { task ->
+                if (task.isComplete) return@forEach
                 val taskListData = convertTaskDataToTaskListData(task)
                 taskListDatas.add(taskListData)
             }
@@ -120,18 +121,21 @@ class TaskViewModel : ViewModel() {
      * @param cause 原因
      * @param groupId グループID
      * @param taskId 保存したTaskのID
+     * @param isComplete 完了状態
      */
     suspend fun saveTask(
         taskId: String = UUID.randomUUID().toString(),
         title: String,
         cause: String,
         groupId: String,
+        isComplete: Boolean = false
     ): String {
         val task = TaskData(
             taskId = taskId,
             title = title,
             cause = cause,
-            groupId = groupId
+            groupId = groupId,
+            isComplete = isComplete
         )
         realmManager.saveItem(task)
         return taskId
