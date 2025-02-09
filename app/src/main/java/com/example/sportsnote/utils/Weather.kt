@@ -46,7 +46,5 @@ enum class Weather(val id: Int, val titleRes: Int) {
         fun getAllTitles(): List<String> {
             return entries.map { it.getTitle() }
         }
-
-        // TODO: イメージを取得
     }
 }
