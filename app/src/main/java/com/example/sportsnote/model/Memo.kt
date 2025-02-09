@@ -51,5 +51,13 @@ open class Memo : RealmObject {
         this.updated_at = Date()
         this.noteDate = Date()
     }
-
 }
+
+// 対策画面用データクラス
+data class MeasuresMemo(
+    val memoID: String,
+    val measuresID: String,
+    val noteID: String,
+    val detail: String,
+    val date: Date
+)

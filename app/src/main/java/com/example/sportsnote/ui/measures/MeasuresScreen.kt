@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,14 +18,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
+import com.example.sportsnote.model.MeasuresMemo
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
+import com.example.sportsnote.ui.memo.MemoViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
  * 対策画面
@@ -41,6 +49,8 @@ fun MeasuresScreen(
 ) {
     val measuresViewModel = MeasuresViewModel()
     val measures = measuresViewModel.getMeasuresById(measuresID)
+    val memoViewModel = MemoViewModel()
+    val memos = memoViewModel.getMemosByMeasuresID(measuresID)
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データ
@@ -63,7 +73,12 @@ fun MeasuresScreen(
                 style = MaterialTheme.typography.body1,
                 modifier = Modifier.padding(8.dp)
             )
-            // TODO: 関連するメモを取得
+            // 関連するメモを表示
+            LazyColumn {
+                items(memos.size) { index ->
+                    MemoItem(memos[index])
+                }
+            }
         }
     )
 
@@ -114,6 +129,31 @@ fun MeasuresScreen(
                 }
             },
             showDialog = showDialog
+        )
+    }
+}
+
+/**
+ * 対策に関連するメモを表示
+ *
+ * @param memo MeasuresMemo
+ */
+@Composable
+fun MemoItem(memo: MeasuresMemo) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Divider()
+        Text(
+            text = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(memo.date),
+            style = MaterialTheme.typography.body2,
+            color = Color.Gray
+        )
+        Text(
+            text = memo.detail,
+            style = MaterialTheme.typography.body1
         )
     }
 }

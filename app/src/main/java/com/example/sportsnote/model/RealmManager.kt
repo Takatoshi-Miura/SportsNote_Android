@@ -228,6 +228,21 @@ class RealmManager {
     }
 
     /**
+     * measuresIDに合致するメモを取得
+     *
+     * @param measuresID 対策ID
+     * @return List<Memo>
+     */
+    fun getMemosByMeasuresID(measuresID: String): List<Memo> {
+        return realm.where(Memo::class.java)
+            .equalTo("measuresID", measuresID)
+            .equalTo("isDeleted", false)
+            .sort("created_at", Sort.ASCENDING)
+            .findAll()
+            .toList()
+    }
+
+    /**
      * noteIDに合致するメモを取得
      *
      * @param noteID ノートID
