@@ -21,6 +21,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -28,7 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.ui.note.NoteViewModel
 import com.example.sportsnote.ui.target.TargetViewModel
+import com.example.sportsnote.utils.NoteType
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -38,6 +42,7 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
+import java.time.ZoneId
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -56,6 +61,9 @@ fun CalendarDisplay(
     selectedDate: java.time.LocalDate?,
     onDateSelected: (java.time.LocalDate) -> Unit
 ) {
+    val noteViewModel = NoteViewModel()
+    val notes by noteViewModel.notes.collectAsState()
+
     val coroutineScope = rememberCoroutineScope()
     // 現在の年月
     val currentMonth = remember { YearMonth.now() }
@@ -139,10 +147,14 @@ fun CalendarDisplay(
         HorizontalCalendar(
             state = state,
             dayContent = { day ->
+                val hasNote = notes.any { note ->
+                    note.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == day.date &&
+                            note.noteType != NoteType.FREE.value
+                }
                 Day(
                     day = day,
                     isSelected = selectedDate == day.date,
-                    hasNote = true, // TODO: ノートのある日付だけtrueにする
+                    hasNote = hasNote,
                     onClick = {
                         onDateSelected(day.date)
                     }

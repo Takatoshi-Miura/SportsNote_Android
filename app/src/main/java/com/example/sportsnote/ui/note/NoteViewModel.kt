@@ -32,7 +32,6 @@ class NoteViewModel : ViewModel() {
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
     private val _targetNotes = MutableStateFlow<List<Note>>(emptyList())
-//    val targetNotes: StateFlow<List<Note>> = _targetNotes
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 

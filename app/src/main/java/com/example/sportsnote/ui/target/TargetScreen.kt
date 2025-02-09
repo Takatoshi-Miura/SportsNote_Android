@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
-import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.Target
 import com.example.sportsnote.ui.LocalNavController
