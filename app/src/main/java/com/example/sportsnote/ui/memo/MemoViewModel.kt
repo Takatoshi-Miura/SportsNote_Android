@@ -31,7 +31,7 @@ class MemoViewModel : ViewModel() {
             )
             memoList.add(measuresMemo)
         }
-        return memoList
+        return memoList.sortedByDescending { it.date }
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example.sportsnote.ui.measures
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.MeasuresMemo
+import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
@@ -52,6 +54,7 @@ fun MeasuresScreen(
     val memoViewModel = MemoViewModel()
     val memos = memoViewModel.getMemosByMeasuresID(measuresID)
     val coroutineScope = rememberCoroutineScope()
+    val navController = LocalNavController.current
 
     // 入力データ
     var title by remember { mutableStateOf(measures!!.title) }
@@ -76,9 +79,16 @@ fun MeasuresScreen(
             // 関連するメモを表示
             LazyColumn {
                 items(memos.size) { index ->
-                    MemoItem(memos[index])
+                    val memo = memos[index]
+                    MemoItem(
+                        memo = memo,
+                        onClick = {
+                            navController.navigate("practice_note_view/${memo.noteID}")
+                        }
+                    )
                 }
             }
+            Divider()
         }
     )
 
@@ -137,12 +147,17 @@ fun MeasuresScreen(
  * 対策に関連するメモを表示
  *
  * @param memo MeasuresMemo
+ * @param onClick メモをタップしたときの処理
  */
 @Composable
-fun MemoItem(memo: MeasuresMemo) {
+fun MemoItem(
+    memo: MeasuresMemo,
+    onClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(8.dp)
     ) {
         Divider()
