@@ -66,7 +66,8 @@ fun TournamentNoteViewScreen(
                         target = target,
                         consciousness = consciousness,
                         result = result,
-                        reflection = reflection
+                        reflection = reflection,
+                        created_at = note!!.created_at
                     )
                 },
                 onDelete = {

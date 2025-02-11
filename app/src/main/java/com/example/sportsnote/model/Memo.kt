@@ -39,7 +39,8 @@ open class Memo : RealmObject {
         memoID: String = UUID.randomUUID().toString(),
         measuresID: String,
         noteID: String,
-        detail: String
+        detail: String,
+        created_at: Date = Date()
     ) {
         this.memoID = memoID
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
@@ -47,7 +48,7 @@ open class Memo : RealmObject {
         this.noteID = noteID
         this.detail = detail
         this.isDeleted = false
-        this.created_at = Date()
+        this.created_at = created_at
         this.updated_at = Date()
         this.noteDate = Date()
     }

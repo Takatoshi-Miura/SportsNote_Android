@@ -3,6 +3,7 @@ package com.example.sportsnote.ui.measures
 import androidx.lifecycle.ViewModel
 import com.example.sportsnote.model.Measures
 import com.example.sportsnote.model.RealmManager
+import java.util.Date
 import java.util.UUID
 
 class MeasuresViewModel : ViewModel() {
@@ -25,16 +26,19 @@ class MeasuresViewModel : ViewModel() {
      * @param measuresId 対策ID
      * @param taskId 課題ID
      * @param title 対策タイトル
+     * @param created_at 作成日付
      */
     suspend fun saveMeasures(
         measuresId: String = UUID.randomUUID().toString(),
         taskId: String,
-        title: String
+        title: String,
+        created_at: Date = Date()
     ): Measures {
         val measures = Measures(
             measuresId = measuresId,
             taskId = taskId,
-            title = title
+            title = title,
+            created_at = created_at
         )
         realmManager.saveItem(measures)
         return measures

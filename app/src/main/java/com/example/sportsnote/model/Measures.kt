@@ -37,6 +37,7 @@ open class Measures : RealmObject {
         measuresId: String = UUID.randomUUID().toString(),
         taskId: String,
         title: String,
+        created_at: Date = Date()
     ) {
         this.measuresID = measuresId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
@@ -44,7 +45,7 @@ open class Measures : RealmObject {
         this.title = title
         this.order = 0
         this.isDeleted = false
-        this.created_at = Date()
+        this.created_at = created_at
         this.updated_at = Date()
     }
 }

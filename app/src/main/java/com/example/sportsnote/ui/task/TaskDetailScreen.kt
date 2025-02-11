@@ -97,7 +97,8 @@ fun TaskDetailScreen(
                             title = title,
                             cause = cause,
                             groupId = taskDetail.task.groupID,
-                            isComplete = isComplete
+                            isComplete = isComplete,
+                            created_at = taskDetail.task.created_at
                         )
                         navController.navigate("measures/${measuresID}")
                     }
@@ -122,7 +123,8 @@ fun TaskDetailScreen(
                         title = title,
                         cause = cause,
                         groupId = taskDetail.task.groupID,
-                        isComplete = isComplete
+                        isComplete = isComplete,
+                        created_at = taskDetail.task.created_at
                     )
                 },
                 onDelete = {
@@ -206,7 +208,8 @@ fun TaskDetailScreen(
                         title = title,
                         cause = cause,
                         groupId = taskDetail.task.groupID,
-                        isComplete = !isComplete
+                        isComplete = !isComplete,
+                        created_at = taskDetail.task.created_at
                     )
                     showDialog.value = false
                     onBack()

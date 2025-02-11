@@ -200,7 +200,8 @@ class NoteViewModel : ViewModel() {
             purpose = note.purpose,
             detail = note.detail,
             reflection = note.reflection,
-            taskReflections = taskReflections
+            taskReflections = taskReflections,
+            created_at = note.created_at
         )
     }
 
@@ -214,14 +215,15 @@ class NoteViewModel : ViewModel() {
     suspend fun saveFreeNote(
         noteId: String = UUID.randomUUID().toString(),
         title: String,
-        detail: String
+        detail: String,
+        created_at: Date = Date()
     ) {
         val note = Note().apply {
             this.noteID = noteId
             this.userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
             this.noteType = NoteType.FREE.value
             this.isDeleted = false
-            this.created_at = Date()
+            this.created_at = created_at
             this.updated_at = Date()
             this.title = title
             this.detail = detail
@@ -251,14 +253,15 @@ class NoteViewModel : ViewModel() {
         target: String,
         consciousness: String,
         result: String,
-        reflection: String
+        reflection: String,
+        created_at: Date = Date()
     ) {
         val note = Note().apply {
             this.noteID = noteId
             this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
             this.noteType = NoteType.TOURNAMENT.value
             this.isDeleted = false
-            this.created_at = Date()
+            this.created_at = created_at
             this.updated_at = Date()
             this.date = date
             this.weather = weather
@@ -294,7 +297,8 @@ class NoteViewModel : ViewModel() {
         purpose: String,
         detail: String,
         reflection: String,
-        taskReflections: Map<TaskListData, String>
+        taskReflections: Map<TaskListData, String>,
+        created_at: Date = Date()
     ) {
         // 練習ノートを保存
         val note = Note().apply {
@@ -302,7 +306,7 @@ class NoteViewModel : ViewModel() {
             this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
             this.noteType = NoteType.PRACTICE.value
             this.isDeleted = false
-            this.created_at = Date()
+            this.created_at = created_at
             this.updated_at = Date()
             this.date = date
             this.weather = weather

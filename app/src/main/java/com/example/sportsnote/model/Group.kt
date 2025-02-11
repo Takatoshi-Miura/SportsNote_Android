@@ -38,7 +38,8 @@ open class Group : RealmObject {
         groupId: String = UUID.randomUUID().toString(),
         title: String,
         colorId: Int,
-        order: Int
+        order: Int,
+        created_at: Date
     ) : this() {
         this.title = title
         this.color = colorId
@@ -46,7 +47,7 @@ open class Group : RealmObject {
         this.groupID = groupId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         this.isDeleted = false
-        this.created_at = Date()
+        this.created_at = created_at
         this.updated_at = Date()
     }
 

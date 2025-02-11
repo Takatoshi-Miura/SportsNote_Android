@@ -107,6 +107,7 @@ fun MeasuresScreen(
                         measuresId = measuresID,
                         taskId = measures!!.taskID,
                         title = title,
+                        created_at = measures.created_at
                     )
                 },
                 onDelete = {

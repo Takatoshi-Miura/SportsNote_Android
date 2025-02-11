@@ -7,6 +7,7 @@ import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Date
 
 class TargetViewModel : ViewModel() {
 
@@ -50,13 +51,15 @@ class TargetViewModel : ViewModel() {
      * @param year 年
      * @param month 月
      * @param isYearlyTarget 年間目標フラグ
+     * @param created_at 作成日付
      * @return targetID
      */
     suspend fun saveTarget(
         title: String,
         year: Int,
         month: Int,
-        isYearlyTarget: Boolean
+        isYearlyTarget: Boolean,
+        created_at: Date = Date()
     ): String {
         // 重複する目標を削除
         val fetchedTargets = realmManager.fetchTargetsByYearMonth(year, month)
@@ -78,6 +81,7 @@ class TargetViewModel : ViewModel() {
         target.year = year
         target.month = month
         target.isYearlyTarget = isYearlyTarget
+        target.created_at = created_at
         realmManager.saveItem(target)
         return target.targetID
     }

@@ -104,5 +104,6 @@ data class PracticeNote(
     val purpose: String,
     val detail: String,
     val reflection: String,
-    val taskReflections: Map<TaskListData, String>
+    val taskReflections: Map<TaskListData, String>,
+    val created_at: Date
 )

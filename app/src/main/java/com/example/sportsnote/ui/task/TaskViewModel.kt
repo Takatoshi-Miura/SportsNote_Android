@@ -11,6 +11,7 @@ import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.UUID
 
 
@@ -128,14 +129,16 @@ class TaskViewModel : ViewModel() {
         title: String,
         cause: String,
         groupId: String,
-        isComplete: Boolean = false
+        isComplete: Boolean = false,
+        created_at: Date = Date()
     ): String {
         val task = TaskData(
             taskId = taskId,
             title = title,
             cause = cause,
             groupId = groupId,
-            isComplete = isComplete
+            isComplete = isComplete,
+            created_at = created_at
         )
         realmManager.saveItem(task)
         return taskId

@@ -21,6 +21,7 @@ import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * Group詳細画面
@@ -62,7 +63,8 @@ fun GroupViewScreen(
                         groupId = groupId,
                         title = title,
                         colorId = color,
-                        order = group?.order
+                        order = group?.order,
+                        created_at = group?.created_at ?: Date()
                     )
                 },
                 onDelete = {

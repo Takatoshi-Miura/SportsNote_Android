@@ -75,7 +75,8 @@ fun FreeNoteScreen(
                     noteViewModel.saveFreeNote(
                         noteId = noteID,
                         title = title,
-                        detail = detail
+                        detail = detail,
+                        created_at = freeNote!!.created_at
                     )
                 },
                 onDelete = { },

@@ -14,7 +14,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
-import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.CustomAlertDialog
@@ -72,7 +71,8 @@ fun PracticeNoteViewScreen(
                         purpose = purpose.value,
                         detail = detail.value,
                         reflection = reflection.value,
-                        taskReflections = taskReflections.value
+                        taskReflections = taskReflections.value,
+                        created_at = note.created_at
                     )
                 },
                 onDelete = {

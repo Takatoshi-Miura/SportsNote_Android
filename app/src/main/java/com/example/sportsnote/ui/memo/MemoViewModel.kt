@@ -5,6 +5,7 @@ import com.example.sportsnote.model.MeasuresMemo
 import com.example.sportsnote.model.Memo
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.RealmManager
+import java.util.Date
 import java.util.UUID
 
 class MemoViewModel : ViewModel() {
@@ -41,19 +42,22 @@ class MemoViewModel : ViewModel() {
      * @param measuresID
      * @param noteID
      * @param detail
+     * @param created_at
      */
     suspend fun saveMemo(
         memoID: String? = null,
         measuresID: String,
         noteID: String,
-        detail: String
+        detail: String,
+        created_at: Date = Date()
     ): Memo {
         val finalMemoID = memoID ?: UUID.randomUUID().toString()
         val memo = Memo(
             memoID = finalMemoID,
             measuresID = measuresID,
             noteID = noteID,
-            detail = detail
+            detail = detail,
+            created_at = created_at
         )
         realmManager.saveItem(memo)
         return memo
