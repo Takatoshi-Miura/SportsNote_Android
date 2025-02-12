@@ -21,23 +21,36 @@ class MeasuresViewModel : ViewModel() {
     }
 
     /**
+     * 対策を取得（taskID指定）
+     *
+     * @param taskID taskID
+     * @return List<Measures>
+     */
+    fun getMeasuresByTaskID(taskID: String): List<Measures> {
+        return realmManager.getMeasuresByTaskID(taskID)
+    }
+
+    /**
      * 対策を保存する
      *
      * @param measuresId 対策ID
      * @param taskId 課題ID
      * @param title 対策タイトル
+     * @param order 並び順
      * @param created_at 作成日付
      */
     suspend fun saveMeasures(
         measuresId: String = UUID.randomUUID().toString(),
         taskId: String,
         title: String,
+        order: Int = getMeasuresByTaskID(taskId).size,
         created_at: Date = Date()
     ): Measures {
         val measures = Measures(
             measuresId = measuresId,
             taskId = taskId,
             title = title,
+            order = order,
             created_at = created_at
         )
         realmManager.saveItem(measures)

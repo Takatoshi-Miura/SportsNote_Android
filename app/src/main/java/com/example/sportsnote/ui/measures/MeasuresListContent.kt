@@ -53,9 +53,9 @@ fun MeasuresListContent(
             .reorderable(state) // 並び替え可能にする
             .detectReorderAfterLongPress(state) // 長押しでドラッグを開始
     ) {
-        itemsIndexed(list, key = { _, item -> item.measuresID }) { index, measure ->
-            Divider()
+        itemsIndexed(list, key = { _, item -> item.measuresID }) { _, measure ->
             ReorderableItem(state, key = measure.measuresID) { isDragging ->
+                Divider()
                 MeasureItem(
                     measure = measure,
                     modifier = Modifier
