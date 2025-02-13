@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,10 +55,11 @@ fun TaskDetailScreen(
     // 入力データ
     var title by remember { mutableStateOf(taskDetail.task.title) }
     var cause by remember { mutableStateOf(taskDetail.task.cause) }
-    var isComplete by remember { mutableStateOf(taskDetail.task.isComplete) }
+    val isComplete by remember { mutableStateOf(taskDetail.task.isComplete) }
     val showDialog = remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     val inputText = remember { mutableStateOf("") }
+    val measuresList = remember { mutableStateListOf(*taskDetail.measuresList.toTypedArray()) }
 
     val inputFields: List<@Composable () -> Unit> = listOf(
         // タイトル
@@ -85,7 +87,7 @@ fun TaskDetailScreen(
                 modifier = Modifier.padding(8.dp)
             )
             MeasuresListContent(
-                measuresList = taskDetail.measuresList,
+                measuresList = measuresList,
                 onOrderChanged = {
                     // TODO: 対策の並び順を更新
                 },
@@ -180,11 +182,11 @@ fun TaskDetailScreen(
             onConfirm = { input ->
                 coroutineScope.launch {
                     // 対策追加
-                    measuresViewModel.saveMeasures(
+                    val newMeasure = measuresViewModel.saveMeasures(
                         title = input,
                         taskId = taskId
                     )
-                    // TODO: UIに反映
+                    newMeasure.let { measuresList.add(it) }
                     showDialog.value = false
                 }
             },
