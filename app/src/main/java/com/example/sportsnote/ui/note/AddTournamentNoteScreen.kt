@@ -32,14 +32,14 @@ fun AddTournamentNoteScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
-    var date = remember { mutableStateOf(Date()) }
-    var weather = remember { mutableStateOf(Weather.SUNNY.id) }
-    var temperature = remember { mutableStateOf(20) }
-    var condition = remember { mutableStateOf("") }
-    var target = remember { mutableStateOf("") }
-    var consciousness = remember { mutableStateOf("") }
-    var result = remember { mutableStateOf("") }
-    var reflection = remember { mutableStateOf("") }
+    val date = remember { mutableStateOf(Date()) }
+    val weather = remember { mutableStateOf(Weather.SUNNY.id) }
+    val temperature = remember { mutableStateOf(20) }
+    val condition = remember { mutableStateOf("") }
+    val target = remember { mutableStateOf("") }
+    val consciousness = remember { mutableStateOf("") }
+    val result = remember { mutableStateOf("") }
+    val reflection = remember { mutableStateOf("") }
 
     Dialog(
         onDismissRequest = onDismiss,

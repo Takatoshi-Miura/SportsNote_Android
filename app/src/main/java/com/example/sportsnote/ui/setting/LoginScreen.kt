@@ -55,8 +55,8 @@ fun LoginScreen(
     val context = LocalContext.current
 
     // 入力データの状態管理
-    var email = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.ADDRESS, "")) }
-    var password = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.PASSWORD, "")) }
+    val email = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.ADDRESS, "")) }
+    val password = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.PASSWORD, "")) }
     val isLoggedIn by viewModel.isLoggedIn.collectAsState()
     val message by viewModel.message.collectAsState()
     val showDialog = remember { mutableStateOf(false) }
