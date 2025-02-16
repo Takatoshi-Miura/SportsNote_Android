@@ -1,9 +1,9 @@
 package com.example.sportsnote.ui
 
 import android.content.Context
-import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.ui.group.GroupViewModel
 import com.example.sportsnote.ui.note.NoteViewModel
 import java.util.UUID
 
@@ -22,7 +22,10 @@ class InitializationManager(
             initializeUserId()
             PreferencesManager.set(PreferencesManager.Keys.FIRST_LAUNCH, false)
         }
+
+        // 初期データを作成
         createFreeNote()
+        createUncategorizedGroup()
     }
 
     /**
@@ -51,11 +54,14 @@ class InitializationManager(
      */
     private suspend fun createFreeNote() {
         val noteViewModel = NoteViewModel()
-        val freeNote = noteViewModel.getFreeNote()
-        if (freeNote != null) return
-        noteViewModel.saveFreeNote(
-            title = context.getString(R.string.freeNote),
-            detail = context.getString(R.string.defaltFreeNoteDetail)
-        )
+        noteViewModel.createFreeNote(context)
+    }
+
+    /**
+     * 未分類グループを作成
+     */
+    private suspend fun createUncategorizedGroup() {
+        val groupViewModel = GroupViewModel()
+        groupViewModel.createUncategorizedGroup(context)
     }
 }

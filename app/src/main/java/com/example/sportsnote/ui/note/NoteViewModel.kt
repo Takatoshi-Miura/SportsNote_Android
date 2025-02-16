@@ -1,8 +1,10 @@
 package com.example.sportsnote.ui.note
 
+import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.PracticeNote
@@ -202,6 +204,20 @@ class NoteViewModel : ViewModel() {
             reflection = note.reflection,
             taskReflections = taskReflections,
             created_at = note.created_at
+        )
+    }
+
+    /**
+     * フリーノートを作成(初回起動時)
+     *
+     * @param context Context
+     */
+    suspend fun createFreeNote(context: Context) {
+        val freeNote = getFreeNote()
+        if (freeNote != null) return
+        saveFreeNote(
+            title = context.getString(R.string.freeNote),
+            detail = context.getString(R.string.defaltFreeNoteDetail)
         )
     }
 

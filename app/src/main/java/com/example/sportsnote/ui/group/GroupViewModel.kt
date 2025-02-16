@@ -1,9 +1,12 @@
 package com.example.sportsnote.ui.group
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -41,6 +44,21 @@ class GroupViewModel : ViewModel() {
      */
     fun getGroupById(groupId: String): Group? {
         return realmManager.getObjectById<Group>(groupId)
+    }
+
+    /**
+     * 未分類グループを作成
+     *
+     * @param context Context
+     */
+    suspend fun createUncategorizedGroup(context: Context) {
+        val groupList = realmManager.getDataList(Group::class.java)
+        if (groupList.isNotEmpty()) return
+        saveGroup(
+            title = context.getString(R.string.Uncategorized),
+            colorId = Color.GRAY.id,
+            order = 0
+        )
     }
 
     /**

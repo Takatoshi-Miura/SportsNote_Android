@@ -111,4 +111,5 @@
     <string name="taskProgress">課題の進捗</string>
     <string name="completeTaskMessage">課題を完了にしますか？</string>
     <string name="notCompleteTask">課題を未完了に戻しますか？</string>
+    <string name="Uncategorized">未分類</string>
 </resources>
