@@ -304,41 +304,99 @@ class RealmManager {
      */
     internal suspend inline fun <reified T : RealmObject> logicalDelete(id: String) {
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            val item = realmTransaction.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
+            val item = realmTransaction.where(T::class.java)
+                .equalTo(getPrimaryKeyName<T>(), id)
+                .findFirst()
+
             item?.let {
+                // 指定されたオブジェクトを削除
+                markAsDeleted(it, realmTransaction)
+
+                // 関連エンティティも削除
                 when (it) {
-                    is Group -> { it.isDeleted = true }
-                    is Measures -> { it.isDeleted = true }
-                    is Memo -> { it.isDeleted = true }
-                    is Note -> { it.isDeleted = true }
-                    is Target -> { it.isDeleted = true }
-                    is TaskData -> { it.isDeleted = true }
-                }
-                realmTransaction.insertOrUpdate(it)
-
-                // Noteを削除する場合、関連するMemoも論理削除
-                if (it is Note) {
-                    val relatedMemos = realmTransaction.where(Memo::class.java)
-                        .equalTo("noteID", id)
-                        .findAll()
-                    relatedMemos.forEach { memo ->
-                        memo.isDeleted = true
-                        realmTransaction.insertOrUpdate(memo)
-                    }
-                }
-
-                // TaskDataを削除する場合、関連するMeasuresも論理削除
-                if (it is TaskData) {
-                    val relatedMeasures = realmTransaction.where(Measures::class.java)
-                        .equalTo("taskID", id)
-                        .findAll()
-                    relatedMeasures.forEach { measure ->
-                        measure.isDeleted = true
-                        realmTransaction.insertOrUpdate(measure)
-                    }
+                    is Note -> deleteRelatedNoteMemos(it.noteID, realmTransaction)
+                    is Group -> deleteRelatedTasks(it.groupID, realmTransaction)
+                    is TaskData -> deleteRelatedMeasures(it.taskID, realmTransaction)
+                    is Measures -> deleteRelatedMeasuresMemos(it.measuresID, realmTransaction)
                 }
             }
         }
+    }
+
+    /**
+     * 任意のオブジェクトを論理削除
+     *
+     * @param item 削除するオブジェクト
+     * @param realmTransaction Realmトランザクション
+     */
+    private fun markAsDeleted(item: RealmObject, realmTransaction: Realm) {
+        when (item) {
+            is Group -> { item.isDeleted = true }
+            is Measures -> { item.isDeleted = true }
+            is Memo -> { item.isDeleted = true }
+            is Note -> { item.isDeleted = true }
+            is Target -> { item.isDeleted = true }
+            is TaskData -> { item.isDeleted = true }
+        }
+        realmTransaction.insertOrUpdate(item)
+    }
+
+    /**
+     * Note に関連する Memo を削除
+     *
+     * @param noteID ノートID
+     * @param realmTransaction Realmトランザクション
+     */
+    private fun deleteRelatedNoteMemos(noteID: String, realmTransaction: Realm) {
+        realmTransaction.where(Memo::class.java)
+            .equalTo("noteID", noteID)
+            .findAll()
+            .forEach { markAsDeleted(it, realmTransaction) }
+    }
+
+    /**
+     * Group に関連する TaskData, Measures, Memo を削除
+     *
+     * @param groupID グループID
+     * @param realmTransaction Realmトランザクション
+     */
+    private fun deleteRelatedTasks(groupID: String, realmTransaction: Realm) {
+        realmTransaction.where(TaskData::class.java)
+            .equalTo("groupID", groupID)
+            .findAll()
+            .forEach { task ->
+                markAsDeleted(task, realmTransaction)
+                deleteRelatedMeasures(task.taskID, realmTransaction)
+            }
+    }
+
+    /**
+     * TaskData に関連する Measures, Memo を削除
+     *
+     * @param taskID 課題ID
+     * @param realmTransaction Realmトランザクション
+     */
+    private fun deleteRelatedMeasures(taskID: String, realmTransaction: Realm) {
+        realmTransaction.where(Measures::class.java)
+            .equalTo("taskID", taskID)
+            .findAll()
+            .forEach { measure ->
+                markAsDeleted(measure, realmTransaction)
+                deleteRelatedMeasuresMemos(measure.measuresID, realmTransaction)
+            }
+    }
+
+    /**
+     * Measures に関連する Memo を削除
+     *
+     * @param measuresID 対策ID
+     * @param realmTransaction Realmトランザクション
+     */
+    private fun deleteRelatedMeasuresMemos(measuresID: String, realmTransaction: Realm) {
+        realmTransaction.where(Memo::class.java)
+            .equalTo("measuresID", measuresID)
+            .findAll()
+            .forEach { markAsDeleted(it, realmTransaction) }
     }
 
     /**
