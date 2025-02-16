@@ -73,7 +73,10 @@ fun GroupViewScreen(
                 onEdit = null,
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
-                    appBarRightIcon.value = rightIcon
+                    // グループが2つ以上ある場合のみ削除ボタンを表示
+                    if (viewModel.getGroupCount() > 1) {
+                        appBarRightIcon.value = rightIcon
+                    }
                 }
             )
 

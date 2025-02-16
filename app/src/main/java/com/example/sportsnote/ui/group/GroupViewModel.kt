@@ -47,13 +47,21 @@ class GroupViewModel : ViewModel() {
     }
 
     /**
+     * Groupの件数を取得
+     *
+     * @return Groupの件数(削除済みデータを含まない)
+     */
+    fun getGroupCount(): Int {
+        return realmManager.getCount(Group::class.java)
+    }
+
+    /**
      * 未分類グループを作成
      *
      * @param context Context
      */
     suspend fun createUncategorizedGroup(context: Context) {
-        val groupList = realmManager.getDataList(Group::class.java)
-        if (groupList.isNotEmpty()) return
+        if (getGroupCount() > 0) return
         saveGroup(
             title = context.getString(R.string.Uncategorized),
             colorId = Color.GRAY.id,
