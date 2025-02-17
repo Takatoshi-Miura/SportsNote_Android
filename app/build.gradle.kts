@@ -67,6 +67,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.6.0-alpha01")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore")
     implementation(libs.firebase.auth.ktx)
     implementation("com.kizitonwose.calendar:compose:2.6.1")
 
