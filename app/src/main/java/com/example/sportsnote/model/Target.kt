@@ -7,7 +7,7 @@ import java.util.*
 /**
  * 目標
  */
-open class Target : RealmObject {
+open class Target : RealmObject, Syncable {
 
     @PrimaryKey
     var targetID: String
@@ -19,7 +19,7 @@ open class Target : RealmObject {
     var isYearlyTarget: Boolean
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
 
     // デフォルトコンストラクタ
     constructor() {
@@ -34,4 +34,8 @@ open class Target : RealmObject {
         this.updated_at = Date()
     }
 
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return targetID
+    }
 }

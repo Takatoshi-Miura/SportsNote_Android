@@ -10,7 +10,7 @@ import java.util.Date
  */
 interface Syncable {
     fun getId(): String
-    val updated_at: Date
+    var updated_at: Date
 }
 
 object SyncManager {
@@ -21,20 +21,20 @@ object SyncManager {
      * Firebase と Realm のデータを同期する汎用メソッド
      *
      * @param T Syncable を実装したデータ型
-     * @param clazz Realm から取得するデータ型のクラス
      * @param getFirebaseData Firebase からデータを取得する関数
+     * @param getRealmData Realm からデータを取得する関数
      * @param saveToFirebase Firebase にデータを保存する関数
      * @param updateFirebase Firebase のデータを更新する関数
      */
     suspend fun <T> syncData(
-        clazz: Class<T>,
         getFirebaseData: suspend () -> List<T>,
+        getRealmData: suspend () -> List<T>,
         saveToFirebase: suspend (T) -> Unit,
         updateFirebase: suspend (T) -> Unit
     ) where T : Syncable, T : RealmObject {
         // Firebase と Realm のデータを取得
         val firebaseArray = withContext(Dispatchers.IO) { getFirebaseData() }
-        val realmArray = withContext(Dispatchers.IO) { realmManager.getDataList(clazz) }
+        val realmArray = withContext(Dispatchers.IO) { getRealmData() }
 
         // ID をキーとしたマップを作成
         val firebaseMap = firebaseArray.associateBy { it.getId() }
@@ -78,11 +78,58 @@ object SyncManager {
      */
     suspend fun syncGroup() {
         syncData(
-            clazz = Group::class.java,
             getFirebaseData = { FirebaseManager.getAllGroup() },
+            getRealmData = { realmManager.getDataList(Group::class.java) },
             saveToFirebase = { FirebaseManager.saveGroup(it) },
             updateFirebase = { FirebaseManager.updateGroup(it) }
         )
     }
 
+    /**
+     * Task を同期
+     */
+    suspend fun syncTask() {
+        syncData(
+            getFirebaseData = { FirebaseManager.getAllTask() },
+            getRealmData = { realmManager.getDataList(TaskData::class.java) },
+            saveToFirebase = { FirebaseManager.saveTask(it) },
+            updateFirebase = { FirebaseManager.updateTask(it) }
+        )
+    }
+
+    /**
+     * Measures を同期
+     */
+    suspend fun syncMeasures() {
+        syncData(
+            getFirebaseData = { FirebaseManager.getAllMeasures() },
+            getRealmData = { realmManager.getDataList(Measures::class.java) },
+            saveToFirebase = { FirebaseManager.saveMeasures(it) },
+            updateFirebase = { FirebaseManager.updateMeasures(it) }
+        )
+    }
+
+    /**
+     * Memo を同期
+     */
+    suspend fun syncMemo() {
+        syncData(
+            getFirebaseData = { FirebaseManager.getAllMemo() },
+            getRealmData = { realmManager.getDataList(Memo::class.java) },
+            saveToFirebase = { FirebaseManager.saveMemo(it) },
+            updateFirebase = { FirebaseManager.updateMemo(it) }
+        )
+    }
+
+    /**
+     * Target を同期
+     */
+    suspend fun syncTarget() {
+        syncData(
+            getFirebaseData = { FirebaseManager.getAllTarget() },
+            getRealmData = { realmManager.getDataList(Target::class.java) },
+            saveToFirebase = { FirebaseManager.saveTarget(it) },
+            updateFirebase = { FirebaseManager.updateTarget(it) }
+        )
+    }
 }

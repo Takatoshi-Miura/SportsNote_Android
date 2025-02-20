@@ -7,7 +7,7 @@ import java.util.*
 /**
  * 対策
  */
-open class Measures : RealmObject {
+open class Measures : RealmObject, Syncable {
 
     @PrimaryKey
     var measuresID: String
@@ -18,7 +18,7 @@ open class Measures : RealmObject {
     var order: Int
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
 
     // デフォルトコンストラクタ
     constructor() {
@@ -48,5 +48,10 @@ open class Measures : RealmObject {
         this.isDeleted = false
         this.created_at = created_at
         this.updated_at = Date()
+    }
+
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return measuresID
     }
 }

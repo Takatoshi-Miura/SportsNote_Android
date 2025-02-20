@@ -7,7 +7,7 @@ import java.util.*
 /**
  * メモ
  */
-open class Memo : RealmObject {
+open class Memo : RealmObject, Syncable {
 
     @PrimaryKey
     var memoID: String
@@ -18,7 +18,7 @@ open class Memo : RealmObject {
     var detail: String
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
     var noteDate: Date
 
     // デフォルトコンストラクタ
@@ -51,6 +51,11 @@ open class Memo : RealmObject {
         this.created_at = created_at
         this.updated_at = Date()
         this.noteDate = Date()
+    }
+
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return memoID
     }
 }
 

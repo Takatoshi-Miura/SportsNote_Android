@@ -286,6 +286,27 @@ object FirebaseManager {
     }
 
     /**
+     * FirebaseからTargetを全取得
+     *
+     * @return List<Target>
+     */
+    suspend fun getAllTarget(): List<Target> {
+        return getAllDocuments("Target") { data ->
+            Target().apply {
+                userID = data["userID"] as String
+                targetID = data["targetID"] as String
+                title = data["title"] as String
+                year = (data["year"] as Long).toInt()  // Firestore は数値を Long で取得する可能性があるため Int に変換
+                month = (data["month"] as Long).toInt()
+                isYearlyTarget = data["isYearlyTarget"] as Boolean
+                isDeleted = data["isDeleted"] as Boolean
+                created_at = (data["created_at"] as Timestamp).toDate()
+                updated_at = (data["updated_at"] as Timestamp).toDate()
+            }
+        }
+    }
+
+    /**
      * FirebaseからNoteを全取得
      *
      * @return List<Note>

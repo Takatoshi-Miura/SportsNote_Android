@@ -8,7 +8,7 @@ import java.util.*
 /**
  * グループ
  */
-open class Group : RealmObject {
+open class Group : RealmObject, Syncable {
 
     @PrimaryKey
     var groupID: String
@@ -19,7 +19,7 @@ open class Group : RealmObject {
     var order: Int
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
 
     // デフォルトのコンストラクタ
     constructor() {
@@ -49,6 +49,11 @@ open class Group : RealmObject {
         this.isDeleted = false
         this.created_at = created_at
         this.updated_at = Date()
+    }
+
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return groupID
     }
 
 }

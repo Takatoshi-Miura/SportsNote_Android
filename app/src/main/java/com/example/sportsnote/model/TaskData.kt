@@ -9,7 +9,7 @@ import java.util.UUID
 /**
  * 課題
  */
-open class TaskData : RealmObject {
+open class TaskData : RealmObject, Syncable {
 
     @PrimaryKey
     var taskID: String
@@ -22,7 +22,7 @@ open class TaskData : RealmObject {
     var isComplete: Boolean
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
 
     // デフォルトコンストラクタ
     constructor() {
@@ -57,6 +57,11 @@ open class TaskData : RealmObject {
         this.isDeleted = false
         this.created_at = created_at
         this.updated_at = Date()
+    }
+
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return taskID
     }
 }
 
