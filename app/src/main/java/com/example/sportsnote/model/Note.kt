@@ -10,7 +10,7 @@ import java.util.*
 /**
  * ノート
  */
-open class Note : RealmObject {
+open class Note : RealmObject, Syncable {
 
     @PrimaryKey
     var noteID: String
@@ -19,7 +19,7 @@ open class Note : RealmObject {
     var noteType: Int
     var isDeleted: Boolean
     var created_at: Date
-    var updated_at: Date
+    override var updated_at: Date = Date()
 
     // フリーノート
     var title: String
@@ -82,6 +82,10 @@ open class Note : RealmObject {
         this.result = result
     }
 
+    // Syncable インターフェースの getId() メソッドを実装
+    override fun getId(): String {
+        return noteID
+    }
 }
 
 /** ノート一覧表示用 */

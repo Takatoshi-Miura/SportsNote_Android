@@ -2,6 +2,9 @@ package com.example.sportsnote.model
 
 import io.realm.RealmObject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import java.util.Date
 
@@ -18,6 +21,21 @@ object SyncManager {
     private val realmManager = RealmManager()
 
     /**
+     * Firebase と Realm の全データを同期
+     * 各同期処理は並列に行われ、全ての同期が完了するまで待機する
+     */
+    suspend fun syncAllData() = coroutineScope {
+        listOf(
+            async { syncGroup() },
+            async { syncTask() },
+            async { syncMeasures() },
+            async { syncMemo() },
+            async { syncTarget() },
+            async { syncNote() }
+        ).awaitAll()
+    }
+
+    /**
      * Firebase と Realm のデータを同期する汎用メソッド
      *
      * @param T Syncable を実装したデータ型
@@ -26,7 +44,7 @@ object SyncManager {
      * @param saveToFirebase Firebase にデータを保存する関数
      * @param updateFirebase Firebase のデータを更新する関数
      */
-    suspend fun <T> syncData(
+    private suspend fun <T> syncData(
         getFirebaseData: suspend () -> List<T>,
         getRealmData: suspend () -> List<T>,
         saveToFirebase: suspend (T) -> Unit,
@@ -76,7 +94,7 @@ object SyncManager {
     /**
      * Group を同期
      */
-    suspend fun syncGroup() {
+    private suspend fun syncGroup() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllGroup() },
             getRealmData = { realmManager.getDataList(Group::class.java) },
@@ -88,7 +106,7 @@ object SyncManager {
     /**
      * Task を同期
      */
-    suspend fun syncTask() {
+    private suspend fun syncTask() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllTask() },
             getRealmData = { realmManager.getDataList(TaskData::class.java) },
@@ -100,7 +118,7 @@ object SyncManager {
     /**
      * Measures を同期
      */
-    suspend fun syncMeasures() {
+    private suspend fun syncMeasures() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllMeasures() },
             getRealmData = { realmManager.getDataList(Measures::class.java) },
@@ -112,7 +130,7 @@ object SyncManager {
     /**
      * Memo を同期
      */
-    suspend fun syncMemo() {
+    private suspend fun syncMemo() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllMemo() },
             getRealmData = { realmManager.getDataList(Memo::class.java) },
@@ -124,12 +142,24 @@ object SyncManager {
     /**
      * Target を同期
      */
-    suspend fun syncTarget() {
+    private suspend fun syncTarget() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllTarget() },
             getRealmData = { realmManager.getDataList(Target::class.java) },
             saveToFirebase = { FirebaseManager.saveTarget(it) },
             updateFirebase = { FirebaseManager.updateTarget(it) }
+        )
+    }
+
+    /**
+     * Note を同期
+     */
+    private suspend fun syncNote() {
+        syncData(
+            getFirebaseData = { FirebaseManager.getAllNote() },
+            getRealmData = { realmManager.getDataList(Note::class.java) },
+            saveToFirebase = { FirebaseManager.saveNote(it) },
+            updateFirebase = { FirebaseManager.updateNote(it) }
         )
     }
 }
