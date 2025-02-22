@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.TaskListData
@@ -44,13 +43,16 @@ import kotlinx.coroutines.launch
 
 /**
  * 課題一覧画面
+ *
+ * @param reloadTrigger リロードトリガー
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TaskScreen(
-    taskViewModel: TaskViewModel = viewModel(),
-    groupViewModel: GroupViewModel = viewModel()
+    reloadTrigger: Int
 ) {
+    val taskViewModel = TaskViewModel()
+    val groupViewModel = GroupViewModel()
     val taskLists by taskViewModel.taskLists.collectAsState()
     val groups by groupViewModel.groups.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -69,7 +71,7 @@ fun TaskScreen(
         taskViewModel.loadData()
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit, reloadTrigger) {
         onRefresh()
     }
 

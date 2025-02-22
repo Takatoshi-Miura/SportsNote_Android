@@ -146,7 +146,12 @@ fun LoginScreen(
                                 password.value = ""
                                 onDismiss()
                             } else {
-                                viewModel.login(email.value, password.value, context)
+                                viewModel.login(
+                                    email = email.value,
+                                    password = password.value,
+                                    onSuccess = { onDismiss() },
+                                    context = context
+                                )
                             }
                         }
                     },

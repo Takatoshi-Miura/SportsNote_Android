@@ -9,9 +9,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,6 +50,16 @@ fun NavigationHost() {
     val screen = Screen.fromRoute(currentRoute)
     val screenConfig = screen.getConfig()
 
+    // リロードのトリガー(ログイン・ログアウト後など)
+    var reloadTrigger by remember { mutableStateOf(0) }
+
+    // Drawerの開閉状態を監視し、閉じたら再描画
+    LaunchedEffect(scaffoldState.drawerState.isClosed) {
+        if (scaffoldState.drawerState.isClosed) {
+            reloadTrigger++
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -74,7 +87,7 @@ fun NavigationHost() {
                     DrawerToggleButton(coroutineScope, drawerState)
                 }
                 appBarRightIcon.value = null
-                TaskScreen()
+                TaskScreen(reloadTrigger)
             }
             // Group詳細
             composable(Screen.GroupView.route) { backStackEntry ->
@@ -121,7 +134,7 @@ fun NavigationHost() {
                     DrawerToggleButton(coroutineScope, drawerState)
                 }
                 appBarRightIcon.value = null
-                NoteScreen()
+                NoteScreen(reloadTrigger)
             }
             // 大会ノート詳細
             composable(Screen.TournamentNoteView.route) { backStackEntry ->
@@ -159,7 +172,7 @@ fun NavigationHost() {
                     DrawerToggleButton(coroutineScope, drawerState)
                 }
                 appBarRightIcon.value = null
-                TargetScreen()
+                TargetScreen(reloadTrigger)
             }
         }
     }

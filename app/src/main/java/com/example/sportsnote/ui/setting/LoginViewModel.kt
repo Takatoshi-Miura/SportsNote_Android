@@ -38,8 +38,15 @@ class LoginViewModel : ViewModel() {
      *
      * @param email メールアドレス
      * @param password パスワード
+     * @param onSuccess ログイン成功時の処理
+     * @param context Context
      */
-    fun login(email: String, password: String, context: Context) {
+    fun login(
+        email: String,
+        password: String,
+        onSuccess: () -> Unit,
+        context: Context
+    ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
             return
@@ -52,6 +59,7 @@ class LoginViewModel : ViewModel() {
                         _message.value = context.getString(R.string.loginSuccess)
                         PreferencesManager.set(key = PreferencesManager.Keys.ADDRESS, value = email)
                         PreferencesManager.set(key = PreferencesManager.Keys.PASSWORD, value = password)
+                        onSuccess()
                     } else {
                         _message.value = task.exception?.message ?: context.getString(R.string.loginError)
                     }
@@ -64,6 +72,8 @@ class LoginViewModel : ViewModel() {
 
     /**
      * ログアウト処理
+     *
+     * @param context Context
      */
     suspend fun logout(context: Context) {
         auth.signOut()

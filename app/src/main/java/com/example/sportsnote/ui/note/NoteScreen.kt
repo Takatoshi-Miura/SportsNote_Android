@@ -55,10 +55,15 @@ import kotlinx.coroutines.launch
 
 /**
  * ノート一覧画面
+ *
+ * @param reloadTrigger リロードトリガー
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
+fun NoteScreen(
+    reloadTrigger: Int
+) {
+    val noteViewModel = NoteViewModel()
     val notes by noteViewModel.noteListItems.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -75,7 +80,7 @@ fun NoteScreen(noteViewModel: NoteViewModel = viewModel()) {
         noteViewModel.searchNotesByQuery(searchQuery)
     }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit, reloadTrigger) {
         onRefresh()
     }
 

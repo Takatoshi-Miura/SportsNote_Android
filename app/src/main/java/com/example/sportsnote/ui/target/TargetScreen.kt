@@ -46,9 +46,16 @@ import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 
+/**
+ * 目標画面
+ *
+ * @param reloadTrigger リロードトリガー
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TargetScreen() {
+fun TargetScreen(
+    reloadTrigger: Int
+) {
     val targetViewModel = TargetViewModel()
     val noteViewModel = NoteViewModel()
     val targetNotes by noteViewModel.targetNotes.collectAsState()
@@ -63,7 +70,7 @@ fun TargetScreen() {
     val visibleMonth by remember { mutableStateOf(YearMonth.now()) }
     var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
-    LaunchedEffect(visibleMonth, isDialogVisible) {
+    LaunchedEffect(visibleMonth, isDialogVisible, reloadTrigger) {
         targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
     }
 
