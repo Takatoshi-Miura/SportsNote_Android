@@ -61,7 +61,7 @@ fun NavigationHost() {
                 BottomNavigationBar()
             }
         },
-        drawerContent = { DrawerContent() }
+        drawerContent = { DrawerContent(scaffoldState) }
     ) { paddingValues ->
         NavHost(
             navController,

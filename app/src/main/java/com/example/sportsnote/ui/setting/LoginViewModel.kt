@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.ui.InitializationManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,12 +65,15 @@ class LoginViewModel : ViewModel() {
     /**
      * ログアウト処理
      */
-    fun logout(context: Context) {
+    suspend fun logout(context: Context) {
         auth.signOut()
         _isLoggedIn.value = false
         _message.value = context.getString(R.string.logoutSuccess)
-        PreferencesManager.remove(PreferencesManager.Keys.ADDRESS)
-        PreferencesManager.remove(PreferencesManager.Keys.PASSWORD)
+
+        // データを全削除＆初期化
+        val initializationManager = InitializationManager(context)
+        initializationManager.deleteAllData()
+        initializationManager.initializeApp()
     }
 
     /**

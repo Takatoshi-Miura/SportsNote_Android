@@ -2,6 +2,7 @@ package com.example.sportsnote.model
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.util.UUID
 
 /**
  * SharedPreferencesを一元管理するオブジェクト
@@ -22,12 +23,12 @@ object PreferencesManager {
     }
 
     /**
-     * 初期化処理
+     * ロード処理
      * 他のアプリからアクセスできないようにするため、Context.MODE_PRIVATEを使用
      *
      * @param context Context
      */
-    fun init(context: Context) {
+    fun load(context: Context) {
         sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     }
 
@@ -75,5 +76,22 @@ object PreferencesManager {
      */
     fun remove(key: String) {
         getEditor().remove(key).apply()
+    }
+
+    /**
+     * SharedPreferencesの全データを削除する
+     */
+    fun clearAll() {
+        sharedPreferences.edit().clear().apply()
+    }
+
+    /**
+     * アカウント情報をリセット
+     *
+     * @param userID ユーザID
+     */
+    fun resetUserInfo(userID: String = UUID.randomUUID().toString()) {
+        // ユーザIDを再生成
+        set(Keys.USER_ID, userID)
     }
 }

@@ -11,6 +11,7 @@ import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
 import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -27,7 +28,7 @@ class RealmManager {
     companion object {
 
         /**
-         * Realmを初期化
+         * Realmを初期化（起動準備）
          *
          * @param context Context
          */
@@ -50,6 +51,19 @@ class RealmManager {
         fun printRealmFilePath() {
             val realmFile = Realm.getDefaultInstance().configuration.path
             println("Realm file path: $realmFile")
+        }
+
+        /**
+         * Realmの全データを削除する
+         */
+        suspend fun clearAll() {
+            withContext(Dispatchers.IO) {
+                val realm = Realm.getDefaultInstance()
+                realm.executeTransaction { transactionRealm ->
+                    transactionRealm.deleteAll()
+                }
+                realm.close()
+            }
         }
     }
 

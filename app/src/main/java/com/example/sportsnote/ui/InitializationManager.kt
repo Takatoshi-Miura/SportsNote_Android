@@ -5,7 +5,6 @@ import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.ui.group.GroupViewModel
 import com.example.sportsnote.ui.note.NoteViewModel
-import java.util.UUID
 
 class InitializationManager(
     private val context: Context,
@@ -19,7 +18,8 @@ class InitializationManager(
 
         val isFirstLaunch = PreferencesManager.get(PreferencesManager.Keys.FIRST_LAUNCH, true)
         if (isFirstLaunch) {
-            initializeUserId()
+            PreferencesManager.clearAll()
+            PreferencesManager.resetUserInfo()
             PreferencesManager.set(PreferencesManager.Keys.FIRST_LAUNCH, false)
         }
 
@@ -32,7 +32,7 @@ class InitializationManager(
      * SharedPreferences を初期化
      */
     private fun initializePreferences() {
-        PreferencesManager.init(context)
+        PreferencesManager.load(context)
     }
 
     /**
@@ -40,13 +40,6 @@ class InitializationManager(
      */
     private fun initializeRealm() {
         RealmManager.initRealm(context)
-    }
-
-    /**
-     * ユーザーIDを生成
-     */
-    private fun initializeUserId() {
-        PreferencesManager.set(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
     }
 
     /**
@@ -63,5 +56,13 @@ class InitializationManager(
     private suspend fun createUncategorizedGroup() {
         val groupViewModel = GroupViewModel()
         groupViewModel.createUncategorizedGroup(context)
+    }
+
+    /**
+     * データを全削除
+     */
+    suspend fun deleteAllData() {
+        RealmManager.clearAll()
+        PreferencesManager.clearAll()
     }
 }

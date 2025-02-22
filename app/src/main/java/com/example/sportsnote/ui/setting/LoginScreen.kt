@@ -21,10 +21,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +43,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.DialogType
+import kotlinx.coroutines.launch
 
 /**
  * ログイン画面
@@ -53,6 +56,7 @@ fun LoginScreen(
 ) {
     val viewModel = LoginViewModel()
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
     val email = remember { mutableStateOf(PreferencesManager.get(PreferencesManager.Keys.ADDRESS, "")) }
@@ -135,12 +139,15 @@ fun LoginScreen(
                 CustomButton(
                     text = if (isLoggedIn) stringResource(R.string.logout) else stringResource(R.string.login),
                     onClick = {
-                        if (isLoggedIn) {
-                            viewModel.logout(context)
-                            email.value = ""
-                            password.value = ""
-                        } else {
-                            viewModel.login(email.value, password.value, context)
+                        coroutineScope.launch {
+                            if (isLoggedIn) {
+                                viewModel.logout(context)
+                                email.value = ""
+                                password.value = ""
+                                onDismiss()
+                            } else {
+                                viewModel.login(email.value, password.value, context)
+                            }
                         }
                     },
                     backgroundColor = if (isLoggedIn) Color.Red else MaterialTheme.colors.secondary

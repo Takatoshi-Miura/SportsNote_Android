@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.components.ItemData
@@ -18,9 +17,13 @@ import launchMailer
 
 /**
  * 設定画面を作成
+ *
+ * @param onDismiss 画面を閉じる処理
  */
 @Composable
-fun SettingScreen() {
+fun SettingScreen(
+    onDismiss: () -> Unit
+) {
     val context = LocalContext.current
     val appVersion = AppInfo.getAppVersion(context)
     val androidVersion = AppInfo.getAndroidVersionInfo()
@@ -100,17 +103,14 @@ fun SettingScreen() {
     if (!isDialogVisible) return
     if (dialogType == DialogType.Login) {
         LoginScreen(
-            onDismiss = { isDialogVisible = false }
+            onDismiss = {
+                isDialogVisible = false
+                onDismiss()
+            }
         )
     } else if (dialogType == DialogType.Tutorial) {
         TutorialScreen(
             onDismiss = { isDialogVisible = false }
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewSettingScreen() {
-    SettingScreen()
 }
