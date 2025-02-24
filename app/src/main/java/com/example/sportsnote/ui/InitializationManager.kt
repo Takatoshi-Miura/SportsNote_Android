@@ -11,8 +11,10 @@ class InitializationManager(
 ) {
     /**
      * アプリ全体の初期化を実行
+     *
+     * @param isLogin ログイン済みかどうか
      */
-    suspend fun initializeApp() {
+    suspend fun initializeApp(isLogin: Boolean = false) {
         initializePreferences()
         initializeRealm()
 
@@ -23,9 +25,11 @@ class InitializationManager(
             PreferencesManager.set(PreferencesManager.Keys.FIRST_LAUNCH, false)
         }
 
-        // 初期データを作成
-        createFreeNote()
-        createUncategorizedGroup()
+        if (!isLogin) {
+            // 初期データを作成
+            createFreeNote()
+            createUncategorizedGroup()
+        }
     }
 
     /**

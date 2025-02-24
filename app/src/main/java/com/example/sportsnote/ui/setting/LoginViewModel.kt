@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.ui.InitializationManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 /**
  * Firebase Authentication を使用したログイン用 ViewModel
@@ -40,7 +42,7 @@ class LoginViewModel : ViewModel() {
      * @param onSuccess ログイン成功時の処理
      * @param context Context
      */
-    fun login(
+    suspend fun login(
         email: String,
         password: String,
         onSuccess: () -> Unit,
@@ -52,19 +54,27 @@ class LoginViewModel : ViewModel() {
         }
         viewModelScope.launch {
             try {
-                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        _isLoggedIn.value = true
-                        _message.value = context.getString(R.string.loginSuccess)
-                        PreferencesManager.set(key = PreferencesManager.Keys.ADDRESS, value = email)
-                        PreferencesManager.set(key = PreferencesManager.Keys.PASSWORD, value = password)
-                        onSuccess()
-                    } else {
-                        _message.value = task.exception?.message ?: context.getString(R.string.loginError)
-                    }
-                }
+                // ログイン処理が完了するのを待機
+                auth.signInWithEmailAndPassword(email, password).await()
+
+                // データを全削除＆ログインユーザ情報に初期設定
+                val initializationManager = InitializationManager(context)
+                initializationManager.deleteAllData()
+                PreferencesManager.set(PreferencesManager.Keys.FIRST_LAUNCH, false)
+                PreferencesManager.set(PreferencesManager.Keys.USER_ID, auth.currentUser?.uid)
+                PreferencesManager.set(PreferencesManager.Keys.ADDRESS, email)
+                PreferencesManager.set(PreferencesManager.Keys.PASSWORD, password)
+                initializationManager.initializeApp(isLogin = true)
+
+                // データ同期
+                SyncManager.syncAllData()
+
+                // TOPに戻る
+                _isLoggedIn.value = true
+                _message.value = context.getString(R.string.loginSuccess)
+                onSuccess()
             } catch (e: Exception) {
-                _message.value = e.message
+                _message.value = e.message ?: context.getString(R.string.loginError)
             }
         }
     }
