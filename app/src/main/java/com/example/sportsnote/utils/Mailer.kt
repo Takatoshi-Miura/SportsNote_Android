@@ -19,18 +19,20 @@ fun launchMailer(
     context: Context,
     email: String,
     subject: String,
-    body: String
+    body: String,
 ) {
-    val mailtoUri = Uri.Builder()
-        .scheme("mailto")
-        .appendPath(email)
-        .appendQueryParameter("subject", subject)
-        .appendQueryParameter("body", body)
-        .build()
+    val mailtoUri =
+        Uri.Builder()
+            .scheme("mailto")
+            .appendPath(email)
+            .appendQueryParameter("subject", subject)
+            .appendQueryParameter("body", body)
+            .build()
 
-    val intent = Intent(Intent.ACTION_SENDTO).apply {
-        data = mailtoUri
-    }
+    val intent =
+        Intent(Intent.ACTION_SENDTO).apply {
+            data = mailtoUri
+        }
 
     try {
         context.startActivity(intent)

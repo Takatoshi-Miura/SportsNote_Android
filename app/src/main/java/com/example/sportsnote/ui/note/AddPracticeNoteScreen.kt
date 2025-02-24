@@ -25,9 +25,7 @@ import java.util.Date
  * @param onDismiss 閉じる時の処理
  */
 @Composable
-fun AddPracticeNoteScreen(
-    onDismiss: () -> Unit,
-) {
+fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
@@ -42,14 +40,16 @@ fun AddPracticeNoteScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -67,11 +67,11 @@ fun AddPracticeNoteScreen(
                             purpose = purpose.value,
                             detail = detail.value,
                             reflection = reflection.value,
-                            taskReflections = taskReflections.value
+                            taskReflections = taskReflections.value,
                         )
                         onDismiss()
                     },
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
                 )
 
                 // 共通フォーム
@@ -84,7 +84,7 @@ fun AddPracticeNoteScreen(
                     onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
                     onDetailChange = { updateDetail -> detail.value = updateDetail },
                     onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
-                    onTaskReflectionsChange = { taskReflections.value = it }
+                    onTaskReflectionsChange = { taskReflections.value = it },
                 )
             }
         }

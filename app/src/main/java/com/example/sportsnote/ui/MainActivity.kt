@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            SportsNoteTheme{
+            SportsNoteTheme {
                 MainScreen()
             }
         }

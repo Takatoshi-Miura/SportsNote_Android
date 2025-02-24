@@ -6,7 +6,6 @@ import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
 object FirebaseManager {
-
     // ======= Create =======
 
     /**
@@ -16,7 +15,11 @@ object FirebaseManager {
      * @param documentID ドキュメントID
      * @param data 保存するデータ
      */
-    private suspend fun saveDocument(collectionName: String, documentID: String, data: Map<String, Any>) {
+    private suspend fun saveDocument(
+        collectionName: String,
+        documentID: String,
+        data: Map<String, Any>,
+    ) {
         val db = FirebaseFirestore.getInstance()
         try {
             db.collection(collectionName)
@@ -38,15 +41,15 @@ object FirebaseManager {
             "Group",
             "${group.userID}_${group.groupID}",
             mapOf(
-                "userID"     to group.userID,
-                "groupID"    to group.groupID,
-                "title"      to group.title,
-                "color"      to group.color,
-                "order"      to group.order,
-                "isDeleted"  to group.isDeleted,
+                "userID" to group.userID,
+                "groupID" to group.groupID,
+                "title" to group.title,
+                "color" to group.color,
+                "order" to group.order,
+                "isDeleted" to group.isDeleted,
                 "created_at" to group.created_at,
-                "updated_at" to group.updated_at
-            )
+                "updated_at" to group.updated_at,
+            ),
         )
     }
 
@@ -60,17 +63,17 @@ object FirebaseManager {
             "Task",
             "${task.userID}_${task.taskID}",
             mapOf(
-                "userID"      to task.userID,
-                "taskID"      to task.taskID,
-                "groupID"     to task.groupID,
-                "title"       to task.title,
-                "cause"       to task.cause,
-                "order"       to task.order,
-                "isComplete"  to task.isComplete,
-                "isDeleted"   to task.isDeleted,
-                "created_at"  to task.created_at,
-                "updated_at"  to task.updated_at
-            )
+                "userID" to task.userID,
+                "taskID" to task.taskID,
+                "groupID" to task.groupID,
+                "title" to task.title,
+                "cause" to task.cause,
+                "order" to task.order,
+                "isComplete" to task.isComplete,
+                "isDeleted" to task.isDeleted,
+                "created_at" to task.created_at,
+                "updated_at" to task.updated_at,
+            ),
         )
     }
 
@@ -84,15 +87,15 @@ object FirebaseManager {
             "Measures",
             "${measures.userID}_${measures.measuresID}",
             mapOf(
-                "userID"      to measures.userID,
-                "measuresID"  to measures.measuresID,
-                "taskID"      to measures.taskID,
-                "title"       to measures.title,
-                "order"       to measures.order,
-                "isDeleted"   to measures.isDeleted,
-                "created_at"  to measures.created_at,
-                "updated_at"  to measures.updated_at
-            )
+                "userID" to measures.userID,
+                "measuresID" to measures.measuresID,
+                "taskID" to measures.taskID,
+                "title" to measures.title,
+                "order" to measures.order,
+                "isDeleted" to measures.isDeleted,
+                "created_at" to measures.created_at,
+                "updated_at" to measures.updated_at,
+            ),
         )
     }
 
@@ -106,15 +109,15 @@ object FirebaseManager {
             "Memo",
             "${memo.userID}_${memo.memoID}",
             mapOf(
-                "userID"      to memo.userID,
-                "memoID"      to memo.memoID,
-                "noteID"      to memo.noteID,
-                "measuresID"  to memo.measuresID,
-                "detail"      to memo.detail,
-                "isDeleted"   to memo.isDeleted,
-                "created_at"  to memo.created_at,
-                "updated_at"  to memo.updated_at
-            )
+                "userID" to memo.userID,
+                "memoID" to memo.memoID,
+                "noteID" to memo.noteID,
+                "measuresID" to memo.measuresID,
+                "detail" to memo.detail,
+                "isDeleted" to memo.isDeleted,
+                "created_at" to memo.created_at,
+                "updated_at" to memo.updated_at,
+            ),
         )
     }
 
@@ -128,16 +131,16 @@ object FirebaseManager {
             "Target",
             "${target.userID}_${target.targetID}",
             mapOf(
-                "userID"         to target.userID,
-                "targetID"       to target.targetID,
-                "title"          to target.title,
-                "year"           to target.year,
-                "month"          to target.month,
+                "userID" to target.userID,
+                "targetID" to target.targetID,
+                "title" to target.title,
+                "year" to target.year,
+                "month" to target.month,
                 "isYearlyTarget" to target.isYearlyTarget,
-                "isDeleted"      to target.isDeleted,
-                "created_at"     to target.created_at,
-                "updated_at"     to target.updated_at
-            )
+                "isDeleted" to target.isDeleted,
+                "created_at" to target.created_at,
+                "updated_at" to target.updated_at,
+            ),
         )
     }
 
@@ -151,24 +154,24 @@ object FirebaseManager {
             "Note",
             "${note.userID}_${note.noteID}",
             mapOf(
-                "userID"        to note.userID,
-                "noteID"        to note.noteID,
-                "noteType"      to note.noteType,
-                "isDeleted"     to note.isDeleted,
-                "created_at"    to note.created_at,
-                "updated_at"    to note.updated_at,
-                "title"         to note.title,
-                "date"          to note.date,
-                "weather"       to note.weather,
-                "temperature"   to note.temperature,
-                "condition"     to note.condition,
-                "reflection"    to note.reflection,
-                "purpose"       to note.purpose,
-                "detail"        to note.detail,
-                "target"        to note.target,
+                "userID" to note.userID,
+                "noteID" to note.noteID,
+                "noteType" to note.noteType,
+                "isDeleted" to note.isDeleted,
+                "created_at" to note.created_at,
+                "updated_at" to note.updated_at,
+                "title" to note.title,
+                "date" to note.date,
+                "weather" to note.weather,
+                "temperature" to note.temperature,
+                "condition" to note.condition,
+                "reflection" to note.reflection,
+                "purpose" to note.purpose,
+                "detail" to note.detail,
+                "target" to note.target,
                 "consciousness" to note.consciousness,
-                "result"        to note.result
-            )
+                "result" to note.result,
+            ),
         )
     }
 
@@ -181,16 +184,20 @@ object FirebaseManager {
      * @param mapData マッピング処理を行うラムダ
      * @return List<T> マッピング後のデータリスト
      */
-    private suspend fun <T> getAllDocuments(collection: String, mapData: (Map<String, Any>) -> T): List<T> {
+    private suspend fun <T> getAllDocuments(
+        collection: String,
+        mapData: (Map<String, Any>) -> T,
+    ): List<T> {
         val db = FirebaseFirestore.getInstance()
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val resultList = mutableListOf<T>()
 
         return try {
-            val querySnapshot = db.collection(collection)
-                .whereEqualTo("userID", userID)
-                .get()
-                .await()
+            val querySnapshot =
+                db.collection(collection)
+                    .whereEqualTo("userID", userID)
+                    .get()
+                    .await()
             for (document in querySnapshot.documents) {
                 val data = document.data ?: continue
                 val item = mapData(data)
@@ -296,7 +303,7 @@ object FirebaseManager {
                 userID = data["userID"] as String
                 targetID = data["targetID"] as String
                 title = data["title"] as String
-                year = (data["year"] as Long).toInt()  // Firestore は数値を Long で取得する可能性があるため Int に変換
+                year = (data["year"] as Long).toInt() // Firestore は数値を Long で取得する可能性があるため Int に変換
                 month = (data["month"] as Long).toInt()
                 isYearlyTarget = data["isYearlyTarget"] as Boolean
                 isDeleted = data["isDeleted"] as Boolean
@@ -344,7 +351,11 @@ object FirebaseManager {
      * @param documentID ドキュメントID
      * @param data 更新するデータ
      */
-    private fun updateDocument(collection: String, documentID: String, data: Map<String, Any>) {
+    private fun updateDocument(
+        collection: String,
+        documentID: String,
+        data: Map<String, Any>,
+    ) {
         val db = FirebaseFirestore.getInstance()
         val documentRef = db.collection(collection).document(documentID)
 
@@ -365,13 +376,14 @@ object FirebaseManager {
     fun updateGroup(group: Group) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${group.groupID}"
-        val data = mapOf(
-            "title" to group.title,
-            "color" to group.color,
-            "order" to group.order,
-            "isDeleted" to group.isDeleted,
-            "updated_at" to group.updated_at
-        )
+        val data =
+            mapOf(
+                "title" to group.title,
+                "color" to group.color,
+                "order" to group.order,
+                "isDeleted" to group.isDeleted,
+                "updated_at" to group.updated_at,
+            )
         updateDocument("Group", documentID, data)
     }
 
@@ -383,15 +395,16 @@ object FirebaseManager {
     fun updateTask(task: TaskData) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${task.taskID}"
-        val data = mapOf(
-            "groupID" to task.groupID,
-            "title" to task.title,
-            "cause" to task.cause,
-            "order" to task.order,
-            "isComplete" to task.isComplete,
-            "isDeleted" to task.isDeleted,
-            "updated_at" to task.updated_at
-        )
+        val data =
+            mapOf(
+                "groupID" to task.groupID,
+                "title" to task.title,
+                "cause" to task.cause,
+                "order" to task.order,
+                "isComplete" to task.isComplete,
+                "isDeleted" to task.isDeleted,
+                "updated_at" to task.updated_at,
+            )
         updateDocument("Task", documentID, data)
     }
 
@@ -403,12 +416,13 @@ object FirebaseManager {
     fun updateMeasures(measures: Measures) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${measures.measuresID}"
-        val data = mapOf(
-            "title" to measures.title,
-            "order" to measures.order,
-            "isDeleted" to measures.isDeleted,
-            "updated_at" to measures.updated_at
-        )
+        val data =
+            mapOf(
+                "title" to measures.title,
+                "order" to measures.order,
+                "isDeleted" to measures.isDeleted,
+                "updated_at" to measures.updated_at,
+            )
         updateDocument("Measures", documentID, data)
     }
 
@@ -420,11 +434,12 @@ object FirebaseManager {
     fun updateMemo(memo: Memo) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${memo.memoID}"
-        val data = mapOf(
-            "detail" to memo.detail,
-            "isDeleted" to memo.isDeleted,
-            "updated_at" to memo.updated_at
-        )
+        val data =
+            mapOf(
+                "detail" to memo.detail,
+                "isDeleted" to memo.isDeleted,
+                "updated_at" to memo.updated_at,
+            )
         updateDocument("Memo", documentID, data)
     }
 
@@ -436,14 +451,15 @@ object FirebaseManager {
     fun updateTarget(target: Target) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${target.targetID}"
-        val data = mapOf(
-            "title" to target.title,
-            "year" to target.year,
-            "month" to target.month,
-            "isYearlyTarget" to target.isYearlyTarget,
-            "isDeleted" to target.isDeleted,
-            "updated_at" to target.updated_at
-        )
+        val data =
+            mapOf(
+                "title" to target.title,
+                "year" to target.year,
+                "month" to target.month,
+                "isYearlyTarget" to target.isYearlyTarget,
+                "isDeleted" to target.isDeleted,
+                "updated_at" to target.updated_at,
+            )
         updateDocument("Target", documentID, data)
     }
 
@@ -455,22 +471,22 @@ object FirebaseManager {
     fun updateNote(note: Note) {
         val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${note.noteID}"
-        val data = mapOf(
-            "isDeleted" to note.isDeleted,
-            "updated_at" to note.updated_at,
-            "title" to note.title,
-            "date" to note.date,
-            "weather" to note.weather,
-            "temperature" to note.temperature,
-            "condition" to note.condition,
-            "reflection" to note.reflection,
-            "purpose" to note.purpose,
-            "detail" to note.detail,
-            "target" to note.target,
-            "consciousness" to note.consciousness,
-            "result" to note.result
-        )
+        val data =
+            mapOf(
+                "isDeleted" to note.isDeleted,
+                "updated_at" to note.updated_at,
+                "title" to note.title,
+                "date" to note.date,
+                "weather" to note.weather,
+                "temperature" to note.temperature,
+                "condition" to note.condition,
+                "reflection" to note.reflection,
+                "purpose" to note.purpose,
+                "detail" to note.detail,
+                "target" to note.target,
+                "consciousness" to note.consciousness,
+                "result" to note.result,
+            )
         updateDocument("Note", documentID, data)
     }
-
 }

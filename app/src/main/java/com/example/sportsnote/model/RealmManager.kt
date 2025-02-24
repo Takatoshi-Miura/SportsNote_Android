@@ -22,11 +22,9 @@ object RealmConstants {
 }
 
 class RealmManager {
-
     internal val realm: Realm = Realm.getDefaultInstance()
 
     companion object {
-
         /**
          * Realmを初期化（起動準備）
          *
@@ -37,11 +35,12 @@ class RealmManager {
             Realm.init(context)
 
             // Realm設定
-            val config = RealmConfiguration.Builder()
-                .name(RealmConstants.DATABASE_NAME)
-                .schemaVersion(RealmConstants.SCHEMA_VERSION)
-                .deleteRealmIfMigrationNeeded() // マイグレーションが必要な場合、データ削除
-                .build()
+            val config =
+                RealmConfiguration.Builder()
+                    .name(RealmConstants.DATABASE_NAME)
+                    .schemaVersion(RealmConstants.SCHEMA_VERSION)
+                    .deleteRealmIfMigrationNeeded() // マイグレーションが必要な場合、データ削除
+                    .build()
             Realm.setDefaultConfiguration(config)
         }
 
@@ -194,30 +193,32 @@ class RealmManager {
      * @return 検索結果のノートリスト
      */
     fun searchNotesByQuery(query: String): List<Note> {
-        val freeNotes = realm.where(Note::class.java)
-            .equalTo("noteType", NoteType.FREE.value)
-            .equalTo("isDeleted", false)
-            .findAll()
+        val freeNotes =
+            realm.where(Note::class.java)
+                .equalTo("noteType", NoteType.FREE.value)
+                .equalTo("isDeleted", false)
+                .findAll()
 
-        val queryNotes = realm.where(Note::class.java)
-            .equalTo("isDeleted", false)
-            .and()
-            .beginGroup()
-            .contains("condition", query, Case.INSENSITIVE)
-            .or()
-            .contains("reflection", query, Case.INSENSITIVE)
-            .or()
-            .contains("purpose", query, Case.INSENSITIVE)
-            .or()
-            .contains("detail", query, Case.INSENSITIVE)
-            .or()
-            .contains("target", query, Case.INSENSITIVE)
-            .or()
-            .contains("consciousness", query, Case.INSENSITIVE)
-            .or()
-            .contains("result", query, Case.INSENSITIVE)
-            .endGroup()
-            .findAll()
+        val queryNotes =
+            realm.where(Note::class.java)
+                .equalTo("isDeleted", false)
+                .and()
+                .beginGroup()
+                .contains("condition", query, Case.INSENSITIVE)
+                .or()
+                .contains("reflection", query, Case.INSENSITIVE)
+                .or()
+                .contains("purpose", query, Case.INSENSITIVE)
+                .or()
+                .contains("detail", query, Case.INSENSITIVE)
+                .or()
+                .contains("target", query, Case.INSENSITIVE)
+                .or()
+                .contains("consciousness", query, Case.INSENSITIVE)
+                .or()
+                .contains("result", query, Case.INSENSITIVE)
+                .endGroup()
+                .findAll()
         return (freeNotes + queryNotes).distinct()
     }
 
@@ -292,7 +293,10 @@ class RealmManager {
      * @param month 取得したい目標の月
      * @return 条件に一致する目標のリスト
      */
-    fun fetchTargetsByYearMonth(year: Int, month: Int): List<Target> {
+    fun fetchTargetsByYearMonth(
+        year: Int,
+        month: Int,
+    ): List<Target> {
         return realm.where<Target>()
             .beginGroup()
             .equalTo("isYearlyTarget", false)
@@ -318,9 +322,10 @@ class RealmManager {
      */
     internal suspend inline fun <reified T : RealmObject> logicalDelete(id: String) {
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            val item = realmTransaction.where(T::class.java)
-                .equalTo(getPrimaryKeyName<T>(), id)
-                .findFirst()
+            val item =
+                realmTransaction.where(T::class.java)
+                    .equalTo(getPrimaryKeyName<T>(), id)
+                    .findFirst()
 
             item?.let {
                 // 指定されたオブジェクトを削除
@@ -343,14 +348,29 @@ class RealmManager {
      * @param item 削除するオブジェクト
      * @param realmTransaction Realmトランザクション
      */
-    private fun markAsDeleted(item: RealmObject, realmTransaction: Realm) {
+    private fun markAsDeleted(
+        item: RealmObject,
+        realmTransaction: Realm,
+    ) {
         when (item) {
-            is Group -> { item.isDeleted = true }
-            is Measures -> { item.isDeleted = true }
-            is Memo -> { item.isDeleted = true }
-            is Note -> { item.isDeleted = true }
-            is Target -> { item.isDeleted = true }
-            is TaskData -> { item.isDeleted = true }
+            is Group -> {
+                item.isDeleted = true
+            }
+            is Measures -> {
+                item.isDeleted = true
+            }
+            is Memo -> {
+                item.isDeleted = true
+            }
+            is Note -> {
+                item.isDeleted = true
+            }
+            is Target -> {
+                item.isDeleted = true
+            }
+            is TaskData -> {
+                item.isDeleted = true
+            }
         }
         realmTransaction.insertOrUpdate(item)
     }
@@ -361,7 +381,10 @@ class RealmManager {
      * @param noteID ノートID
      * @param realmTransaction Realmトランザクション
      */
-    private fun deleteRelatedNoteMemos(noteID: String, realmTransaction: Realm) {
+    private fun deleteRelatedNoteMemos(
+        noteID: String,
+        realmTransaction: Realm,
+    ) {
         realmTransaction.where(Memo::class.java)
             .equalTo("noteID", noteID)
             .findAll()
@@ -374,7 +397,10 @@ class RealmManager {
      * @param groupID グループID
      * @param realmTransaction Realmトランザクション
      */
-    private fun deleteRelatedTasks(groupID: String, realmTransaction: Realm) {
+    private fun deleteRelatedTasks(
+        groupID: String,
+        realmTransaction: Realm,
+    ) {
         realmTransaction.where(TaskData::class.java)
             .equalTo("groupID", groupID)
             .findAll()
@@ -390,7 +416,10 @@ class RealmManager {
      * @param taskID 課題ID
      * @param realmTransaction Realmトランザクション
      */
-    private fun deleteRelatedMeasures(taskID: String, realmTransaction: Realm) {
+    private fun deleteRelatedMeasures(
+        taskID: String,
+        realmTransaction: Realm,
+    ) {
         realmTransaction.where(Measures::class.java)
             .equalTo("taskID", taskID)
             .findAll()
@@ -406,7 +435,10 @@ class RealmManager {
      * @param measuresID 対策ID
      * @param realmTransaction Realmトランザクション
      */
-    private fun deleteRelatedMeasuresMemos(measuresID: String, realmTransaction: Realm) {
+    private fun deleteRelatedMeasuresMemos(
+        measuresID: String,
+        realmTransaction: Realm,
+    ) {
         realmTransaction.where(Memo::class.java)
             .equalTo("measuresID", measuresID)
             .findAll()

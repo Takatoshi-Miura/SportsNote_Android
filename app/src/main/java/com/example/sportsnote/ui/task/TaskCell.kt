@@ -24,32 +24,32 @@ import com.example.sportsnote.ui.LocalNavController
  * @param task TaskListData
  */
 @Composable
-fun TaskCell(
-    task: TaskListData
-) {
+fun TaskCell(task: TaskListData) {
     val navController = LocalNavController.current
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .clickable {
-                // TaskDetailScreenに遷移する
-                navController.navigate("detail_task/${task.taskID}")
-            },
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clickable {
+                    // TaskDetailScreenに遷移する
+                    navController.navigate("detail_task/${task.taskID}")
+                },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp),
         ) {
             // タイトル
             Text(
                 text = task.title,
                 style = MaterialTheme.typography.body1,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             // 対策
             Text(
@@ -57,7 +57,7 @@ fun TaskCell(
                 style = MaterialTheme.typography.body2,
                 color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }

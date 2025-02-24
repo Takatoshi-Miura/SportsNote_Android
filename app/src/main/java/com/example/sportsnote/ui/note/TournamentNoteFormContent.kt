@@ -44,7 +44,7 @@ fun TournamentNoteFormContent(
     onTargetChange: (String) -> Unit,
     onConsciousnessChange: (String) -> Unit,
     onResultChange: (String) -> Unit,
-    onReflectionChange: (String) -> Unit
+    onReflectionChange: (String) -> Unit,
 ) {
     val date = remember { mutableStateOf(note?.date ?: Date()) }
     val weather = remember { mutableStateOf(note?.weather ?: Weather.SUNNY.id) }
@@ -55,76 +55,78 @@ fun TournamentNoteFormContent(
     val result = remember { mutableStateOf(note?.result ?: "") }
     val reflection = remember { mutableStateOf(note?.reflection ?: "") }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // 日付
-        {
-            DatePickerField(
-                initialDate = date.value,
-                onDateSelected = { selectedDate -> date.value = selectedDate }
-            )
-        },
-        // 天気
-        {
-            WeatherPickerField(
-                initialWeather = weather.value,
-                onWeatherSelected = { selectedWeather -> weather.value = selectedWeather }
-            )
-        },
-        // 気温
-        {
-            TemperatureSlider(
-                initialTemperature = temperature.value,
-                onTemperatureSelected = { selectedTemperature -> temperature.value = selectedTemperature }
-            )
-        },
-        // 体調
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.condition),
-                onTextChanged = { input -> condition.value = input },
-                initialText = condition.value
-            )
-        },
-        // 目標
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.target),
-                onTextChanged = { input -> target.value = input },
-                initialText = target.value
-            )
-        },
-        // 意識すること
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.consciousness),
-                onTextChanged = { input -> consciousness.value = input },
-                initialText = consciousness.value
-            )
-        },
-        // 結果
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.result),
-                onTextChanged = { input -> result.value = input },
-                initialText = result.value
-            )
-        },
-        // 反省
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.reflection),
-                onTextChanged = { input -> reflection.value = input },
-                initialText = reflection.value
-            )
-        }
-    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // 日付
+            {
+                DatePickerField(
+                    initialDate = date.value,
+                    onDateSelected = { selectedDate -> date.value = selectedDate },
+                )
+            },
+            // 天気
+            {
+                WeatherPickerField(
+                    initialWeather = weather.value,
+                    onWeatherSelected = { selectedWeather -> weather.value = selectedWeather },
+                )
+            },
+            // 気温
+            {
+                TemperatureSlider(
+                    initialTemperature = temperature.value,
+                    onTemperatureSelected = { selectedTemperature -> temperature.value = selectedTemperature },
+                )
+            },
+            // 体調
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.condition),
+                    onTextChanged = { input -> condition.value = input },
+                    initialText = condition.value,
+                )
+            },
+            // 目標
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.target),
+                    onTextChanged = { input -> target.value = input },
+                    initialText = target.value,
+                )
+            },
+            // 意識すること
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.consciousness),
+                    onTextChanged = { input -> consciousness.value = input },
+                    initialText = consciousness.value,
+                )
+            },
+            // 結果
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.result),
+                    onTextChanged = { input -> result.value = input },
+                    initialText = result.value,
+                )
+            },
+            // 反省
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.reflection),
+                    onTextChanged = { input -> reflection.value = input },
+                    initialText = reflection.value,
+                )
+            },
+        )
 
     // 入力フォーム
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         CustomSpacerColumn(items = inputFields)
 

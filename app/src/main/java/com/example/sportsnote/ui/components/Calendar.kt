@@ -59,7 +59,7 @@ fun CalendarDisplay(
     modifier: Modifier = Modifier,
     targetViewModel: TargetViewModel,
     selectedDate: java.time.LocalDate?,
-    onDateSelected: (java.time.LocalDate) -> Unit
+    onDateSelected: (java.time.LocalDate) -> Unit,
 ) {
     val noteViewModel = NoteViewModel()
     val notes by noteViewModel.notes.collectAsState()
@@ -74,13 +74,14 @@ fun CalendarDisplay(
     // 曜日
     val daysOfWeek = remember { daysOfWeek() }
     // カレンダーの状態を持つ
-    val state = rememberCalendarState(
-        startMonth = startMonth,
-        endMonth = endMonth,
-        firstVisibleMonth = currentMonth,
-        firstDayOfWeek = daysOfWeek.first(),
-        outDateStyle = OutDateStyle.EndOfGrid
-    )
+    val state =
+        rememberCalendarState(
+            startMonth = startMonth,
+            endMonth = endMonth,
+            firstVisibleMonth = currentMonth,
+            firstDayOfWeek = daysOfWeek.first(),
+            outDateStyle = OutDateStyle.EndOfGrid,
+        )
 
     // 表示中の年月が変わるたびに ViewModel にリクエスト
     val visibleMonth = state.firstVisibleMonth.yearMonth
@@ -92,11 +93,12 @@ fun CalendarDisplay(
         val formattedMonth = "${visibleMonth.year} / ${"%02d".format(visibleMonth.monthValue)}"
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             // 左矢印
             IconButton(
@@ -104,7 +106,7 @@ fun CalendarDisplay(
                     coroutineScope.launch {
                         state.scrollToMonth(state.firstVisibleMonth.yearMonth.minusMonths(1))
                     }
-                }
+                },
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Previous Month")
             }
@@ -117,7 +119,7 @@ fun CalendarDisplay(
                 text = formattedMonth,
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
             // 「今日」ボタンを追加（右矢印の左側）
             TextButton(
@@ -127,7 +129,7 @@ fun CalendarDisplay(
                         state.scrollToMonth(YearMonth.from(today))
                     }
                     onDateSelected(today)
-                }
+                },
             ) {
                 Text(text = "今日")
             }
@@ -137,7 +139,7 @@ fun CalendarDisplay(
                     coroutineScope.launch {
                         state.scrollToMonth(state.firstVisibleMonth.yearMonth.plusMonths(1))
                     }
-                }
+                },
             ) {
                 Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "Next Month")
             }
@@ -147,20 +149,21 @@ fun CalendarDisplay(
         HorizontalCalendar(
             state = state,
             dayContent = { day ->
-                val hasNote = notes.any { note ->
-                    note.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == day.date &&
+                val hasNote =
+                    notes.any { note ->
+                        note.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() == day.date &&
                             note.noteType != NoteType.FREE.value
-                }
+                    }
                 Day(
                     day = day,
                     isSelected = selectedDate == day.date,
                     hasNote = hasNote,
                     onClick = {
                         onDateSelected(day.date)
-                    }
+                    },
                 )
             },
-            monthHeader = { DaysOfWeekTitle(daysOfWeek = daysOfWeek) }
+            monthHeader = { DaysOfWeekTitle(daysOfWeek = daysOfWeek) },
         )
     }
 }
@@ -173,14 +176,14 @@ fun CalendarDisplay(
 @Composable
 fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         for (dayOfWeek in daysOfWeek) {
             Text(
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                 color = getDayOfWeekTextColor(dayOfWeek),
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
     }
@@ -214,35 +217,38 @@ fun Day(
     day: CalendarDay,
     isSelected: Boolean,
     hasNote: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val today = remember { java.time.LocalDate.now() }
     val isToday = day.date.isEqual(today)
 
     Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .clickable { onClick() },
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .aspectRatio(1f)
+                .clickable { onClick() },
+        contentAlignment = Alignment.Center,
     ) {
         Box(
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    color = when {
-                        isToday -> MaterialTheme.colors.primary
-                        isSelected -> Color(0xFFFFC0CB) // ピンク色
-                        hasNote -> Color(0xFFA8E6CF) // 緑色
-                        else -> Color.Transparent
-                    },
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .size(40.dp)
+                    .background(
+                        color =
+                            when {
+                                isToday -> MaterialTheme.colors.primary
+                                isSelected -> Color(0xFFFFC0CB) // ピンク色
+                                hasNote -> Color(0xFFA8E6CF) // 緑色
+                                else -> Color.Transparent
+                            },
+                        shape = CircleShape,
+                    ),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = day.date.dayOfMonth.toString(),
                 color = getDayTextColor(day),
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body2,
             )
         }
     }

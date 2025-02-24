@@ -31,13 +31,13 @@ fun TournamentNoteViewScreen(
     noteId: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val note: Note? = viewModel.getNoteById(noteId)
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
-    var date  by remember { mutableStateOf(Date()) }
+    var date by remember { mutableStateOf(Date()) }
     var weather by remember { mutableStateOf(Weather.SUNNY.id) }
     var temperature by remember { mutableStateOf(20) }
     var condition by remember { mutableStateOf("") }
@@ -48,9 +48,10 @@ fun TournamentNoteViewScreen(
     val showDialog = remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -67,7 +68,7 @@ fun TournamentNoteViewScreen(
                         consciousness = consciousness,
                         result = result,
                         reflection = reflection,
-                        created_at = note!!.created_at
+                        created_at = note!!.created_at,
                     )
                 },
                 onDelete = {
@@ -77,7 +78,7 @@ fun TournamentNoteViewScreen(
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = rightIcon
-                }
+                },
             )
 
             // 共通フォーム
@@ -90,7 +91,7 @@ fun TournamentNoteViewScreen(
                 onTargetChange = { target = it },
                 onConsciousnessChange = { consciousness = it },
                 onResultChange = { result = it },
-                onReflectionChange = { reflection = it }
+                onReflectionChange = { reflection = it },
             )
         }
     }
@@ -108,7 +109,7 @@ fun TournamentNoteViewScreen(
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }

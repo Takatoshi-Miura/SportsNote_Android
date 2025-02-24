@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
  * Firebase Authentication を使用したログイン用 ViewModel
  */
 class LoginViewModel : ViewModel() {
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // ユーザーのログイン状態
@@ -45,7 +44,7 @@ class LoginViewModel : ViewModel() {
         email: String,
         password: String,
         onSuccess: () -> Unit,
-        context: Context
+        context: Context,
     ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
@@ -92,7 +91,11 @@ class LoginViewModel : ViewModel() {
      * @param email メールアドレス
      * @param password パスワード
      */
-    fun createAccount(email: String, password: String, context: Context) {
+    fun createAccount(
+        email: String,
+        password: String,
+        context: Context,
+    ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
             return
@@ -145,7 +148,10 @@ class LoginViewModel : ViewModel() {
      *
      * @param email メールアドレス
      */
-    fun sendPasswordResetEmail(email: String, context: Context) {
+    fun sendPasswordResetEmail(
+        email: String,
+        context: Context,
+    ) {
         if (email.isBlank()) {
             _message.value = context.getString(R.string.emptyTextErrorPasswordReset)
             return

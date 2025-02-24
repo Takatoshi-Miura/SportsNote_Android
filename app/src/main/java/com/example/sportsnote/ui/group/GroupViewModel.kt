@@ -14,7 +14,6 @@ import java.util.Date
 import java.util.UUID
 
 class GroupViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups
@@ -65,7 +64,7 @@ class GroupViewModel : ViewModel() {
         saveGroup(
             title = context.getString(R.string.Uncategorized),
             colorId = Color.GRAY.id,
-            order = 0
+            order = 0,
         )
     }
 
@@ -83,15 +82,16 @@ class GroupViewModel : ViewModel() {
         title: String,
         colorId: Int,
         order: Int?,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
-        val group = Group(
-            groupId = groupId,
-            title = title,
-            colorId = colorId,
-            order = order ?: realmManager.getCount(Group::class.java),
-            created_at = created_at
-        )
+        val group =
+            Group(
+                groupId = groupId,
+                title = title,
+                colorId = colorId,
+                order = order ?: realmManager.getCount(Group::class.java),
+                created_at = created_at,
+            )
         realmManager.saveItem(group)
     }
 
@@ -103,5 +103,4 @@ class GroupViewModel : ViewModel() {
     suspend fun deleteGroup(groupId: String) {
         realmManager.logicalDelete<Group>(groupId)
     }
-
 }

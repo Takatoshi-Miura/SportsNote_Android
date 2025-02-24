@@ -31,22 +31,23 @@ import com.example.sportsnote.utils.Weather
 @Composable
 fun WeatherPickerField(
     initialWeather: Int = Weather.SUNNY.id,
-    onWeatherSelected: (Int) -> Unit
+    onWeatherSelected: (Int) -> Unit,
 ) {
     val weatherOptions = Weather.entries
     var selectedWeather by remember { mutableStateOf(initialWeather) }
     var expanded by remember { mutableStateOf(false) }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.weather),
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -54,13 +55,13 @@ fun WeatherPickerField(
         // 天気選択ドロップダウン
         Button(
             onClick = { expanded = true },
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(Weather.fromInt(selectedWeather).getTitle())
         }
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             weatherOptions.forEach { option ->
                 DropdownMenuItem(
@@ -68,7 +69,7 @@ fun WeatherPickerField(
                         selectedWeather = option.id
                         onWeatherSelected(option.id)
                         expanded = false
-                    }
+                    },
                 ) {
                     Text(option.getTitle())
                 }

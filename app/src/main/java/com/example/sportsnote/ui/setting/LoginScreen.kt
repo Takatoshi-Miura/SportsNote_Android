@@ -21,7 +21,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,9 +50,7 @@ import kotlinx.coroutines.launch
  * @param onDismiss 閉じる時の処理
  */
 @Composable
-fun LoginScreen(
-    onDismiss: () -> Unit,
-) {
+fun LoginScreen(onDismiss: () -> Unit) {
     val viewModel = LoginViewModel()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -68,28 +65,32 @@ fun LoginScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.primary)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.primary),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 // アプリアイコン表示
                 Icon(
                     painter = painterResource(R.drawable.sportnoteicon),
                     contentDescription = "App Icon",
                     tint = Color.White,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .align(Alignment.CenterHorizontally)
+                    modifier =
+                        Modifier
+                            .size(120.dp)
+                            .align(Alignment.CenterHorizontally),
                 )
 
                 // アプリ名表示
@@ -97,21 +98,22 @@ fun LoginScreen(
                     text = "SportsNote",
                     color = Color.White,
                     style = MaterialTheme.typography.h5,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ログイン状態によるメッセージ表示
                 Text(
-                    text = if (isLoggedIn) {
-                        stringResource(R.string.loginMessage)
-                    } else {
-                        stringResource(R.string.notLoginMessage)
-                    },
+                    text =
+                        if (isLoggedIn) {
+                            stringResource(R.string.loginMessage)
+                        } else {
+                            stringResource(R.string.notLoginMessage)
+                        },
                     color = Color.White,
                     style = MaterialTheme.typography.body1,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -120,7 +122,7 @@ fun LoginScreen(
                 CustomTextField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    label = stringResource(R.string.mailAddress)
+                    label = stringResource(R.string.mailAddress),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -130,7 +132,7 @@ fun LoginScreen(
                     value = password.value,
                     onValueChange = { password.value = it },
                     label = stringResource(R.string.password),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -150,12 +152,12 @@ fun LoginScreen(
                                     email = email.value,
                                     password = password.value,
                                     onSuccess = { onDismiss() },
-                                    context = context
+                                    context = context,
                                 )
                             }
                         }
                     },
-                    backgroundColor = if (isLoggedIn) Color.Red else MaterialTheme.colors.secondary
+                    backgroundColor = if (isLoggedIn) Color.Red else MaterialTheme.colors.secondary,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -165,7 +167,7 @@ fun LoginScreen(
                     onClick = {
                         dialogType = DialogType.PasswordReset
                         showDialog.value = true
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -175,7 +177,7 @@ fun LoginScreen(
                     onClick = {
                         dialogType = DialogType.CreateAccount
                         showDialog.value = true
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -185,7 +187,7 @@ fun LoginScreen(
                     onClick = {
                         dialogType = DialogType.DeleteAccount
                         showDialog.value = true
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -194,7 +196,7 @@ fun LoginScreen(
                 CustomButton(
                     text = stringResource(R.string.cancel),
                     onClick = onDismiss,
-                    backgroundColor = Color.Gray
+                    backgroundColor = Color.Gray,
                 )
             }
 
@@ -219,7 +221,7 @@ fun LoginScreen(
                         dialogType = DialogType.None
                         showDialog.value = false
                     },
-                    showDialog = showDialog
+                    showDialog = showDialog,
                 )
             }
 
@@ -233,7 +235,7 @@ fun LoginScreen(
                         dialogType = DialogType.None
                         showDialog.value = false
                     },
-                    showDialog = showDialog
+                    showDialog = showDialog,
                 )
             }
 
@@ -247,7 +249,7 @@ fun LoginScreen(
                         dialogType = DialogType.None
                         showDialog.value = false
                     },
-                    showDialog = showDialog
+                    showDialog = showDialog,
                 )
             }
         }
@@ -267,7 +269,7 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     TextField(
         value = value,
@@ -275,17 +277,19 @@ fun CustomTextField(
         label = { Text(text = label, color = Color.Gray) },
         singleLine = true,
         visualTransformation = visualTransformation,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Color.Black,
-            cursorColor = Color.Black,
-            focusedBorderColor = Color.Gray,
-            unfocusedBorderColor = Color.LightGray,
-            focusedLabelColor = Color.Gray,
-            unfocusedLabelColor = Color.Gray
-        )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White),
+        colors =
+            TextFieldDefaults.outlinedTextFieldColors(
+                textColor = Color.Black,
+                cursorColor = Color.Black,
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.LightGray,
+                focusedLabelColor = Color.Gray,
+                unfocusedLabelColor = Color.Gray,
+            ),
     )
 }
 
@@ -304,12 +308,12 @@ fun CustomButton(
     onClick: () -> Unit,
     backgroundColor: Color = MaterialTheme.colors.secondary,
     textColor: Color = Color.White,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor)
+        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
     ) {
         Text(text = text, color = textColor)
     }

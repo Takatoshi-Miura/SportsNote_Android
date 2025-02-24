@@ -33,7 +33,7 @@ fun FreeNoteScreen(
     noteID: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val noteViewModel = NoteViewModel()
     val freeNote = noteViewModel.getNoteById(noteID)
@@ -42,30 +42,32 @@ fun FreeNoteScreen(
     var title by remember { mutableStateOf(freeNote!!.title) }
     var detail by remember { mutableStateOf(freeNote!!.detail) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // タイトル
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title = updatedText },
-                initialText = title
-            )
-        },
-        // 詳細
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.noteDetail),
-                defaultLines = calcMaxLines(),
-                onTextChanged = { updatedText -> detail = updatedText },
-                initialText = detail
-            )
-        }
-    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // タイトル
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title = updatedText },
+                    initialText = title,
+                )
+            },
+            // 詳細
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.noteDetail),
+                    defaultLines = calcMaxLines(),
+                    onTextChanged = { updatedText -> detail = updatedText },
+                    initialText = detail,
+                )
+            },
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -76,7 +78,7 @@ fun FreeNoteScreen(
                         noteId = noteID,
                         title = title,
                         detail = detail,
-                        created_at = freeNote!!.created_at
+                        created_at = freeNote!!.created_at,
                     )
                 },
                 onDelete = { },
@@ -84,7 +86,7 @@ fun FreeNoteScreen(
                 updateAppBar = { navigationIcon, _ ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = null
-                }
+                },
             )
 
             // 共通フォーム

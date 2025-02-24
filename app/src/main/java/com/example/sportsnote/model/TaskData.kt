@@ -10,7 +10,6 @@ import java.util.UUID
  * 課題
  */
 open class TaskData : RealmObject, Syncable {
-
     @PrimaryKey
     var taskID: String
 
@@ -45,7 +44,7 @@ open class TaskData : RealmObject, Syncable {
         cause: String,
         groupId: String,
         isComplete: Boolean,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
         this.taskID = taskId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
@@ -77,7 +76,7 @@ data class AddTaskData(
     val title: String = "",
     val cause: String = "",
     val measuresTitle: String = "",
-    val groupList: List<Group>
+    val groupList: List<Group>,
 )
 
 /**
@@ -100,7 +99,7 @@ data class TaskListData(
     val measuresID: String,
     val measures: String,
     var memoID: String?,
-    val order: Int
+    val order: Int,
 )
 
 /**
@@ -109,7 +108,7 @@ data class TaskListData(
  * @param task TaskData
  * @param measuresList 対策リスト
  */
-data class  TaskDetailData(
+data class TaskDetailData(
     val task: TaskData,
     var measuresList: List<Measures>,
 )

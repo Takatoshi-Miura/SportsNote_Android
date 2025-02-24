@@ -31,48 +31,52 @@ import androidx.compose.ui.graphics.Color as AndroidColor
 fun GroupHeaderView(
     title: String,
     colorId: Int,
-    onInfoButtonClick: () -> Unit
+    onInfoButtonClick: () -> Unit,
 ) {
     val systemGray6 = AndroidColor(0xFFF2F2F7)
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .background(systemGray6),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(systemGray6),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         // 背景色を指定した部品
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .size(25.dp)
-                .background(
-                    Color.fromInt(colorId).toComposeColor()
-                )
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .size(25.dp)
+                    .background(
+                        Color.fromInt(colorId).toComposeColor(),
+                    ),
         )
 
         // タイトル
         Text(
             text = title,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .weight(1f),
+            modifier =
+                Modifier
+                    .padding(start = 8.dp)
+                    .weight(1f),
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
 
         // Info button
         IconButton(
             onClick = onInfoButtonClick,
-            modifier = Modifier
-                .padding(end = 4.dp)
+            modifier =
+                Modifier
+                    .padding(end = 4.dp),
         ) {
             Icon(
                 imageVector = Icons.Default.Info,
-                contentDescription = "Info"
+                contentDescription = "Info",
             )
         }
     }
@@ -84,6 +88,6 @@ fun PreviewGroupHeaderView() {
     GroupHeaderView(
         title = "グループ名グループ名グループ名グループ名グループ名グループ名グループ名",
         colorId = Color.RED.id,
-        onInfoButtonClick = {}
+        onInfoButtonClick = {},
     )
 }

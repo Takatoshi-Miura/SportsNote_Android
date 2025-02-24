@@ -27,7 +27,7 @@ fun NavigationScreenHeader(
     onSave: suspend () -> Unit,
     onDelete: suspend () -> Unit,
     onEdit: (() -> Unit)?,
-    updateAppBar: (@Composable (() -> Unit)?, @Composable (() -> Unit)?) -> Unit
+    updateAppBar: (@Composable (() -> Unit)?, @Composable (() -> Unit)?) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -62,7 +62,7 @@ fun NavigationScreenHeader(
                         Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete")
                     }
                 }
-            }
+            },
         )
     }
 }

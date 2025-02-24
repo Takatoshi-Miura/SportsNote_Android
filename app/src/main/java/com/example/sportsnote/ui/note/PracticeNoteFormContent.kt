@@ -73,7 +73,7 @@ fun PracticeNoteFormContent(
     onPurposeChange: (String) -> Unit,
     onDetailChange: (String) -> Unit,
     onReflectionChange: (String) -> Unit,
-    onTaskReflectionsChange: (Map<TaskListData, String>) -> Unit
+    onTaskReflectionsChange: (Map<TaskListData, String>) -> Unit,
 ) {
     val date = remember { mutableStateOf(note?.date ?: Date()) }
     val weather = remember { mutableStateOf(note?.weather ?: Weather.SUNNY.id) }
@@ -91,118 +91,122 @@ fun PracticeNoteFormContent(
 
     // ノートに未追加の課題を取得
     val allTasks by taskViewModel.taskLists.collectAsState()
-    val unaddedTasks = remember(taskListState.value, allTasks) {
-        derivedStateOf {
-            val taskIDMap = taskListState.value.keys.map { it.taskID }.toSet()
-            allTasks.filter { it.taskID !in taskIDMap }
+    val unaddedTasks =
+        remember(taskListState.value, allTasks) {
+            derivedStateOf {
+                val taskIDMap = taskListState.value.keys.map { it.taskID }.toSet()
+                allTasks.filter { it.taskID !in taskIDMap }
+            }
         }
-    }
 
     val showDialog = remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // 日付
-        {
-            DatePickerField(
-                initialDate = date.value,
-                onDateSelected = { selectedDate -> date.value = selectedDate }
-            )
-        },
-        // 天気
-        {
-            WeatherPickerField(
-                initialWeather = weather.value,
-                onWeatherSelected = { selectedWeather -> weather.value = selectedWeather }
-            )
-        },
-        // 気温
-        {
-            TemperatureSlider(
-                initialTemperature = temperature.value,
-                onTemperatureSelected = { selectedTemperature -> temperature.value = selectedTemperature }
-            )
-        },
-        // 体調
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.condition),
-                onTextChanged = { input -> condition.value = input },
-                initialText = condition.value
-            )
-        },
-        // 練習の目的
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.practicePurpoce),
-                onTextChanged = { input -> purpose.value = input },
-                initialText = purpose.value
-            )
-        },
-        // 練習内容
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.practiceDetail),
-                onTextChanged = { input -> detail.value = input },
-                initialText = detail.value
-            )
-        },
-        // 取り組んだ課題
-        {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "取り組んだ課題",
-                    style = MaterialTheme.typography.body1,
-                    modifier = Modifier.weight(1f)
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // 日付
+            {
+                DatePickerField(
+                    initialDate = date.value,
+                    onDateSelected = { selectedDate -> date.value = selectedDate },
                 )
-                IconButton(
-                    onClick = { showDialog.value = true }
+            },
+            // 天気
+            {
+                WeatherPickerField(
+                    initialWeather = weather.value,
+                    onWeatherSelected = { selectedWeather -> weather.value = selectedWeather },
+                )
+            },
+            // 気温
+            {
+                TemperatureSlider(
+                    initialTemperature = temperature.value,
+                    onTemperatureSelected = { selectedTemperature -> temperature.value = selectedTemperature },
+                )
+            },
+            // 体調
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.condition),
+                    onTextChanged = { input -> condition.value = input },
+                    initialText = condition.value,
+                )
+            },
+            // 練習の目的
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.practicePurpoce),
+                    onTextChanged = { input -> purpose.value = input },
+                    initialText = purpose.value,
+                )
+            },
+            // 練習内容
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.practiceDetail),
+                    onTextChanged = { input -> detail.value = input },
+                    initialText = detail.value,
+                )
+            },
+            // 取り組んだ課題
+            {
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Add Task"
+                    Text(
+                        text = "取り組んだ課題",
+                        style = MaterialTheme.typography.body1,
+                        modifier = Modifier.weight(1f),
                     )
-                }
-            }
-        },
-        {
-            TaskListInput(
-                taskDataList = taskListState.value,
-                onTaskRemoved = { task ->
-                    if (task.memoID != null) {
-                        coroutineScope.launch {
-                            val memoViewModel = MemoViewModel()
-                            memoViewModel.deleteMemo(task.memoID!!)
-                        }
+                    IconButton(
+                        onClick = { showDialog.value = true },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add Task",
+                        )
                     }
-                    taskListState.value -= task
-                },
-                onReflectionChanged = { task, reflection ->
-                    taskListState.value += (task to reflection)
                 }
-            )
-        },
-        // 反省
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.reflection),
-                onTextChanged = { input -> reflection.value = input },
-                initialText = reflection.value
-            )
-        }
-    )
+            },
+            {
+                TaskListInput(
+                    taskDataList = taskListState.value,
+                    onTaskRemoved = { task ->
+                        if (task.memoID != null) {
+                            coroutineScope.launch {
+                                val memoViewModel = MemoViewModel()
+                                memoViewModel.deleteMemo(task.memoID!!)
+                            }
+                        }
+                        taskListState.value -= task
+                    },
+                    onReflectionChanged = { task, reflection ->
+                        taskListState.value += (task to reflection)
+                    },
+                )
+            },
+            // 反省
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.reflection),
+                    onTextChanged = { input -> reflection.value = input },
+                    initialText = reflection.value,
+                )
+            },
+        )
 
     // 入力フォーム
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         CustomSpacerColumn(items = inputFields)
 
@@ -224,7 +228,7 @@ fun PracticeNoteFormContent(
                 taskListState.value += selectedTask to ""
                 showDialog.value = false
             },
-            onDismiss = { showDialog.value = false }
+            onDismiss = { showDialog.value = false },
         )
     }
 }
@@ -240,13 +244,13 @@ fun PracticeNoteFormContent(
 fun TaskListInput(
     taskDataList: Map<TaskListData, String>, // 課題と入力テキストのマップ
     onTaskRemoved: (TaskListData) -> Unit,
-    onReflectionChanged: (TaskListData, String) -> Unit
+    onReflectionChanged: (TaskListData, String) -> Unit,
 ) {
     val showDialog = remember { mutableStateOf(false) }
     val selectedTask = remember { mutableStateOf<TaskListData?>(null) }
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Divider()
         taskDataList.forEach { (taskData, reflectionText) ->
@@ -259,7 +263,7 @@ fun TaskListInput(
                 },
                 onReflectionChanged = { updatedText ->
                     onReflectionChanged(taskData, updatedText)
-                }
+                },
             )
             Divider()
         }
@@ -274,7 +278,7 @@ fun TaskListInput(
                 selectedTask.value?.let { onTaskRemoved(it) }
                 showDialog.value = false
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }
@@ -292,37 +296,39 @@ fun TaskInputItem(
     taskData: TaskListData,
     initialReflection: String,
     onOptionClick: () -> Unit,
-    onReflectionChanged: (String) -> Unit
+    onReflectionChanged: (String) -> Unit,
 ) {
     val reflectionText = remember { mutableStateOf(initialReflection) }
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Row(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             // グループカラー
             Box(
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .width(20.dp)
-                    .height(50.dp)
-                    .background(taskData.groupColor)
+                modifier =
+                    Modifier
+                        .padding(start = 12.dp)
+                        .width(20.dp)
+                        .height(50.dp)
+                        .background(taskData.groupColor),
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 // 課題タイトル
                 Text(
                     text = taskData.title,
                     fontSize = 16.sp,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
                 // 最優先の対策
                 Text(
@@ -330,16 +336,17 @@ fun TaskInputItem(
                     fontSize = 14.sp,
                     color = Color.Gray,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             // オプションボタン
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = "Options",
-                modifier = Modifier
-                    .padding(end = 12.dp)
-                    .clickable { onOptionClick() }
+                modifier =
+                    Modifier
+                        .padding(end = 12.dp)
+                        .clickable { onOptionClick() },
             )
         }
         // メモ欄
@@ -350,7 +357,7 @@ fun TaskInputItem(
                 reflectionText.value = text
                 onReflectionChanged(text)
             },
-            initialText = reflectionText.value
+            initialText = reflectionText.value,
         )
     }
 }

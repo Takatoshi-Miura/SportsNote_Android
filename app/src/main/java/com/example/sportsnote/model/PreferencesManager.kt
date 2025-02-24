@@ -15,11 +15,11 @@ object PreferencesManager {
 
     // 保存するためのキー一覧
     object Keys {
-        const val FIRST_LAUNCH = "firstLaunch"  // 初回起動判定
-        const val USER_ID = "userID"            // アカウント持ちならFirebaseID、なければ端末のUID
-        const val ADDRESS = "address"           // アカウントのメールアドレス
-        const val PASSWORD = "password"         // アカウントのパスワード
-        const val AGREE = "agree"               // 利用規約への同意状況
+        const val FIRST_LAUNCH = "firstLaunch" // 初回起動判定
+        const val USER_ID = "userID" // アカウント持ちならFirebaseID、なければ端末のUID
+        const val ADDRESS = "address" // アカウントのメールアドレス
+        const val PASSWORD = "password" // アカウントのパスワード
+        const val AGREE = "agree" // 利用規約への同意状況
     }
 
     /**
@@ -40,7 +40,10 @@ object PreferencesManager {
      * @param key キー（PreferencesManager.Keys）
      * @param value 値
      */
-    fun <T> set(key: String, value: T) {
+    fun <T> set(
+        key: String,
+        value: T,
+    ) {
         when (value) {
             is Int -> getEditor().putInt(key, value).apply()
             is Float -> getEditor().putFloat(key, value).apply()
@@ -58,7 +61,10 @@ object PreferencesManager {
      * @param defaultValue デフォルト値
      * @return 保存された値
      */
-    fun <T> get(key: String, defaultValue: T): T {
+    fun <T> get(
+        key: String,
+        defaultValue: T,
+    ): T {
         return when (defaultValue) {
             is Int -> sharedPreferences.getInt(key, defaultValue) as T
             is Float -> sharedPreferences.getFloat(key, defaultValue) as T

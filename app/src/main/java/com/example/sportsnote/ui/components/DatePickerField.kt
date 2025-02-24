@@ -29,35 +29,38 @@ import java.util.Date
 @Composable
 fun DatePickerField(
     initialDate: Date? = null,
-    onDateSelected: (Date) -> Unit
+    onDateSelected: (Date) -> Unit,
 ) {
     // カレンダーのインスタンスを作成
     val calendar = Calendar.getInstance()
 
     // 初期日付を設定
-    val initialCalendar = initialDate?.let {
-        calendar.time = it
-        calendar
-    } ?: calendar
+    val initialCalendar =
+        initialDate?.let {
+            calendar.time = it
+            calendar
+        } ?: calendar
 
     // 初期状態として渡された初期日付、もしくは今日の日付を設定
-    val selectedDate = remember {
-        mutableStateOf(SimpleDateFormat("yyyy/MM/dd").format(initialCalendar.time))
-    }
+    val selectedDate =
+        remember {
+            mutableStateOf(SimpleDateFormat("yyyy/MM/dd").format(initialCalendar.time))
+        }
 
     // ダイアログの表示状態
     val context = LocalContext.current
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "日付",
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         // 選択した日付の表示 or ボタン
@@ -76,10 +79,10 @@ fun DatePickerField(
                     },
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
+                    calendar.get(Calendar.DAY_OF_MONTH),
                 ).show()
             },
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(text = selectedDate.value)
         }

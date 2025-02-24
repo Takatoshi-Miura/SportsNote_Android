@@ -24,7 +24,7 @@ fun BottomNavigationBar() {
             selected = true,
             onClick = {
                 navController.navigate("task")
-            }
+            },
         )
         // ノートタブ
         BottomNavigationItem(
@@ -33,7 +33,7 @@ fun BottomNavigationBar() {
             selected = false,
             onClick = {
                 navController.navigate("note")
-            }
+            },
         )
         // 目標タブ
         BottomNavigationItem(
@@ -42,7 +42,7 @@ fun BottomNavigationBar() {
             selected = false,
             onClick = {
                 navController.navigate("target")
-            }
+            },
         )
     }
 }

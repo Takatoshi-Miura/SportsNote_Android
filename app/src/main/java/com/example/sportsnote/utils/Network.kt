@@ -4,7 +4,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 
 object Network {
-
     /**
      * デバイスがオンラインか判定
      * @param context アプリケーションのコンテキスト

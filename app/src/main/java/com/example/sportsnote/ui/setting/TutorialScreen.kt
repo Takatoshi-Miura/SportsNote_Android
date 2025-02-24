@@ -32,7 +32,7 @@ import com.example.sportsnote.R
 data class TutorialPage(
     val title: String,
     val description: String,
-    val imageRes: Int
+    val imageRes: Int,
 )
 
 /**
@@ -41,89 +41,96 @@ data class TutorialPage(
  * @param onDismiss 閉じる時の処理
  */
 @Composable
-fun TutorialScreen(
-    onDismiss: () -> Unit,
-) {
+fun TutorialScreen(onDismiss: () -> Unit) {
     // TODO: スクリーンショットを差し替え
-    val pages = listOf(
-        TutorialPage(
-            title = "SportsNoteとは",
-            description = """
-                課題解決に特化したノートアプリです。
-                原因と対策を考えて実践し、反省を通して
-                解決を目指すことができます。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-        TutorialPage(
-            title = "課題の管理①",
-            description = """
-                課題を一覧で管理できます。
-                グループを作成することで課題を分類して
-                管理することができます。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-        TutorialPage(
-            title = "課題の管理②",
-            description = """
-                課題毎に原因と対策を登録できます。
-                優先度が最も高い対策が
-                ノートに読み込まれるようになります。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-        TutorialPage(
-            title = "ノートを作成",
-            description = """
-                練習ノートを作成できます。
-                ノートには登録した課題が読み込まれ、
-                課題への取り組みを記録しておくことができます。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-        TutorialPage(
-            title = "振り返り",
-            description = """
-                記録した内容はノートで振り返ることができます。
-                課題＞対策へと進めば、その課題への取り組み内容を
-                まとめて振り返ることもできます。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-        TutorialPage(
-            title = "課題を完了にする",
-            description = """
-                解決した課題は完了にすることで
-                ノートへ読み込まれなくなります。完了にしても
-                完了した課題からいつでも振り返ることができます。
-            """.trimIndent(),
-            imageRes = R.drawable.ic_home_black_24dp
-        ),
-    )
+    val pages =
+        listOf(
+            TutorialPage(
+                title = "SportsNoteとは",
+                description =
+                    """
+                    課題解決に特化したノートアプリです。
+                    原因と対策を考えて実践し、反省を通して
+                    解決を目指すことができます。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+            TutorialPage(
+                title = "課題の管理①",
+                description =
+                    """
+                    課題を一覧で管理できます。
+                    グループを作成することで課題を分類して
+                    管理することができます。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+            TutorialPage(
+                title = "課題の管理②",
+                description =
+                    """
+                    課題毎に原因と対策を登録できます。
+                    優先度が最も高い対策が
+                    ノートに読み込まれるようになります。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+            TutorialPage(
+                title = "ノートを作成",
+                description =
+                    """
+                    練習ノートを作成できます。
+                    ノートには登録した課題が読み込まれ、
+                    課題への取り組みを記録しておくことができます。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+            TutorialPage(
+                title = "振り返り",
+                description =
+                    """
+                    記録した内容はノートで振り返ることができます。
+                    課題＞対策へと進めば、その課題への取り組み内容を
+                    まとめて振り返ることもできます。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+            TutorialPage(
+                title = "課題を完了にする",
+                description =
+                    """
+                    解決した課題は完了にすることで
+                    ノートへ読み込まれなくなります。完了にしても
+                    完了した課題からいつでも振り返ることができます。
+                    """.trimIndent(),
+                imageRes = R.drawable.ic_home_black_24dp,
+            ),
+        )
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         val pagerState = rememberPagerState { pages.size }
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.primary)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.primary),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // ページ表示
                 HorizontalPager(
                     beyondViewportPageCount = pages.size,
                     state = pagerState,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 ) { page ->
                     TutorialPageContent(page = pages[page])
                 }
@@ -132,16 +139,17 @@ fun TutorialScreen(
                 PagerIndicator(
                     pageCount = pages.size,
                     currentPage = pagerState.currentPage,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(16.dp),
                 )
             }
 
             // 閉じるボタン
             Button(
                 onClick = onDismiss,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp),
             ) {
                 Text(stringResource(R.string.close))
             }
@@ -160,20 +168,21 @@ fun TutorialScreen(
 fun PagerIndicator(
     pageCount: Int,
     currentPage: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(pageCount) { index ->
             val color = if (index == currentPage) Color.White else Color.Gray
             Box(
-                modifier = Modifier
-                    .size(10.dp)
-                    .background(color, shape = androidx.compose.foundation.shape.CircleShape)
-                    .padding(4.dp)
+                modifier =
+                    Modifier
+                        .size(10.dp)
+                        .background(color, shape = androidx.compose.foundation.shape.CircleShape)
+                        .padding(4.dp),
             )
         }
     }
@@ -187,11 +196,12 @@ fun PagerIndicator(
 @Composable
 fun TutorialPageContent(page: TutorialPage) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         // タイトル
         Text(
@@ -199,9 +209,10 @@ fun TutorialPageContent(page: TutorialPage) {
             color = Color.White,
             style = MaterialTheme.typography.h5.copy(fontSize = 25.sp),
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(top = 60.dp)
-                .padding(bottom = 8.dp)
+            modifier =
+                Modifier
+                    .padding(top = 60.dp)
+                    .padding(bottom = 8.dp),
         )
 
         // 説明文
@@ -212,16 +223,17 @@ fun TutorialPageContent(page: TutorialPage) {
             textAlign = TextAlign.Center,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         // 画像
         Image(
             painter = painterResource(id = page.imageRes),
             contentDescription = page.title,
-            modifier = Modifier
-                .size(288.dp)
-                .padding(bottom = 50.dp)
+            modifier =
+                Modifier
+                    .size(288.dp)
+                    .padding(bottom = 50.dp),
         )
     }
 }
@@ -229,5 +241,5 @@ fun TutorialPageContent(page: TutorialPage) {
 @Preview
 @Composable
 fun PreviewTutorialScreen() {
-    TutorialScreen {  }
+    TutorialScreen { }
 }

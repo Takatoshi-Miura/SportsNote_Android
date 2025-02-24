@@ -29,7 +29,6 @@ import java.util.Locale
 import java.util.UUID
 
 class NoteViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
@@ -37,31 +36,33 @@ class NoteViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    val noteListItems: StateFlow<List<NoteListItem>> = _notes.map { notes ->
-        notes.map { note ->
-            NoteListItem(
-                noteID = note.noteID,
-                noteType = note.noteType,
-                date = note.date,
-                backGroundColor = getBackgroundColor(note),
-                title = getNoteTitle(note),
-                subTitle = getNoteSubTitle(note)
-            )
-        }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val noteListItems: StateFlow<List<NoteListItem>> =
+        _notes.map { notes ->
+            notes.map { note ->
+                NoteListItem(
+                    noteID = note.noteID,
+                    noteType = note.noteType,
+                    date = note.date,
+                    backGroundColor = getBackgroundColor(note),
+                    title = getNoteTitle(note),
+                    subTitle = getNoteSubTitle(note),
+                )
+            }
+        }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    val targetNotes: StateFlow<List<NoteListItem>> = _targetNotes.map { notes ->
-        notes.map { note ->
-            NoteListItem(
-                noteID = note.noteID,
-                noteType = note.noteType,
-                date = note.date,
-                backGroundColor = getBackgroundColor(note),
-                title = getNoteTitle(note),
-                subTitle = getNoteSubTitle(note)
-            )
-        }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val targetNotes: StateFlow<List<NoteListItem>> =
+        _targetNotes.map { notes ->
+            notes.map { note ->
+                NoteListItem(
+                    noteID = note.noteID,
+                    noteType = note.noteType,
+                    date = note.date,
+                    backGroundColor = getBackgroundColor(note),
+                    title = getNoteTitle(note),
+                    subTitle = getNoteSubTitle(note),
+                )
+            }
+        }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     init {
         searchNotesByQuery("")
@@ -75,16 +76,18 @@ class NoteViewModel : ViewModel() {
     fun searchNotesByQuery(query: String) {
         viewModelScope.launch {
             _isLoading.value = true
-            val result = if (query.isBlank()) {
-                // クエリが空の場合は全件取得
-                realmManager.getDataList(Note::class.java)
-            } else {
-                realmManager.searchNotesByQuery(query)
-            }
-            _notes.value = result.sortedWith(
-                compareByDescending<Note> { it.noteType == NoteType.FREE.value }
-                    .thenByDescending { it.date }
-            )
+            val result =
+                if (query.isBlank()) {
+                    // クエリが空の場合は全件取得
+                    realmManager.getDataList(Note::class.java)
+                } else {
+                    realmManager.searchNotesByQuery(query)
+                }
+            _notes.value =
+                result.sortedWith(
+                    compareByDescending<Note> { it.noteType == NoteType.FREE.value }
+                        .thenByDescending { it.date },
+                )
             _isLoading.value = false
         }
     }
@@ -122,11 +125,12 @@ class NoteViewModel : ViewModel() {
      * @return タイトル
      */
     private fun getNoteTitle(note: Note): String {
-        val title = when (NoteType.fromInt(note.noteType)) {
-            NoteType.FREE -> note.title
-            NoteType.PRACTICE -> note.detail
-            NoteType.TOURNAMENT -> note.result
-        }
+        val title =
+            when (NoteType.fromInt(note.noteType)) {
+                NoteType.FREE -> note.title
+                NoteType.PRACTICE -> note.detail
+                NoteType.TOURNAMENT -> note.result
+            }
         return title
     }
 
@@ -137,11 +141,12 @@ class NoteViewModel : ViewModel() {
      * @return サブタイトル
      */
     private fun getNoteSubTitle(note: Note): String {
-        val subTitle = when (NoteType.fromInt(note.noteType)) {
-            NoteType.FREE -> note.detail
-            NoteType.PRACTICE -> formatDate(note.date)
-            NoteType.TOURNAMENT -> formatDate(note.date)
-        }
+        val subTitle =
+            when (NoteType.fromInt(note.noteType)) {
+                NoteType.FREE -> note.detail
+                NoteType.PRACTICE -> formatDate(note.date)
+                NoteType.TOURNAMENT -> formatDate(note.date)
+            }
         return subTitle
     }
 
@@ -159,12 +164,13 @@ class NoteViewModel : ViewModel() {
      * @param note Note
      * @return 背景色
      */
-    private  fun getBackgroundColor(note: Note): Color {
-        val backgroundColor = when (NoteType.fromInt(note.noteType)) {
-            NoteType.FREE -> Color.White
-            NoteType.PRACTICE -> realmManager.getNoteBackgroundColor(note.noteID)
-            NoteType.TOURNAMENT -> Color.White
-        }
+    private fun getBackgroundColor(note: Note): Color {
+        val backgroundColor =
+            when (NoteType.fromInt(note.noteType)) {
+                NoteType.FREE -> Color.White
+                NoteType.PRACTICE -> realmManager.getNoteBackgroundColor(note.noteID)
+                NoteType.TOURNAMENT -> Color.White
+            }
         return backgroundColor
     }
 
@@ -203,7 +209,7 @@ class NoteViewModel : ViewModel() {
             detail = note.detail,
             reflection = note.reflection,
             taskReflections = taskReflections,
-            created_at = note.created_at
+            created_at = note.created_at,
         )
     }
 
@@ -217,7 +223,7 @@ class NoteViewModel : ViewModel() {
         if (freeNote != null) return
         saveFreeNote(
             title = context.getString(R.string.freeNote),
-            detail = context.getString(R.string.defaltFreeNoteDetail)
+            detail = context.getString(R.string.defaltFreeNoteDetail),
         )
     }
 
@@ -232,18 +238,19 @@ class NoteViewModel : ViewModel() {
         noteId: String = UUID.randomUUID().toString(),
         title: String,
         detail: String,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
-        val note = Note().apply {
-            this.noteID = noteId
-            this.userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
-            this.noteType = NoteType.FREE.value
-            this.isDeleted = false
-            this.created_at = created_at
-            this.updated_at = Date()
-            this.title = title
-            this.detail = detail
-        }
+        val note =
+            Note().apply {
+                this.noteID = noteId
+                this.userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+                this.noteType = NoteType.FREE.value
+                this.isDeleted = false
+                this.created_at = created_at
+                this.updated_at = Date()
+                this.title = title
+                this.detail = detail
+            }
         realmManager.saveItem(note)
     }
 
@@ -270,24 +277,25 @@ class NoteViewModel : ViewModel() {
         consciousness: String,
         result: String,
         reflection: String,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
-        val note = Note().apply {
-            this.noteID = noteId
-            this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
-            this.noteType = NoteType.TOURNAMENT.value
-            this.isDeleted = false
-            this.created_at = created_at
-            this.updated_at = Date()
-            this.date = date
-            this.weather = weather
-            this.temperature = temperature
-            this.condition = condition
-            this.target = target
-            this.consciousness = consciousness
-            this.result = result
-            this.reflection = reflection
-        }
+        val note =
+            Note().apply {
+                this.noteID = noteId
+                this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+                this.noteType = NoteType.TOURNAMENT.value
+                this.isDeleted = false
+                this.created_at = created_at
+                this.updated_at = Date()
+                this.date = date
+                this.weather = weather
+                this.temperature = temperature
+                this.condition = condition
+                this.target = target
+                this.consciousness = consciousness
+                this.result = result
+                this.reflection = reflection
+            }
         realmManager.saveItem(note)
     }
 
@@ -314,24 +322,25 @@ class NoteViewModel : ViewModel() {
         detail: String,
         reflection: String,
         taskReflections: Map<TaskListData, String>,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
         // 練習ノートを保存
-        val note = Note().apply {
-            this.noteID = noteId
-            this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
-            this.noteType = NoteType.PRACTICE.value
-            this.isDeleted = false
-            this.created_at = created_at
-            this.updated_at = Date()
-            this.date = date
-            this.weather = weather
-            this.temperature = temperature
-            this.condition = condition
-            this.purpose = purpose
-            this.detail = detail
-            this.reflection = reflection
-        }
+        val note =
+            Note().apply {
+                this.noteID = noteId
+                this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+                this.noteType = NoteType.PRACTICE.value
+                this.isDeleted = false
+                this.created_at = created_at
+                this.updated_at = Date()
+                this.date = date
+                this.weather = weather
+                this.temperature = temperature
+                this.condition = condition
+                this.purpose = purpose
+                this.detail = detail
+                this.reflection = reflection
+            }
         realmManager.saveItem(note)
 
         // 取り組んだ課題のメモを保存
@@ -342,7 +351,7 @@ class NoteViewModel : ViewModel() {
                 memoID = taskListData.memoID,
                 measuresID = taskListData.measuresID,
                 noteID = noteId,
-                detail = reflectionText
+                detail = reflectionText,
             )
         }
     }

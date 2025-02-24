@@ -12,19 +12,28 @@ import com.example.sportsnote.R
  */
 data class ScreenConfig(
     val topBarTitle: String,
-    val showBottomBar: Boolean
+    val showBottomBar: Boolean,
 )
 
 sealed class Screen(val route: String) {
     object Task : Screen("task")
+
     object GroupView : Screen("group_view_screen/{groupId}")
+
     object TaskDetail : Screen("detail_task/{taskId}")
+
     object Measures : Screen("measures/{measuresId}")
+
     object CompletedTask : Screen("completed_task/{groupId}")
+
     object Note : Screen("note")
+
     object TournamentNoteView : Screen("tournament_note_view/{noteId}")
+
     object PracticeNoteView : Screen("practice_note_view/{noteId}")
+
     object FreeNoteView : Screen("free_note_view/{noteId}")
+
     object Target : Screen("target")
 
     // 各画面に対応する設定を定義
@@ -63,4 +72,3 @@ sealed class Screen(val route: String) {
         }
     }
 }
-

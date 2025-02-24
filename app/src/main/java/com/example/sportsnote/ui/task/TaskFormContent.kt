@@ -34,7 +34,7 @@ fun AddTaskFormContent(
     onTitleChange: (String) -> Unit,
     onCauseChange: (String) -> Unit,
     onMeasuresChange: (String) -> Unit,
-    onGroupChange: (Group) -> Unit
+    onGroupChange: (Group) -> Unit,
 ) {
     // グループリストを取得
     val groupViewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
@@ -47,48 +47,50 @@ fun AddTaskFormContent(
     val measures = remember { mutableStateOf(addTaskData.measuresTitle) }
     val group = remember { mutableStateOf(addTaskData.groupList.first()) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // タイトル
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title.value = updatedText },
-                initialText = title.value
-            )
-        },
-        // 原因
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.cause),
-                defaultLines = 3,
-                onTextChanged = { updatedText -> cause.value = updatedText },
-                initialText = cause.value
-            )
-        },
-        // 対策
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.measures),
-                onTextChanged = { updatedText -> measures.value = updatedText },
-                initialText = measures.value
-            )
-        },
-        // グループ
-        {
-            GroupPickerField(
-                groups = addTaskData.groupList,
-                onGroupSelected = { selectedGroup -> group.value = selectedGroup },
-                initialGroup = group.value
-            )
-        }
-    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // タイトル
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title.value = updatedText },
+                    initialText = title.value,
+                )
+            },
+            // 原因
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.cause),
+                    defaultLines = 3,
+                    onTextChanged = { updatedText -> cause.value = updatedText },
+                    initialText = cause.value,
+                )
+            },
+            // 対策
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.measures),
+                    onTextChanged = { updatedText -> measures.value = updatedText },
+                    initialText = measures.value,
+                )
+            },
+            // グループ
+            {
+                GroupPickerField(
+                    groups = addTaskData.groupList,
+                    onGroupSelected = { selectedGroup -> group.value = selectedGroup },
+                    initialGroup = group.value,
+                )
+            },
+        )
 
     // 入力欄のレイアウト
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         CustomSpacerColumn(items = inputFields)
 

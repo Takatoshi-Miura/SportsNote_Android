@@ -41,7 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sportsnote.R
 import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.ui.LocalNavController
@@ -60,9 +59,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun NoteScreen(
-    reloadTrigger: Int
-) {
+fun NoteScreen(reloadTrigger: Int) {
     val noteViewModel = NoteViewModel()
     val notes by noteViewModel.noteListItems.collectAsState()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -87,28 +84,30 @@ fun NoteScreen(
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            val actionItems = listOf(
-                stringResource(R.string.addPracticeNoteAction) to {
-                    isDialogVisible = true
-                    dialogType = DialogType.AddPracticeNote
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.addTournamentNoteAction) to {
-                    isDialogVisible = true
-                    dialogType = DialogType.AddTournamentNote
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.cancel) to {
-                    coroutineScope.launch { sheetState.hide() }
-                }
-            )
+            val actionItems =
+                listOf(
+                    stringResource(R.string.addPracticeNoteAction) to {
+                        isDialogVisible = true
+                        dialogType = DialogType.AddPracticeNote
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.addTournamentNoteAction) to {
+                        isDialogVisible = true
+                        dialogType = DialogType.AddTournamentNote
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.cancel) to {
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                )
             ActionBottomSheetContent(items = actionItems)
-        }
+        },
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(systemGray6)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(systemGray6),
         ) {
             Column {
                 // 検索バー
@@ -117,11 +116,11 @@ fun NoteScreen(
                     onQueryChanged = {
                         searchQuery = it
                         onRefresh()
-                    }
+                    },
                 )
                 SwipeRefresh(
                     state = swipeRefreshState,
-                    onRefresh = onRefresh
+                    onRefresh = onRefresh,
                 ) {
                     // ノート一覧
                     NoteListScreen(
@@ -138,7 +137,7 @@ fun NoteScreen(
                                     navController.navigate("tournament_note_view/${note.noteID}")
                                 }
                             }
-                        }
+                        },
                     )
                 }
             }
@@ -157,14 +156,14 @@ fun NoteScreen(
             onDismiss = {
                 isDialogVisible = false
                 onRefresh()
-            }
+            },
         )
     } else if (dialogType == DialogType.AddTournamentNote) {
         AddTournamentNoteScreen(
             onDismiss = {
                 isDialogVisible = false
                 onRefresh()
-            }
+            },
         )
     }
 }
@@ -178,23 +177,25 @@ fun NoteScreen(
 @Composable
 fun SearchBar(
     query: String,
-    onQueryChanged: (String) -> Unit
+    onQueryChanged: (String) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         // 虫眼鏡アイコン
         Icon(
             painter = painterResource(id = R.drawable.search_24px),
             contentDescription = null,
-            modifier = Modifier
-                .padding(start = 4.dp)
-                .size(24.dp),
-            tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+            modifier =
+                Modifier
+                    .padding(start = 4.dp)
+                    .size(24.dp),
+            tint = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
         )
 
         // テキスト入力フィールド
@@ -205,13 +206,14 @@ fun SearchBar(
             placeholder = {
                 Text(text = stringResource(R.string.searchNote))
             },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            singleLine = true
+            colors =
+                TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+            singleLine = true,
         )
     }
 }
@@ -219,18 +221,19 @@ fun SearchBar(
 @Composable
 fun NoteListScreen(
     notes: List<NoteListItem>,
-    onNoteClick: (NoteListItem) -> Unit
+    onNoteClick: (NoteListItem) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .background(Color.White)
-            .fillMaxWidth()
-            .fillMaxHeight()
+        modifier =
+            Modifier
+                .background(Color.White)
+                .fillMaxWidth()
+                .fillMaxHeight(),
     ) {
         items(notes) { note ->
             NoteListItem(
                 note = note,
-                onClick = { onNoteClick(note) }
+                onClick = { onNoteClick(note) },
             )
             Divider()
         }
@@ -240,44 +243,49 @@ fun NoteListScreen(
 @Composable
 fun NoteListItem(
     note: NoteListItem,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .height(56.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .height(56.dp),
     ) {
         if (NoteType.fromInt(note.noteType) == NoteType.FREE) {
             // ピン留めアイコン
             Box(
-                modifier = Modifier
-                    .width(24.dp)
-                    .fillMaxHeight(),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .width(24.dp)
+                        .fillMaxHeight(),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.keep_24dp),
                     contentDescription = "Item Icon",
-                    modifier = Modifier
-                        .size(24.dp)
+                    modifier =
+                        Modifier
+                            .size(24.dp),
                 )
             }
         } else {
             // 背景色だけの部品
             Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(24.dp)
-                    .background(note.backGroundColor)
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .width(24.dp)
+                        .background(note.backGroundColor),
             )
         }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-                .align(Alignment.CenterVertically)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically),
         ) {
             // 情報表示
             Text(
@@ -285,7 +293,7 @@ fun NoteListItem(
                 fontSize = 16.sp,
                 style = MaterialTheme.typography.body1,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = note.subTitle,
@@ -293,7 +301,7 @@ fun NoteListItem(
                 style = MaterialTheme.typography.body2,
                 color = Color.Gray,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -305,21 +313,23 @@ fun NoteListItem(
 @Composable
 fun NoteEmptyItem() {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp),
     ) {
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-                .align(Alignment.CenterVertically)
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+                    .align(Alignment.CenterVertically),
         ) {
             // 情報表示
             Text(
                 text = stringResource(R.string.emptyNote),
                 fontSize = 16.sp,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.body1,
             )
         }
     }

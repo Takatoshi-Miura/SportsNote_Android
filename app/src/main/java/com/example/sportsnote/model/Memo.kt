@@ -2,13 +2,13 @@ package com.example.sportsnote.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * メモ
  */
 open class Memo : RealmObject, Syncable {
-
     @PrimaryKey
     var memoID: String
 
@@ -40,7 +40,7 @@ open class Memo : RealmObject, Syncable {
         measuresID: String,
         noteID: String,
         detail: String,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
         this.memoID = memoID
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
@@ -65,5 +65,5 @@ data class MeasuresMemo(
     val measuresID: String,
     val noteID: String,
     val detail: String,
-    val date: Date
+    val date: Date,
 )

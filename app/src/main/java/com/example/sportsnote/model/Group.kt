@@ -3,13 +3,13 @@ package com.example.sportsnote.model
 import com.example.sportsnote.utils.Color
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * グループ
  */
 open class Group : RealmObject, Syncable {
-
     @PrimaryKey
     var groupID: String
 
@@ -39,7 +39,7 @@ open class Group : RealmObject, Syncable {
         title: String,
         colorId: Int,
         order: Int,
-        created_at: Date
+        created_at: Date,
     ) : this() {
         this.title = title
         this.color = colorId
@@ -55,5 +55,4 @@ open class Group : RealmObject, Syncable {
     override fun getId(): String {
         return groupID
     }
-
 }

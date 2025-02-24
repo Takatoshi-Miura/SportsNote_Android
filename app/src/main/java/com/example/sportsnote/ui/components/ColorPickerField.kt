@@ -15,7 +15,7 @@ import com.example.sportsnote.utils.Color
 @Composable
 fun ColorPickerField(
     onColorSelected: (Int) -> Unit,
-    initialColor: Int = Color.RED.id
+    initialColor: Int = Color.RED.id,
 ) {
     val context = LocalContext.current
 
@@ -25,6 +25,6 @@ fun ColorPickerField(
         initialSelected = Color.entries.first { it.id == initialColor },
         onItemSelected = { onColorSelected(it.id) },
         displayText = { it.getTitle(context = context) },
-        buttonColor = { it.toComposeColor() }
+        buttonColor = { it.toComposeColor() },
     )
 }

@@ -43,14 +43,16 @@ fun AddTournamentNoteScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -67,11 +69,11 @@ fun AddTournamentNoteScreen(
                             target = target.value,
                             consciousness = consciousness.value,
                             result = result.value,
-                            reflection = reflection.value
+                            reflection = reflection.value,
                         )
                         onDismiss()
                     },
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
                 )
 
                 // 共通フォーム
@@ -84,7 +86,7 @@ fun AddTournamentNoteScreen(
                     onTargetChange = { updatedTarget -> target.value = updatedTarget },
                     onConsciousnessChange = { updatedConsciousness -> consciousness.value = updatedConsciousness },
                     onResultChange = { updatedResult -> result.value = updatedResult },
-                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection }
+                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
                 )
             }
         }

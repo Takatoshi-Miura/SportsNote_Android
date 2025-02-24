@@ -15,13 +15,13 @@ import androidx.compose.runtime.Composable
 fun CustomTopAppBar(
     title: String,
     navigationIcon: @Composable (() -> Unit)? = null,
-    rightIcon: @Composable (() -> Unit)? = null
+    rightIcon: @Composable (() -> Unit)? = null,
 ) {
     TopAppBar(
         title = { Text(title) },
         navigationIcon = navigationIcon,
         actions = {
             rightIcon?.invoke()
-        }
+        },
     )
 }

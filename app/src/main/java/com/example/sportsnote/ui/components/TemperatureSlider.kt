@@ -26,20 +26,21 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TemperatureSlider(
     initialTemperature: Int = 20,
-    onTemperatureSelected: (Int) -> Unit
+    onTemperatureSelected: (Int) -> Unit,
 ) {
     var temperature by remember { mutableStateOf(initialTemperature.toFloat()) }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "気温: ${temperature.toInt()}℃",
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         // 気温スライダー
@@ -50,7 +51,7 @@ fun TemperatureSlider(
                 onTemperatureSelected(temperature.toInt())
             },
             valueRange = -40f..40f,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 }

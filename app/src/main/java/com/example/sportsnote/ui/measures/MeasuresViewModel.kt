@@ -7,7 +7,6 @@ import java.util.Date
 import java.util.UUID
 
 class MeasuresViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
 
     /**
@@ -44,15 +43,16 @@ class MeasuresViewModel : ViewModel() {
         taskId: String,
         title: String,
         order: Int = getMeasuresByTaskID(taskId).size,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ): Measures {
-        val measures = Measures(
-            measuresId = measuresId,
-            taskId = taskId,
-            title = title,
-            order = order,
-            created_at = created_at
-        )
+        val measures =
+            Measures(
+                measuresId = measuresId,
+                taskId = taskId,
+                title = title,
+                order = order,
+                created_at = created_at,
+            )
         realmManager.saveItem(measures)
         return measures
     }

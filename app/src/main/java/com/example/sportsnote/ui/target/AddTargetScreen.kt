@@ -47,7 +47,7 @@ import java.time.LocalDate
 @Composable
 fun AddTargetScreen(
     isYearlyTarget: Boolean,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val targetViewModel = TargetViewModel()
     val coroutineScope = rememberCoroutineScope()
@@ -57,16 +57,18 @@ fun AddTargetScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         val context = LocalContext.current
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -80,7 +82,7 @@ fun AddTargetScreen(
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.ErrorTitleEmpty),
-                                    Toast.LENGTH_SHORT
+                                    Toast.LENGTH_SHORT,
                                 ).show()
                             }
                             return@AddScreenHeader
@@ -90,11 +92,11 @@ fun AddTargetScreen(
                             title = title,
                             year = year,
                             month = month,
-                            isYearlyTarget = isYearlyTarget
+                            isYearlyTarget = isYearlyTarget,
                         )
                         onDismiss()
                     },
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
                 )
 
                 // Target共通フォーム
@@ -102,7 +104,7 @@ fun AddTargetScreen(
                     isYearlyTarget = isYearlyTarget,
                     onTitleChange = { title = it },
                     onYearChange = { year = it },
-                    onMonthChange = { month = it }
+                    onMonthChange = { month = it },
                 )
             }
         }
@@ -122,39 +124,41 @@ fun TargetFormContent(
     isYearlyTarget: Boolean,
     onTitleChange: (String) -> Unit,
     onYearChange: (Int) -> Unit,
-    onMonthChange: (Int) -> Unit
+    onMonthChange: (Int) -> Unit,
 ) {
     val currentDate = LocalDate.now()
     val title = remember { mutableStateOf("") }
     val year = remember { mutableStateOf(currentDate.year) }
     val month = remember { mutableStateOf(currentDate.monthValue) }
 
-    val inputFields: List<@Composable () -> Unit> = mutableListOf<@Composable () -> Unit>().apply {
-        // タイトル
-        add {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title.value = updatedText },
-                initialText = title.value
-            )
-        }
-        // 年の選択
-        add {
-            YearSelection(year = year)
-        }
-        // 月の選択
-        if (!isYearlyTarget) {
+    val inputFields: List<@Composable () -> Unit> =
+        mutableListOf<@Composable () -> Unit>().apply {
+            // タイトル
             add {
-                MonthSelection(month = month)
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title.value = updatedText },
+                    initialText = title.value,
+                )
+            }
+            // 年の選択
+            add {
+                YearSelection(year = year)
+            }
+            // 月の選択
+            if (!isYearlyTarget) {
+                add {
+                    MonthSelection(month = month)
+                }
             }
         }
-    }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         // 入力フィールド
         CustomSpacerColumn(items = inputFields)
@@ -179,7 +183,7 @@ fun YearSelection(year: MutableState<Int>) {
     SelectableDropdown(
         items = years,
         selectedValue = year,
-        label = stringResource(R.string.year)
+        label = stringResource(R.string.year),
     )
 }
 
@@ -195,7 +199,7 @@ fun MonthSelection(month: MutableState<Int>) {
     SelectableDropdown(
         items = months,
         selectedValue = month,
-        label = stringResource(R.string.month)
+        label = stringResource(R.string.month),
     )
 }
 
@@ -211,14 +215,14 @@ fun MonthSelection(month: MutableState<Int>) {
 fun SelectableDropdown(
     items: List<Int>,
     selectedValue: MutableState<Int>,
-    label: String
+    label: String,
 ) {
     var expanded by remember { mutableStateOf(false) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         TextField(
             value = "%02d".format(selectedValue.value),
@@ -228,18 +232,18 @@ fun SelectableDropdown(
             trailingIcon = {
                 Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = null)
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
                     onClick = {
                         selectedValue.value = item
                         expanded = false
-                    }
+                    },
                 ) {
                     Text(text = "%02d".format(item))
                 }

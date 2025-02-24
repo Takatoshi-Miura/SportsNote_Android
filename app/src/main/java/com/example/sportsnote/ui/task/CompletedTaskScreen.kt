@@ -51,9 +51,10 @@ fun CompletedTaskScreen(
     var isRefreshing by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             SideEffect {
@@ -76,25 +77,26 @@ fun CompletedTaskScreen(
                         taskListDatas = viewModel.getCompletedTasksByGroupId(groupId)
                         isRefreshing = false
                     }
-                }
+                },
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     if (taskListDatas.isEmpty()) {
                         // 空リストの場合でもスクロール可能な要素を追加
                         item {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(MaterialTheme.colors.surface)
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(MaterialTheme.colors.surface)
+                                        .padding(16.dp),
+                                contentAlignment = Alignment.Center,
                             ) {
                                 Text(
                                     text = stringResource(R.string.noData),
                                     style = MaterialTheme.typography.body1,
-                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f),
                                 )
                             }
                         }

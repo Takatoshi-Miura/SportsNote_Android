@@ -32,7 +32,7 @@ fun MultiLineTextInputField(
     placeholder: String = "$title を入力してください",
     defaultLines: Int = 1,
     onTextChanged: (String) -> Unit,
-    initialText: String = ""
+    initialText: String = "",
 ) {
     var text by remember { mutableStateOf(initialText) }
     val textHeight = remember { mutableStateOf(0) } // テキストの高さを動的に管理
@@ -44,7 +44,7 @@ fun MultiLineTextInputField(
             Text(
                 text = title,
                 style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier.padding(bottom = 4.dp),
             )
         }
         androidx.compose.material.OutlinedTextField(
@@ -56,11 +56,12 @@ fun MultiLineTextInputField(
                 textHeight.value = it.split("\n").size
             },
             placeholder = { Text(placeholder) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = lineHeight * defaultLines)
-                .padding(4.dp),
-            singleLine = false
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = lineHeight * defaultLines)
+                    .padding(4.dp),
+            singleLine = false,
         )
         // 動的に高さを更新する
         LaunchedEffect(textHeight.value) {

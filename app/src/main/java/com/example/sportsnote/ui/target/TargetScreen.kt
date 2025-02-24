@@ -53,9 +53,7 @@ import java.time.YearMonth
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TargetScreen(
-    reloadTrigger: Int
-) {
+fun TargetScreen(reloadTrigger: Int) {
     val targetViewModel = TargetViewModel()
     val noteViewModel = NoteViewModel()
     val targetNotes by noteViewModel.targetNotes.collectAsState()
@@ -77,32 +75,35 @@ fun TargetScreen(
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            val actionItems = listOf(
-                stringResource(R.string.AddYearTarget) to {
-                    isDialogVisible = true
-                    dialogType = DialogType.AddYearTarget
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.AddMonthTarget) to {
-                    isDialogVisible = true
-                    dialogType = DialogType.AddMonthTarget
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.cancel) to {
-                    coroutineScope.launch { sheetState.hide() }
-                }
-            )
+            val actionItems =
+                listOf(
+                    stringResource(R.string.AddYearTarget) to {
+                        isDialogVisible = true
+                        dialogType = DialogType.AddYearTarget
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.AddMonthTarget) to {
+                        isDialogVisible = true
+                        dialogType = DialogType.AddMonthTarget
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.cancel) to {
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                )
             ActionBottomSheetContent(items = actionItems)
-        }
+        },
     ) {
         Box(
-            modifier = Modifier
-                .background(systemGray6)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .background(systemGray6)
+                    .fillMaxSize(),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier =
+                    Modifier
+                        .fillMaxSize(),
             ) {
                 // 年間目標と月間目標
                 TargetDisplaySection(yearlyTarget, monthlyTarget)
@@ -117,7 +118,7 @@ fun TargetScreen(
                     onDateSelected = { date ->
                         selectedDate = date
                         noteViewModel.getNoteListByDate(date)
-                    }
+                    },
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +127,7 @@ fun TargetScreen(
                 NoteListSection(
                     notes = targetNotes,
                     onNoteClick = { note ->
-                        when(NoteType.fromInt(note.noteType)) {
+                        when (NoteType.fromInt(note.noteType)) {
                             NoteType.FREE -> { }
                             NoteType.PRACTICE -> {
                                 navController.navigate("practice_note_view/${note.noteID}")
@@ -135,7 +136,7 @@ fun TargetScreen(
                                 navController.navigate("tournament_note_view/${note.noteID}")
                             }
                         }
-                    }
+                    },
                 )
             }
 
@@ -152,13 +153,13 @@ fun TargetScreen(
         // 年間目標を追加
         AddTargetScreen(
             isYearlyTarget = true,
-            onDismiss = { isDialogVisible = false }
+            onDismiss = { isDialogVisible = false },
         )
     } else if (dialogType == DialogType.AddMonthTarget) {
         // 月間目標を追加
         AddTargetScreen(
             isYearlyTarget = false,
-            onDismiss = { isDialogVisible = false }
+            onDismiss = { isDialogVisible = false },
         )
     }
 }
@@ -172,13 +173,14 @@ fun TargetScreen(
 @Composable
 fun TargetDisplaySection(
     yearlyTarget: Target?,
-    monthlyTarget: Target?
+    monthlyTarget: Target?,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(8.dp),
     ) {
         Column {
             // 年間目標
@@ -204,9 +206,10 @@ fun TargetLabel(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.body1,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
     )
 }
 
@@ -219,13 +222,14 @@ fun TargetLabel(text: String) {
 @Composable
 fun NoteListSection(
     notes: List<NoteListItem>,
-    onNoteClick: (NoteListItem) -> Unit
+    onNoteClick: (NoteListItem) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(8.dp),
     ) {
         if (notes.isEmpty()) {
             item {
@@ -235,7 +239,7 @@ fun NoteListSection(
         items(notes) { note ->
             NoteListItem(
                 note = note,
-                onClick = { onNoteClick(note) }
+                onClick = { onNoteClick(note) },
             )
             Divider()
         }

@@ -17,7 +17,7 @@ import com.example.sportsnote.utils.Color
 fun GroupPickerField(
     groups: List<Group>,
     onGroupSelected: (Group) -> Unit,
-    initialGroup: Group
+    initialGroup: Group,
 ) {
     DropdownPickerField(
         fieldName = stringResource(R.string.group),
@@ -25,6 +25,6 @@ fun GroupPickerField(
         initialSelected = initialGroup,
         onItemSelected = onGroupSelected,
         displayText = { it.title },
-        buttonColor = { Color.fromInt(it.color).toComposeColor() }
+        buttonColor = { Color.fromInt(it.color).toComposeColor() },
     )
 }

@@ -5,13 +5,13 @@ import com.example.sportsnote.utils.NoteType
 import com.example.sportsnote.utils.Weather
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * ノート
  */
 open class Note : RealmObject, Syncable {
-
     @PrimaryKey
     var noteID: String
 
@@ -62,20 +62,20 @@ open class Note : RealmObject, Syncable {
     }
 
     // フリーノートのイニシャライザ
-    constructor(title: String): this() {
+    constructor(title: String) : this() {
         this.noteType = NoteType.FREE.value
         this.title = title
     }
 
     // 練習ノートのイニシャライザ
-    constructor(purpose: String, detail: String): this() {
+    constructor(purpose: String, detail: String) : this() {
         this.noteType = NoteType.PRACTICE.value
         this.purpose = purpose
         this.detail = detail
     }
 
     // 大会ノートのイニシャライザ
-    constructor(target: String, consciousness: String, result: String): this() {
+    constructor(target: String, consciousness: String, result: String) : this() {
         this.noteType = NoteType.TOURNAMENT.value
         this.target = target
         this.consciousness = consciousness
@@ -95,7 +95,7 @@ data class NoteListItem(
     val date: Date,
     val backGroundColor: Color,
     val title: String,
-    val subTitle: String
+    val subTitle: String,
 )
 
 /** 練習ノート詳細画面表示用 */
@@ -109,5 +109,5 @@ data class PracticeNote(
     val detail: String,
     val reflection: String,
     val taskReflections: Map<TaskListData, String>,
-    val created_at: Date
+    val created_at: Date,
 )

@@ -29,34 +29,36 @@ import com.example.sportsnote.utils.Color
 fun GroupFormContent(
     group: Group? = null,
     onTitleChange: (String) -> Unit,
-    onColorChange: (Int) -> Unit
+    onColorChange: (Int) -> Unit,
 ) {
     val title = remember { mutableStateOf(group?.title ?: "") }
     val color = remember { mutableStateOf(group?.color ?: Color.RED.id) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // タイトル
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title.value = updatedText },
-                initialText = title.value
-            )
-        },
-        // カラー
-        {
-            ColorPickerField(
-                onColorSelected = { selectedColor -> color.value = selectedColor },
-                initialColor = color.value
-            )
-        }
-    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // タイトル
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title.value = updatedText },
+                    initialText = title.value,
+                )
+            },
+            // カラー
+            {
+                ColorPickerField(
+                    onColorSelected = { selectedColor -> color.value = selectedColor },
+                    initialColor = color.value,
+                )
+            },
+        )
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
         // 入力フィールド
         CustomSpacerColumn(items = inputFields)

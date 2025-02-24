@@ -1,14 +1,17 @@
+
+@file:Suppress("ktlint:standard:property-naming")
+
 package com.example.sportsnote.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * 目標
  */
 open class Target : RealmObject, Syncable {
-
     @PrimaryKey
     var targetID: String
 

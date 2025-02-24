@@ -2,13 +2,13 @@ package com.example.sportsnote.model
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
-import java.util.*
+import java.util.Date
+import java.util.UUID
 
 /**
  * 対策
  */
 open class Measures : RealmObject, Syncable {
-
     @PrimaryKey
     var measuresID: String
 
@@ -38,7 +38,7 @@ open class Measures : RealmObject, Syncable {
         taskId: String,
         title: String,
         order: Int,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ) {
         this.measuresID = measuresId
         this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())

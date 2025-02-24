@@ -44,7 +44,7 @@ fun TaskDetailScreen(
     taskId: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val taskViewModel = TaskViewModel()
     val measuresViewModel = MeasuresViewModel()
@@ -61,58 +61,60 @@ fun TaskDetailScreen(
     val inputText = remember { mutableStateOf("") }
     val measuresList = remember { mutableStateListOf(*taskDetail.measuresList.toTypedArray()) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // タイトル
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title = updatedText },
-                initialText = title
-            )
-        },
-        // 原因
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.cause),
-                defaultLines = 3,
-                onTextChanged = { updatedText -> cause = updatedText },
-                initialText = cause
-            )
-        },
-        // 対策
-        {
-            Text(
-                text = stringResource(R.string.measures),
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(8.dp)
-            )
-            MeasuresListContent(
-                measuresList = measuresList,
-                onOrderChanged = {
-                    // TODO: 対策の並び順を更新
-                },
-                onItemClick = { measuresID ->
-                    coroutineScope.launch {
-                        // 非同期でsaveTaskを実行
-                        taskViewModel.saveTask(
-                            taskId = taskId,
-                            title = title,
-                            cause = cause,
-                            groupId = taskDetail.task.groupID,
-                            isComplete = isComplete,
-                            created_at = taskDetail.task.created_at
-                        )
-                        navController.navigate("measures/${measuresID}")
-                    }
-                }
-            )
-        }
-    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // タイトル
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title = updatedText },
+                    initialText = title,
+                )
+            },
+            // 原因
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.cause),
+                    defaultLines = 3,
+                    onTextChanged = { updatedText -> cause = updatedText },
+                    initialText = cause,
+                )
+            },
+            // 対策
+            {
+                Text(
+                    text = stringResource(R.string.measures),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(8.dp),
+                )
+                MeasuresListContent(
+                    measuresList = measuresList,
+                    onOrderChanged = {
+                        // TODO: 対策の並び順を更新
+                    },
+                    onItemClick = { measuresID ->
+                        coroutineScope.launch {
+                            // 非同期でsaveTaskを実行
+                            taskViewModel.saveTask(
+                                taskId = taskId,
+                                title = title,
+                                cause = cause,
+                                groupId = taskDetail.task.groupID,
+                                isComplete = isComplete,
+                                created_at = taskDetail.task.created_at,
+                            )
+                            navController.navigate("measures/$measuresID")
+                        }
+                    },
+                )
+            },
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -126,7 +128,7 @@ fun TaskDetailScreen(
                         cause = cause,
                         groupId = taskDetail.task.groupID,
                         isComplete = isComplete,
-                        created_at = taskDetail.task.created_at
+                        created_at = taskDetail.task.created_at,
                     )
                 },
                 onDelete = {
@@ -140,7 +142,7 @@ fun TaskDetailScreen(
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = rightIcon
-                }
+                },
             )
 
             // 共通フォーム
@@ -171,7 +173,7 @@ fun TaskDetailScreen(
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     } else if (dialogType == DialogType.AddMeasure) {
         // 対策追加ダイアログ
@@ -182,22 +184,24 @@ fun TaskDetailScreen(
             onConfirm = { input ->
                 coroutineScope.launch {
                     // 対策追加
-                    val newMeasure = measuresViewModel.saveMeasures(
-                        title = input,
-                        taskId = taskId
-                    )
+                    val newMeasure =
+                        measuresViewModel.saveMeasures(
+                            title = input,
+                            taskId = taskId,
+                        )
                     newMeasure.let { measuresList.add(it) }
                     showDialog.value = false
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     } else if (dialogType == DialogType.CompleteTask) {
-        val message = if (isComplete) {
-            stringResource(R.string.notCompleteTask)
-        } else {
-            stringResource(R.string.completeTaskMessage)
-        }
+        val message =
+            if (isComplete) {
+                stringResource(R.string.notCompleteTask)
+            } else {
+                stringResource(R.string.completeTaskMessage)
+            }
         // 完了確認ダイアログの表示
         CustomAlertDialog(
             title = stringResource(R.string.taskProgress),
@@ -211,13 +215,13 @@ fun TaskDetailScreen(
                         cause = cause,
                         groupId = taskDetail.task.groupID,
                         isComplete = !isComplete,
-                        created_at = taskDetail.task.created_at
+                        created_at = taskDetail.task.created_at,
                     )
                     showDialog.value = false
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }

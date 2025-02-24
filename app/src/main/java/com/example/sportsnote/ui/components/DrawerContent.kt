@@ -12,9 +12,7 @@ import kotlinx.coroutines.launch
  * @param scaffoldState ScaffoldState
  */
 @Composable
-fun DrawerContent(
-    scaffoldState: ScaffoldState
-) {
+fun DrawerContent(scaffoldState: ScaffoldState) {
     val coroutineScope = rememberCoroutineScope()
 
     // 設定画面を描画
@@ -23,6 +21,6 @@ fun DrawerContent(
             coroutineScope.launch {
                 scaffoldState.drawerState.close()
             }
-        }
+        },
     )
 }

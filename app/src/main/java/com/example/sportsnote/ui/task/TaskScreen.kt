@@ -48,9 +48,7 @@ import kotlinx.coroutines.launch
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TaskScreen(
-    reloadTrigger: Int
-) {
+fun TaskScreen(reloadTrigger: Int) {
     val taskViewModel = TaskViewModel()
     val groupViewModel = GroupViewModel()
     val taskLists by taskViewModel.taskLists.collectAsState()
@@ -78,26 +76,27 @@ fun TaskScreen(
     ModalBottomSheetLayout(
         sheetState = sheetState,
         sheetContent = {
-            val actionItems = listOf(
-                stringResource(R.string.addGroupAction) to {
-                    groupDialogVisible = true
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.addTaskAction) to {
-                    taskDialogVisible = true
-                    coroutineScope.launch { sheetState.hide() }
-                },
-                stringResource(R.string.cancel) to {
-                    coroutineScope.launch { sheetState.hide() }
-                }
-            )
+            val actionItems =
+                listOf(
+                    stringResource(R.string.addGroupAction) to {
+                        groupDialogVisible = true
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.addTaskAction) to {
+                        taskDialogVisible = true
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                    stringResource(R.string.cancel) to {
+                        coroutineScope.launch { sheetState.hide() }
+                    },
+                )
             ActionBottomSheetContent(items = actionItems)
-        }
+        },
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             SwipeRefresh(
                 state = swipeRefreshState,
-                onRefresh = onRefresh
+                onRefresh = onRefresh,
             ) {
                 // 課題一覧
                 TaskListScreen(
@@ -106,7 +105,7 @@ fun TaskScreen(
                     onInfoButtonClick = { group ->
                         // GroupViewScreenに遷移する
                         navController.navigate("group_view_screen/${group.groupID}")
-                    }
+                    },
                 )
             }
 
@@ -123,7 +122,7 @@ fun TaskScreen(
             onDismiss = {
                 groupDialogVisible = false
                 onRefresh()
-            }
+            },
         )
     }
     // 課題追加モーダル表示
@@ -132,7 +131,7 @@ fun TaskScreen(
             onDismiss = {
                 taskDialogVisible = false
                 onRefresh()
-            }
+            },
         )
     }
 }
@@ -148,28 +147,30 @@ fun TaskScreen(
 fun TaskListScreen(
     groups: List<Group>,
     taskList: List<TaskListData>,
-    onInfoButtonClick: (Group) -> Unit
+    onInfoButtonClick: (Group) -> Unit,
 ) {
     val navController = LocalNavController.current
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
     ) {
         items(groups) { group ->
             // グループ表示
             GroupHeaderView(
                 title = group.title,
                 colorId = group.color,
-                onInfoButtonClick = { onInfoButtonClick(group) }
+                onInfoButtonClick = { onInfoButtonClick(group) },
             )
             Divider()
 
             // 課題セルのリスト
-            val groupTasks = taskList
-                .filter { it.groupID == group.groupID }
-                .sortedBy { it.order }
+            val groupTasks =
+                taskList
+                    .filter { it.groupID == group.groupID }
+                    .sortedBy { it.order }
             groupTasks.forEach { task ->
                 TaskCell(task)
                 Divider()
@@ -177,21 +178,23 @@ fun TaskListScreen(
 
             // 完了した課題セル
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable {
-                        // CompletedTaskScreenに遷移する
-                        navController.navigate("completed_task/${group.groupID}")
-                    }
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .clickable {
+                            // CompletedTaskScreenに遷移する
+                            navController.navigate("completed_task/${group.groupID}")
+                        },
             ) {
                 Text(
                     text = stringResource(R.string.completedTask),
                     color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.body2,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .padding(start = 8.dp)
+                    modifier =
+                        Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(start = 8.dp),
                 )
             }
             Divider()

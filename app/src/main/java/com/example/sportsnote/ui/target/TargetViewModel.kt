@@ -1,7 +1,7 @@
 package com.example.sportsnote.ui.target
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 
 class TargetViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
 
     // カレンダーに表示している年月の目標を保持
@@ -31,7 +30,10 @@ class TargetViewModel : ViewModel() {
      * @param year 表示中の年
      * @param month 表示中の月
      */
-    fun getTargetByYearMonth(year: Int, month: Int) {
+    fun getTargetByYearMonth(
+        year: Int,
+        month: Int,
+    ) {
         val fetchedTargets = realmManager.fetchTargetsByYearMonth(year, month)
         _targets.value = fetchedTargets
 
@@ -59,7 +61,7 @@ class TargetViewModel : ViewModel() {
         year: Int,
         month: Int,
         isYearlyTarget: Boolean,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ): String {
         // 重複する目標を削除
         val fetchedTargets = realmManager.fetchTargetsByYearMonth(year, month)

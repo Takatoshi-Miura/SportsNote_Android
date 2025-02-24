@@ -28,7 +28,7 @@ import com.example.sportsnote.utils.Color
 @Composable
 fun AddGroupScreen(
     viewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var title by remember { mutableStateOf("") }
@@ -36,14 +36,16 @@ fun AddGroupScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -54,18 +56,18 @@ fun AddGroupScreen(
                         viewModel.saveGroup(
                             title = title,
                             colorId = color,
-                            order = null
+                            order = null,
                         )
                         onDismiss()
                     },
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
                 )
 
                 // 共通フォーム
                 GroupFormContent(
                     group = null,
                     onTitleChange = { title = it },
-                    onColorChange = { color = it }
+                    onColorChange = { color = it },
                 )
             }
         }

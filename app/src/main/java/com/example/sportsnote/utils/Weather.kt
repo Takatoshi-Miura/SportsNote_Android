@@ -1,8 +1,8 @@
 package com.example.sportsnote.utils
 
-import com.example.sportsnote.R
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.example.sportsnote.R
 
 /**
  * 天気
@@ -13,7 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 enum class Weather(val id: Int, val titleRes: Int) {
     SUNNY(0, R.string.sunny),
     CLOUDY(1, R.string.cloudy),
-    RAINY(2, R.string.rainy);
+    RAINY(2, R.string.rainy),
+    ;
 
     /**
      * タイトル文字列を取得

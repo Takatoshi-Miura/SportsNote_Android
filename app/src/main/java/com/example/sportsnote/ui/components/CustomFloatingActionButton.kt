@@ -24,18 +24,19 @@ fun CustomFloatingActionButton(onClick: () -> Unit) {
     val bottomNavigationHeight = 56.dp
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         FloatingActionButton(
             onClick = onClick,
             backgroundColor = MaterialTheme.colors.primary,
             contentColor = Color.White,
-            modifier = Modifier
-                .padding(
-                    end = 16.dp,
-                    bottom = 16.dp + bottomNavigationHeight
-                )
-                .align(Alignment.BottomEnd)
+            modifier =
+                Modifier
+                    .padding(
+                        end = 16.dp,
+                        bottom = 16.dp + bottomNavigationHeight,
+                    )
+                    .align(Alignment.BottomEnd),
         ) {
             Icon(Icons.Filled.Add, contentDescription = null)
         }

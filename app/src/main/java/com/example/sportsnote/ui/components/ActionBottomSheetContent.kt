@@ -17,21 +17,21 @@ import kotlinx.coroutines.Job
  * @param items リストの項目名とクリック動作のペア
  */
 @Composable
-fun ActionBottomSheetContent(
-    items: List<Pair<String, () -> Job>>
-) {
+fun ActionBottomSheetContent(items: List<Pair<String, () -> Job>>) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     ) {
         items.forEachIndexed { index, item ->
             Text(
                 text = item.first,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { item.second() }
-                    .padding(vertical = 16.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { item.second() }
+                        .padding(vertical = 16.dp),
             )
             if (index != items.lastIndex) {
                 Divider() // 最後の項目以外は区切り線を表示

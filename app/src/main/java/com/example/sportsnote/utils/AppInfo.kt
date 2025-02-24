@@ -4,7 +4,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 
 object AppInfo {
-
     /**
      * アプリバージョンを取得
      *

@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import com.example.sportsnote.R
 
 /**
  * ヘッダーコンポーネント
@@ -31,20 +31,22 @@ fun AddScreenHeader(
     title: String,
     onCancel: () -> Unit,
     onSave: suspend () -> Unit,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(MaterialTheme.colors.primary)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .background(MaterialTheme.colors.primary),
     ) {
         // キャンセルボタン
         Button(
             onClick = onCancel,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 8.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 8.dp),
         ) {
             Text(stringResource(R.string.cancel))
         }
@@ -54,7 +56,7 @@ fun AddScreenHeader(
             text = title,
             color = MaterialTheme.colors.onPrimary,
             style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
         )
 
         // 保存ボタン
@@ -64,9 +66,10 @@ fun AddScreenHeader(
                     onSave()
                 }
             },
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 8.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 8.dp),
         ) {
             Text(stringResource(R.string.save))
         }

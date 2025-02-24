@@ -41,14 +41,16 @@ fun AddTaskScreen(
 
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties =
+            DialogProperties(
+                usePlatformDefaultWidth = false,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -57,21 +59,22 @@ fun AddTaskScreen(
                     onCancel = onDismiss,
                     onSave = {
                         // 課題を保存
-                        val taskId = viewModel.saveTask(
-                            title = title,
-                            cause = cause,
-                            groupId = groupId
-                        )
+                        val taskId =
+                            viewModel.saveTask(
+                                title = title,
+                                cause = cause,
+                                groupId = groupId,
+                            )
                         // 対策を保存
                         if (measures.isNotBlank()) {
                             measuresViewModel.saveMeasures(
-                                taskId =  taskId,
-                                title = measures
+                                taskId = taskId,
+                                title = measures,
                             )
                         }
                         onDismiss()
                     },
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
                 )
 
                 // フォーム
@@ -79,7 +82,7 @@ fun AddTaskScreen(
                     onTitleChange = { title = it },
                     onCauseChange = { cause = it },
                     onMeasuresChange = { measures = it },
-                    onGroupChange = { groupId = it.groupID }
+                    onGroupChange = { groupId = it.groupID },
                 )
             }
         }

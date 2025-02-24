@@ -39,7 +39,7 @@ fun GroupViewScreen(
     groupId: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val group: Group? = viewModel.getGroupById(groupId)
     val coroutineScope = rememberCoroutineScope()
@@ -50,9 +50,10 @@ fun GroupViewScreen(
     val showDialog = remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -64,7 +65,7 @@ fun GroupViewScreen(
                         title = title,
                         colorId = color,
                         order = group?.order,
-                        created_at = group?.created_at ?: Date()
+                        created_at = group?.created_at ?: Date(),
                     )
                 },
                 onDelete = {
@@ -77,14 +78,14 @@ fun GroupViewScreen(
                     if (viewModel.getGroupCount() > 1) {
                         appBarRightIcon.value = rightIcon
                     }
-                }
+                },
             )
 
             // 共通フォーム
             GroupFormContent(
                 group = group,
                 onTitleChange = { title = it },
-                onColorChange = { color = it }
+                onColorChange = { color = it },
             )
         }
     }
@@ -102,7 +103,7 @@ fun GroupViewScreen(
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }

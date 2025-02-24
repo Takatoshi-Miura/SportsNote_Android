@@ -66,7 +66,7 @@ fun NavigationHost() {
             CustomTopAppBar(
                 title = screenConfig.topBarTitle,
                 navigationIcon = appBarNavigationIcon.value,
-                rightIcon = appBarRightIcon.value
+                rightIcon = appBarRightIcon.value,
             )
         },
         bottomBar = {
@@ -74,12 +74,12 @@ fun NavigationHost() {
                 BottomNavigationBar()
             }
         },
-        drawerContent = { DrawerContent(scaffoldState) }
+        drawerContent = { DrawerContent(scaffoldState) },
     ) { paddingValues ->
         NavHost(
             navController,
             startDestination = Screen.Task.route,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
         ) {
             // 課題タブTOP
             composable(Screen.Task.route) {
@@ -96,7 +96,7 @@ fun NavigationHost() {
                     groupId = groupId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // Task詳細
@@ -106,17 +106,17 @@ fun NavigationHost() {
                     taskId = taskId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // Measures詳細
             composable(Screen.Measures.route) { backStackEntry ->
                 val measuresId = backStackEntry.arguments?.getString("measuresId") ?: ""
                 MeasuresScreen(
-                    measuresID =  measuresId,
+                    measuresID = measuresId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // 完了した課題一覧
@@ -125,7 +125,7 @@ fun NavigationHost() {
                 CompletedTaskScreen(
                     groupId = groupId,
                     onBack = { navController.popBackStack() },
-                    appBarNavigationIcon = appBarNavigationIcon
+                    appBarNavigationIcon = appBarNavigationIcon,
                 )
             }
             // ノートタブTOP
@@ -143,7 +143,7 @@ fun NavigationHost() {
                     noteId = noteId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // 練習ノート詳細
@@ -153,7 +153,7 @@ fun NavigationHost() {
                     noteId = noteId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // フリーノート
@@ -163,7 +163,7 @@ fun NavigationHost() {
                     noteID = noteId,
                     onBack = { navController.popBackStack() },
                     appBarNavigationIcon = appBarNavigationIcon,
-                    appBarRightIcon = appBarRightIcon
+                    appBarRightIcon = appBarRightIcon,
                 )
             }
             // 目標タブTOP
@@ -187,12 +187,15 @@ fun NavigationHost() {
 @Composable
 fun DrawerToggleButton(
     coroutineScope: CoroutineScope,
-    drawerState: DrawerState
+    drawerState: DrawerState,
 ) {
     IconButton(onClick = {
         coroutineScope.launch {
-            if (drawerState.isClosed) drawerState.open()
-            else drawerState.close()
+            if (drawerState.isClosed) {
+                drawerState.open()
+            } else {
+                drawerState.close()
+            }
         }
     }) {
         Icon(Icons.Filled.Menu, contentDescription = "Menu")

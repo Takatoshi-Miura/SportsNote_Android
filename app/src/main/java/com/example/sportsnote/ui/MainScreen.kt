@@ -8,9 +8,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.sportsnote.ui.components.NavigationHost
 
 // CompositionLocalでNavControllerを共有
-val LocalNavController = compositionLocalOf<NavHostController> {
-    error("No NavController provided")
-}
+val LocalNavController =
+    compositionLocalOf<NavHostController> {
+        error("No NavController provided")
+    }
 
 @Composable
 fun MainScreen() {

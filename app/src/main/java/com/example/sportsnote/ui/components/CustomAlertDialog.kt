@@ -29,7 +29,7 @@ enum class DialogType {
     CreateAccount,
     DeleteAccount,
     AddYearTarget,
-    AddMonthTarget
+    AddMonthTarget,
 }
 
 /**
@@ -44,12 +44,12 @@ enum class DialogType {
  */
 @Composable
 fun CustomAlertDialog(
-    title: String ,
+    title: String,
     message: String,
     confirmButtonText: String = "OK",
     onConfirm: () -> Unit,
     dismissButtonText: String = stringResource(R.string.cancel),
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
 ) {
     AlertDialog(
         onDismissRequest = { },
@@ -59,7 +59,7 @@ fun CustomAlertDialog(
             TextButton(
                 onClick = {
                     onConfirm()
-                }
+                },
             ) {
                 Text(confirmButtonText)
             }
@@ -68,11 +68,11 @@ fun CustomAlertDialog(
             TextButton(
                 onClick = {
                     showDialog.value = false
-                }
+                },
             ) {
                 Text(dismissButtonText)
             }
-        }
+        },
     )
 }
 
@@ -95,7 +95,7 @@ fun TextInputDialog(
     confirmButtonText: String = "OK",
     onConfirm: (String) -> Unit,
     dismissButtonText: String = stringResource(R.string.cancel),
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
 ) {
     AlertDialog(
         onDismissRequest = { showDialog.value = false },
@@ -107,7 +107,7 @@ fun TextInputDialog(
                     value = inputTextState.value,
                     onValueChange = { inputTextState.value = it },
                     modifier = androidx.compose.ui.Modifier.fillMaxWidth(),
-                    placeholder = { Text("対策を入力してください") }
+                    placeholder = { Text("対策を入力してください") },
                 )
             }
         },
@@ -116,7 +116,7 @@ fun TextInputDialog(
                 onClick = {
                     onConfirm(inputTextState.value)
                     showDialog.value = false
-                }
+                },
             ) {
                 Text(confirmButtonText)
             }
@@ -125,11 +125,11 @@ fun TextInputDialog(
             TextButton(
                 onClick = {
                     showDialog.value = false
-                }
+                },
             ) {
                 Text(dismissButtonText)
             }
-        }
+        },
     )
 }
 
@@ -144,7 +144,7 @@ fun TextInputDialog(
 fun TaskSelectionDialog(
     tasks: List<TaskListData>,
     onTaskSelected: (TaskListData) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -157,12 +157,12 @@ fun TaskSelectionDialog(
                     Column {
                         tasks.forEach { task ->
                             TextButton(
-                                onClick = { onTaskSelected(task) }
+                                onClick = { onTaskSelected(task) },
                             ) {
                                 Text(
                                     text = task.title,
                                     maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
+                                    overflow = TextOverflow.Ellipsis,
                                 )
                             }
                         }
@@ -174,6 +174,6 @@ fun TaskSelectionDialog(
             TextButton(onClick = onDismiss) {
                 Text(stringResource(R.string.close))
             }
-        }
+        },
     )
 }

@@ -35,7 +35,7 @@ fun PracticeNoteViewScreen(
     noteId: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val viewModel = NoteViewModel()
     val note: PracticeNote = viewModel.getPracticeNote(noteId = noteId)
@@ -53,9 +53,10 @@ fun PracticeNoteViewScreen(
     val taskReflections = remember { mutableStateOf<Map<TaskListData, String>>(emptyMap()) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -72,7 +73,7 @@ fun PracticeNoteViewScreen(
                         detail = detail.value,
                         reflection = reflection.value,
                         taskReflections = taskReflections.value,
-                        created_at = note.created_at
+                        created_at = note.created_at,
                     )
                 },
                 onDelete = {
@@ -82,7 +83,7 @@ fun PracticeNoteViewScreen(
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = rightIcon
-                }
+                },
             )
 
             // 共通フォーム
@@ -95,7 +96,7 @@ fun PracticeNoteViewScreen(
                 onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
                 onDetailChange = { updateDetail -> detail.value = updateDetail },
                 onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
-                onTaskReflectionsChange = { taskReflections.value = it }
+                onTaskReflectionsChange = { taskReflections.value = it },
             )
         }
     }
@@ -113,7 +114,7 @@ fun PracticeNoteViewScreen(
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }

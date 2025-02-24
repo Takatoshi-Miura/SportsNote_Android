@@ -47,7 +47,7 @@ fun MeasuresScreen(
     measuresID: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
-    appBarRightIcon: MutableState<(@Composable () -> Unit)?>
+    appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val measuresViewModel = MeasuresViewModel()
     val measures = measuresViewModel.getMeasuresById(measuresID)
@@ -60,42 +60,44 @@ fun MeasuresScreen(
     var title by remember { mutableStateOf(measures!!.title) }
     val showDialog = remember { mutableStateOf(false) }
 
-    val inputFields: List<@Composable () -> Unit> = listOf(
-        // タイトル
-        {
-            MultiLineTextInputField(
-                title = stringResource(R.string.title),
-                onTextChanged = { updatedText -> title = updatedText },
-                initialText = title
-            )
-        },
-        // ノート（メモ）
-        {
-            Text(
-                text = stringResource(R.string.note),
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(8.dp)
-            )
-            // 関連するメモを表示
-            LazyColumn {
-                items(memos.size) { index ->
-                    val memo = memos[index]
-                    MemoItem(
-                        memo = memo,
-                        onClick = {
-                            navController.navigate("practice_note_view/${memo.noteID}")
-                        }
-                    )
+    val inputFields: List<@Composable () -> Unit> =
+        listOf(
+            // タイトル
+            {
+                MultiLineTextInputField(
+                    title = stringResource(R.string.title),
+                    onTextChanged = { updatedText -> title = updatedText },
+                    initialText = title,
+                )
+            },
+            // ノート（メモ）
+            {
+                Text(
+                    text = stringResource(R.string.note),
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.padding(8.dp),
+                )
+                // 関連するメモを表示
+                LazyColumn {
+                    items(memos.size) { index ->
+                        val memo = memos[index]
+                        MemoItem(
+                            memo = memo,
+                            onClick = {
+                                navController.navigate("practice_note_view/${memo.noteID}")
+                            },
+                        )
+                    }
                 }
-            }
-            Divider()
-        }
-    )
+                Divider()
+            },
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -107,7 +109,7 @@ fun MeasuresScreen(
                         measuresId = measuresID,
                         taskId = measures!!.taskID,
                         title = title,
-                        created_at = measures.created_at
+                        created_at = measures.created_at,
                     )
                 },
                 onDelete = {
@@ -117,7 +119,7 @@ fun MeasuresScreen(
                 updateAppBar = { navigationIcon, rightIcon ->
                     appBarNavigationIcon.value = navigationIcon
                     appBarRightIcon.value = rightIcon
-                }
+                },
             )
 
             // 共通フォーム
@@ -139,7 +141,7 @@ fun MeasuresScreen(
                     onBack()
                 }
             },
-            showDialog = showDialog
+            showDialog = showDialog,
         )
     }
 }
@@ -153,23 +155,24 @@ fun MeasuresScreen(
 @Composable
 fun MemoItem(
     memo: MeasuresMemo,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
+                .padding(8.dp),
     ) {
         Divider()
         Text(
             text = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(memo.date),
             style = MaterialTheme.typography.body2,
-            color = Color.Gray
+            color = Color.Gray,
         )
         Text(
             text = memo.detail,
-            style = MaterialTheme.typography.body1
+            style = MaterialTheme.typography.body1,
         )
     }
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color as ComposeColor
 enum class Color(
     val id: Int,
     val titleRes: Int,
-    val colorValue: ComposeColor
+    val colorValue: ComposeColor,
 ) {
     RED(0, R.string.red, ComposeColor(0xFFFF0000)),
     PINK(1, R.string.pink, ComposeColor(0xFFFFC0CB)),
@@ -23,7 +23,8 @@ enum class Color(
     GREEN(4, R.string.green, ComposeColor(0xFF008000)),
     BLUE(5, R.string.blue, ComposeColor(0xFF0000FF)),
     PURPLE(6, R.string.purple, ComposeColor(0xFF800080)),
-    GRAY(7, R.string.gray, ComposeColor(0xFF808080));
+    GRAY(7, R.string.gray, ComposeColor(0xFF808080)),
+    ;
 
     /**
      * タイトル文字列を取得

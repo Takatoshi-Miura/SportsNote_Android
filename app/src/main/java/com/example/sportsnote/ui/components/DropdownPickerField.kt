@@ -35,31 +35,33 @@ fun <T> DropdownPickerField(
     initialSelected: T,
     onItemSelected: (T) -> Unit,
     displayText: (T) -> String,
-    buttonColor: @Composable (T) -> AndroidColor = { MaterialTheme.colors.primary }
+    buttonColor: @Composable (T) -> AndroidColor = { MaterialTheme.colors.primary },
 ) {
     var selectedItem by remember { mutableStateOf(initialSelected) }
     var expanded by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
     ) {
         // 項目名
         Text(
             text = fieldName,
             style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
 
         // 選択ボタン
         Button(
             onClick = { expanded = true },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = buttonColor(selectedItem),
-                contentColor = AndroidColor.White
-            )
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor(selectedItem),
+                    contentColor = AndroidColor.White,
+                ),
         ) {
             Text(displayText(selectedItem))
         }
@@ -67,7 +69,7 @@ fun <T> DropdownPickerField(
         // 選択項目
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
@@ -75,7 +77,7 @@ fun <T> DropdownPickerField(
                         selectedItem = item
                         onItemSelected(item)
                         expanded = false
-                    }
+                    },
                 ) {
                     Text(displayText(item))
                 }

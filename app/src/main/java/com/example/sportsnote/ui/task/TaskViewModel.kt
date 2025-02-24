@@ -14,9 +14,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.UUID
 
-
 class TaskViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
     private val _tasks = MutableStateFlow<List<TaskData>>(emptyList())
     val tasks: StateFlow<List<TaskData>> = _tasks
@@ -58,11 +56,12 @@ class TaskViewModel : ViewModel() {
     fun convertTaskDataToTaskListData(task: TaskData): TaskListData {
         // 最優先の対策を取得
         val measuresList = realmManager.getMeasuresByTaskID(task.taskID)
-        val (measuresTitle, measuresID) = if (measuresList.isNotEmpty()) {
-            measuresList.first().let { it.title to it.measuresID }
-        } else {
-            "" to "" // 空の値を設定
-        }
+        val (measuresTitle, measuresID) =
+            if (measuresList.isNotEmpty()) {
+                measuresList.first().let { it.title to it.measuresID }
+            } else {
+                "" to "" // 空の値を設定
+            }
 
         // グループカラーを取得
         val group = realmManager.getObjectById<Group>(task.groupID) ?: Group()
@@ -75,7 +74,7 @@ class TaskViewModel : ViewModel() {
             measuresID = measuresID,
             measures = measuresTitle,
             memoID = null,
-            order = task.order
+            order = task.order,
         )
     }
 
@@ -85,9 +84,7 @@ class TaskViewModel : ViewModel() {
      * @param groupID groupID
      * @return List<TaskListData>
      */
-    fun getCompletedTasksByGroupId(
-        groupID: String
-    ): List<TaskListData> {
+    fun getCompletedTasksByGroupId(groupID: String): List<TaskListData> {
         val taskListDatas = mutableListOf<TaskListData>()
         val tasks = realmManager.getCompletedTasksByGroupId(groupID)
         tasks.forEach { task ->
@@ -103,14 +100,12 @@ class TaskViewModel : ViewModel() {
      * @param taskID taskID
      * @return TaskDetailData
      */
-    fun getTaskByTaskId(
-        taskID: String
-    ): TaskDetailData {
+    fun getTaskByTaskId(taskID: String): TaskDetailData {
         val taskData = realmManager.getObjectById<TaskData>(taskID)
         val measuresList = realmManager.getMeasuresByTaskID(taskID)
         return TaskDetailData(
             task = taskData!!,
-            measuresList = measuresList
+            measuresList = measuresList,
         )
     }
 
@@ -130,16 +125,17 @@ class TaskViewModel : ViewModel() {
         cause: String,
         groupId: String,
         isComplete: Boolean = false,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ): String {
-        val task = TaskData(
-            taskId = taskId,
-            title = title,
-            cause = cause,
-            groupId = groupId,
-            isComplete = isComplete,
-            created_at = created_at
-        )
+        val task =
+            TaskData(
+                taskId = taskId,
+                title = title,
+                cause = cause,
+                groupId = groupId,
+                isComplete = isComplete,
+                created_at = created_at,
+            )
         realmManager.saveItem(task)
         return taskId
     }

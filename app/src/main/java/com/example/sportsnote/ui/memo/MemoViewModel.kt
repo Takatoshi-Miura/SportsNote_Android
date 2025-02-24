@@ -9,7 +9,6 @@ import java.util.Date
 import java.util.UUID
 
 class MemoViewModel : ViewModel() {
-
     private val realmManager: RealmManager = RealmManager()
 
     /**
@@ -23,13 +22,14 @@ class MemoViewModel : ViewModel() {
         val memoList = mutableListOf<MeasuresMemo>()
         measuresMemos.forEach { memo ->
             val note = realmManager.getObjectById<Note>(memo.noteID) ?: return@forEach
-            val measuresMemo = MeasuresMemo(
-                memoID = memo.memoID,
-                measuresID = memo.measuresID,
-                noteID = memo.noteID,
-                detail = memo.detail,
-                date = note.date
-            )
+            val measuresMemo =
+                MeasuresMemo(
+                    memoID = memo.memoID,
+                    measuresID = memo.measuresID,
+                    noteID = memo.noteID,
+                    detail = memo.detail,
+                    date = note.date,
+                )
             memoList.add(measuresMemo)
         }
         return memoList.sortedByDescending { it.date }
@@ -49,16 +49,17 @@ class MemoViewModel : ViewModel() {
         measuresID: String,
         noteID: String,
         detail: String,
-        created_at: Date = Date()
+        created_at: Date = Date(),
     ): Memo {
         val finalMemoID = memoID ?: UUID.randomUUID().toString()
-        val memo = Memo(
-            memoID = finalMemoID,
-            measuresID = measuresID,
-            noteID = noteID,
-            detail = detail,
-            created_at = created_at
-        )
+        val memo =
+            Memo(
+                memoID = finalMemoID,
+                measuresID = measuresID,
+                noteID = noteID,
+                detail = detail,
+                created_at = created_at,
+            )
         realmManager.saveItem(memo)
         return memo
     }
