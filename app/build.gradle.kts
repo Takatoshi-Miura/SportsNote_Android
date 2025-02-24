@@ -2,8 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.ktlint)
     id("realm-android")
     id("com.google.gms.google-services")
+}
+
+ktlint {
+    filter {
+        exclude { it.file.path.contains("generated") }
+    }
 }
 
 android {
