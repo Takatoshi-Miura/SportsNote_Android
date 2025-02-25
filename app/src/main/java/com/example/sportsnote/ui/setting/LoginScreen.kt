@@ -202,7 +202,7 @@ fun LoginScreen(onDismiss: () -> Unit) {
 
             // メッセージ表示
             if (!message.isNullOrEmpty()) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                 viewModel.resetMessage()
             }
 
@@ -231,7 +231,12 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.createAccount),
                     message = stringResource(R.string.createAccountMessage),
                     onConfirm = {
-                        viewModel.createAccount(email.value, password.value, context)
+                        viewModel.createAccount(
+                            email = email.value,
+                            password = password.value,
+                            onSuccess = { onDismiss() },
+                            context = context
+                        )
                         dialogType = DialogType.None
                         showDialog.value = false
                     },

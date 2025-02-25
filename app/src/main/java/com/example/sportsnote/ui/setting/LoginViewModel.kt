@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.ui.InitializationManager
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -72,6 +74,7 @@ class LoginViewModel : ViewModel() {
                 // TOPに戻る
                 _isLoggedIn.value = true
                 _message.value = context.getString(R.string.loginSuccess)
+                delay(2000)
                 onSuccess()
             } catch (e: Exception) {
                 _message.value = e.message ?: context.getString(R.string.loginError)
@@ -100,10 +103,13 @@ class LoginViewModel : ViewModel() {
      *
      * @param email メールアドレス
      * @param password パスワード
+     * @param onSuccess アカウント作成成功時の処理
+     * @param context Context
      */
     fun createAccount(
         email: String,
         password: String,
+        onSuccess: () -> Unit,
         context: Context,
     ) {
         if (email.isBlank() || password.isBlank()) {
@@ -112,15 +118,27 @@ class LoginViewModel : ViewModel() {
         }
         viewModelScope.launch {
             try {
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        _isLoggedIn.value = true
-                        _message.value = context.getString(R.string.createAccountSuccess)
-                        PreferencesManager.set(key = PreferencesManager.Keys.ADDRESS, value = email)
-                        PreferencesManager.set(key = PreferencesManager.Keys.PASSWORD, value = password)
-                    } else {
-                        _message.value = task.exception?.message ?: context.getString(R.string.createAccountFailed)
-                    }
+                val result = auth.createUserWithEmailAndPassword(email, password).await()
+                if (result.user != null) {
+                    // ログイン情報を保存
+                    PreferencesManager.set(PreferencesManager.Keys.USER_ID, result.user?.uid)
+                    PreferencesManager.set(PreferencesManager.Keys.ADDRESS, email)
+                    PreferencesManager.set(PreferencesManager.Keys.PASSWORD, password)
+
+                    // RealmデータのuserIDを新しいIDに更新
+                    val realmManager = RealmManager()
+                    realmManager.updateAllUserIds(userId = result.user!!.uid)
+
+                    // データ同期
+                    SyncManager.syncAllData()
+
+                    // TOPに戻る
+                    _isLoggedIn.value = true
+                    _message.value = context.getString(R.string.createAccountSuccess)
+                    delay(2000)
+                    onSuccess()
+                } else {
+                    _message.value = context.getString(R.string.createAccountFailed)
                 }
             } catch (e: Exception) {
                 _message.value = e.message

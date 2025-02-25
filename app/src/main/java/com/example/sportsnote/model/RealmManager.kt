@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.ui.graphics.Color
 import com.example.sportsnote.utils.NoteType
 import io.realm.Case
+import io.realm.DynamicRealm
+import io.realm.DynamicRealmObject
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
@@ -77,6 +79,30 @@ class RealmManager {
             realmTransaction.insertOrUpdate(item)
         }
     }
+
+    /**
+     * すべてのデータの userID を指定した値に更新する
+     *
+     * @param userId 更新後の userID
+     */
+    suspend fun updateAllUserIds(userId: String) {
+        withContext(Dispatchers.IO) {
+            val config = Realm.getDefaultInstance().configuration
+            DynamicRealm.getInstance(config).use { dynamicRealm ->
+                dynamicRealm.executeTransaction { transactionRealm ->
+                    val allSchemaClasses = transactionRealm.configuration.realmObjectClasses
+                    allSchemaClasses.forEach { clazz ->
+                        val results = transactionRealm.where(clazz.simpleName).findAll()
+                        results.forEach { obj ->
+                            val dynamicObj = obj as DynamicRealmObject
+                            if (dynamicObj.hasField("userID"))
+                                dynamicObj.set("userID", userId)
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     /**
      * 指定したクラスに対応するプライマリキーのプロパティ名を取得
