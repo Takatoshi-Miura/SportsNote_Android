@@ -250,7 +250,13 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.deleteAccount),
                     message = stringResource(R.string.deleteAccountMessage),
                     onConfirm = {
-                        viewModel.deleteAccount(context)
+                        viewModel.deleteAccount(
+                            onSuccess = {
+                                email.value = ""
+                                password.value = ""
+                            },
+                            context = context
+                        )
                         dialogType = DialogType.None
                         showDialog.value = false
                     },

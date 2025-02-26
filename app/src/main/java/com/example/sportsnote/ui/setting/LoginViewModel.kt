@@ -89,13 +89,14 @@ class LoginViewModel : ViewModel() {
      */
     suspend fun logout(context: Context) {
         auth.signOut()
-        _isLoggedIn.value = false
-        _message.value = context.getString(R.string.logoutSuccess)
 
         // データを全削除＆初期化
         val initializationManager = InitializationManager(context)
         initializationManager.deleteAllData()
         initializationManager.initializeApp()
+
+        _isLoggedIn.value = false
+        _message.value = context.getString(R.string.logoutSuccess)
     }
 
     /**
@@ -148,26 +149,40 @@ class LoginViewModel : ViewModel() {
 
     /**
      * アカウント削除
+     *
+     * @param onSuccess アカウント削除成功時の処理
+     * @param context Context
      */
-    fun deleteAccount(context: Context) {
+    fun deleteAccount(
+        onSuccess: () -> Unit,
+        context: Context
+    ) {
         if (!_isLoggedIn.value) {
             _message.value = context.getString(R.string.pleaseLogin)
             return
         }
-        val user = auth.currentUser
-        if (user != null) {
-            user.delete().addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _isLoggedIn.value = false
-                    _message.value = context.getString(R.string.deleteAccountSuccess)
-                    PreferencesManager.remove(PreferencesManager.Keys.ADDRESS)
-                    PreferencesManager.remove(PreferencesManager.Keys.PASSWORD)
-                } else {
-                    _message.value = task.exception?.message ?: context.getString(R.string.deleteAccountFailed)
-                }
-            }
-        } else {
+
+        val user = auth.currentUser ?: run {
             _message.value = context.getString(R.string.pleaseLogin)
+            return
+        }
+
+        user.delete().addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                _message.value = task.exception?.message ?: context.getString(R.string.deleteAccountFailed)
+                return@addOnCompleteListener
+            }
+
+            viewModelScope.launch {
+                // データを全削除＆初期化
+                val initializationManager = InitializationManager(context)
+                initializationManager.deleteAllData()
+                initializationManager.initializeApp()
+                onSuccess()
+
+                _isLoggedIn.value = false
+                _message.value = context.getString(R.string.deleteAccountSuccess)
+            }
         }
     }
 
