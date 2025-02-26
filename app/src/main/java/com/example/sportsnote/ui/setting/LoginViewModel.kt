@@ -66,6 +66,7 @@ class LoginViewModel : ViewModel() {
                 PreferencesManager.set(PreferencesManager.Keys.USER_ID, auth.currentUser?.uid)
                 PreferencesManager.set(PreferencesManager.Keys.ADDRESS, email)
                 PreferencesManager.set(PreferencesManager.Keys.PASSWORD, password)
+                PreferencesManager.set(PreferencesManager.Keys.IS_LOGIN, true)
                 initializationManager.initializeApp(isLogin = true)
 
                 // データ同期
@@ -125,6 +126,7 @@ class LoginViewModel : ViewModel() {
                     PreferencesManager.set(PreferencesManager.Keys.USER_ID, result.user?.uid)
                     PreferencesManager.set(PreferencesManager.Keys.ADDRESS, email)
                     PreferencesManager.set(PreferencesManager.Keys.PASSWORD, password)
+                    PreferencesManager.set(PreferencesManager.Keys.IS_LOGIN, true)
 
                     // RealmデータのuserIDを新しいIDに更新
                     val realmManager = RealmManager()

@@ -19,6 +19,7 @@ object PreferencesManager {
         const val USER_ID = "userID" // アカウント持ちならFirebaseID、なければ端末のUID
         const val ADDRESS = "address" // アカウントのメールアドレス
         const val PASSWORD = "password" // アカウントのパスワード
+        const val IS_LOGIN = "isLogin" // ログイン状態
         const val AGREE = "agree" // 利用規約への同意状況
     }
 

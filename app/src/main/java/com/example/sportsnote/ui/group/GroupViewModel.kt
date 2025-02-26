@@ -76,6 +76,7 @@ class GroupViewModel : ViewModel() {
      * @param colorId カラーID
      * @param order 並び順
      * @param created_at 作成日付
+     * @return 保存したGroupオブジェクト
      */
     suspend fun saveGroup(
         groupId: String = UUID.randomUUID().toString(),
@@ -83,7 +84,7 @@ class GroupViewModel : ViewModel() {
         colorId: Int,
         order: Int?,
         created_at: Date = Date(),
-    ) {
+    ): Group {
         val group =
             Group(
                 groupId = groupId,
@@ -93,6 +94,7 @@ class GroupViewModel : ViewModel() {
                 created_at = created_at,
             )
         realmManager.saveItem(group)
+        return group
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.example.sportsnote.ui.group
 
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,7 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Group
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 import com.example.sportsnote.utils.Color
@@ -60,13 +63,17 @@ fun GroupViewScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
-                    viewModel.saveGroup(
-                        groupId = groupId,
-                        title = title,
-                        colorId = color,
-                        order = group?.order,
-                        created_at = group?.created_at ?: Date(),
-                    )
+                    val savedGroup =
+                        viewModel.saveGroup(
+                            groupId = groupId,
+                            title = title,
+                            colorId = color,
+                            order = group?.order,
+                            created_at = group?.created_at ?: Date(),
+                        )
+                    if (PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+                        FirebaseManager.saveGroup(savedGroup)
+                    }
                 },
                 onDelete = {
                     showDialog.value = true
