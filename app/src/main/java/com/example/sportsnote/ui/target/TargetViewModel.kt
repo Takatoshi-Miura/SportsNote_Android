@@ -3,6 +3,8 @@ package com.example.sportsnote.ui.target
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.sportsnote.model.FirebaseManager
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,15 +66,18 @@ class TargetViewModel : ViewModel() {
         created_at: Date = Date(),
     ): String {
         // 重複する目標を削除
+        var deletedTargetID: String? = null
         val fetchedTargets = realmManager.fetchTargetsByYearMonth(year, month)
         if (isYearlyTarget) {
             val yearlyTarget = fetchedTargets.firstOrNull { it.isYearlyTarget }
             if (yearlyTarget != null) {
+                deletedTargetID = yearlyTarget.targetID
                 realmManager.logicalDelete<Target>(yearlyTarget.targetID)
             }
         } else {
             val monthlyTarget = fetchedTargets.firstOrNull { !it.isYearlyTarget }
             if (monthlyTarget != null) {
+                deletedTargetID = monthlyTarget.targetID
                 realmManager.logicalDelete<Target>(monthlyTarget.targetID)
             }
         }
@@ -85,6 +90,16 @@ class TargetViewModel : ViewModel() {
         target.isYearlyTarget = isYearlyTarget
         target.created_at = created_at
         realmManager.saveItem(target)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return target.targetID
+        }
+        val deletedTarget = deletedTargetID?.let { realmManager.getObjectById<Target>(it) }
+        if (deletedTarget != null) {
+            FirebaseManager.updateTarget(deletedTarget)
+        }
+        FirebaseManager.saveTarget(target)
         return target.targetID
     }
 }

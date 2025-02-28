@@ -380,11 +380,32 @@ class RealmManager private constructor() {
     fun getNoteBackgroundColor(noteID: String): Color {
         val realm = Realm.getDefaultInstance()
         return try {
-            val memo = getMemosByNoteID(noteID).firstOrNull()?.let { realm.copyFromRealm(it) } ?: return Color.White
-            val measures = getObjectById<Measures>(memo.measuresID)
-            val taskData = getObjectById<TaskData>(measures!!.taskID)
-            val group = getObjectById<Group>(taskData!!.groupID)
-            com.example.sportsnote.utils.Color.fromInt(group!!.color).toComposeColor()
+            val memo =
+                realm.where(Memo::class.java)
+                    .equalTo("noteID", noteID)
+                    .equalTo("isDeleted", false)
+                    .findFirst()
+                    ?.let { realm.copyFromRealm(it) } ?: return Color.White
+
+            val measures =
+                realm.where(Measures::class.java)
+                    .equalTo("measuresID", memo.measuresID)
+                    .findFirst()
+                    ?.let { realm.copyFromRealm(it) } ?: return Color.White
+
+            val taskData =
+                realm.where(TaskData::class.java)
+                    .equalTo("taskID", measures.taskID)
+                    .findFirst()
+                    ?.let { realm.copyFromRealm(it) } ?: return Color.White
+
+            val group =
+                realm.where(Group::class.java)
+                    .equalTo("groupID", taskData.groupID)
+                    .findFirst()
+                    ?.let { realm.copyFromRealm(it) } ?: return Color.White
+
+            com.example.sportsnote.utils.Color.fromInt(group.color).toComposeColor()
         } finally {
             realm.close()
         }

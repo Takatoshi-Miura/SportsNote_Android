@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.PracticeNote
@@ -235,14 +236,16 @@ class NoteViewModel : ViewModel() {
      * @param detail ノート内容
      */
     suspend fun saveFreeNote(
-        noteId: String = UUID.randomUUID().toString(),
+        noteId: String? = null,
         title: String,
         detail: String,
         created_at: Date = Date(),
     ) {
+        val finalNoteId = noteId ?: UUID.randomUUID().toString()
+        val isUpdate = noteId != null
         val note =
             Note().apply {
-                this.noteID = noteId
+                this.noteID = finalNoteId
                 this.userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
                 this.noteType = NoteType.FREE.value
                 this.isDeleted = false
@@ -252,6 +255,16 @@ class NoteViewModel : ViewModel() {
                 this.detail = detail
             }
         realmManager.saveItem(note)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        if (isUpdate) {
+            FirebaseManager.updateNote(note)
+        } else {
+            FirebaseManager.saveNote(note)
+        }
     }
 
     /**
@@ -268,7 +281,7 @@ class NoteViewModel : ViewModel() {
      * @param reflection 反省
      */
     suspend fun saveTournamentNote(
-        noteId: String = UUID.randomUUID().toString(),
+        noteId: String? = null,
         date: Date,
         weather: Int,
         temperature: Int,
@@ -279,9 +292,11 @@ class NoteViewModel : ViewModel() {
         reflection: String,
         created_at: Date = Date(),
     ) {
+        val finalNoteId = noteId ?: UUID.randomUUID().toString()
+        val isUpdate = noteId != null
         val note =
             Note().apply {
-                this.noteID = noteId
+                this.noteID = finalNoteId
                 this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
                 this.noteType = NoteType.TOURNAMENT.value
                 this.isDeleted = false
@@ -297,6 +312,16 @@ class NoteViewModel : ViewModel() {
                 this.reflection = reflection
             }
         realmManager.saveItem(note)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        if (isUpdate) {
+            FirebaseManager.updateNote(note)
+        } else {
+            FirebaseManager.saveNote(note)
+        }
     }
 
     /**
@@ -313,7 +338,7 @@ class NoteViewModel : ViewModel() {
      * @param taskReflections 取り組んだ課題のメモ
      */
     suspend fun savePracticeNote(
-        noteId: String = UUID.randomUUID().toString(),
+        noteId: String? = null,
         date: Date,
         weather: Int,
         temperature: Int,
@@ -324,10 +349,12 @@ class NoteViewModel : ViewModel() {
         taskReflections: Map<TaskListData, String>,
         created_at: Date = Date(),
     ) {
+        val finalNoteId = noteId ?: UUID.randomUUID().toString()
+        val isUpdate = noteId != null
         // 練習ノートを保存
         val note =
             Note().apply {
-                this.noteID = noteId
+                this.noteID = finalNoteId
                 this.userID = PreferencesManager.get<String>(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
                 this.noteType = NoteType.PRACTICE.value
                 this.isDeleted = false
@@ -350,9 +377,19 @@ class NoteViewModel : ViewModel() {
             memoViewModel.saveMemo(
                 memoID = taskListData.memoID,
                 measuresID = taskListData.measuresID,
-                noteID = noteId,
+                noteID = finalNoteId,
                 detail = reflectionText,
             )
+        }
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        if (isUpdate) {
+            FirebaseManager.updateNote(note)
+        } else {
+            FirebaseManager.saveNote(note)
         }
     }
 
@@ -363,5 +400,12 @@ class NoteViewModel : ViewModel() {
      */
     suspend fun deleteNote(noteId: String) {
         realmManager.logicalDelete<Note>(noteId)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        val deletedNote = getNoteById(noteId) ?: return
+        FirebaseManager.updateNote(deletedNote)
     }
 }
