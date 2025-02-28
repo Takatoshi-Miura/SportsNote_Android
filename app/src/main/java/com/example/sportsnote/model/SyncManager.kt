@@ -22,7 +22,6 @@ interface Syncable {
 }
 
 object SyncManager {
-
     /**
      * Firebase と Realm の全データを同期
      * 各同期処理は並列に行われ、全ての同期が完了するまで待機する

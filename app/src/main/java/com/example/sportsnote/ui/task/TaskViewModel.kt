@@ -2,7 +2,9 @@ package com.example.sportsnote.ui.task
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Group
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.TaskData
 import com.example.sportsnote.model.TaskDetailData
@@ -85,13 +87,8 @@ class TaskViewModel : ViewModel() {
      * @return List<TaskListData>
      */
     fun getCompletedTasksByGroupId(groupID: String): List<TaskListData> {
-        val taskListDatas = mutableListOf<TaskListData>()
         val tasks = realmManager.getCompletedTasksByGroupId(groupID)
-        tasks.forEach { task ->
-            val taskListData = convertTaskDataToTaskListData(task)
-            taskListDatas.add(taskListData)
-        }
-        return taskListDatas
+        return tasks.map { task -> convertTaskDataToTaskListData(task) }
     }
 
     /**
@@ -120,16 +117,18 @@ class TaskViewModel : ViewModel() {
      * @param isComplete 完了状態
      */
     suspend fun saveTask(
-        taskId: String = UUID.randomUUID().toString(),
+        taskId: String? = null,
         title: String,
         cause: String,
         groupId: String,
         isComplete: Boolean = false,
         created_at: Date = Date(),
     ): String {
+        val finalTaskId = taskId ?: UUID.randomUUID().toString()
+        val isUpdate = taskId != null
         val task =
             TaskData(
-                taskId = taskId,
+                taskId = finalTaskId,
                 title = title,
                 cause = cause,
                 groupId = groupId,
@@ -137,7 +136,17 @@ class TaskViewModel : ViewModel() {
                 created_at = created_at,
             )
         realmManager.saveItem(task)
-        return taskId
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return finalTaskId
+        }
+        if (isUpdate) {
+            FirebaseManager.updateTask(task)
+        } else {
+            FirebaseManager.saveTask(task)
+        }
+        return finalTaskId
     }
 
     /**
@@ -147,5 +156,12 @@ class TaskViewModel : ViewModel() {
      */
     suspend fun deleteTaskData(taskID: String) {
         realmManager.logicalDelete<TaskData>(taskID)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        val deletedTask = realmManager.getObjectById<TaskData>(taskID) ?: return
+        FirebaseManager.updateTask(deletedTask)
     }
 }

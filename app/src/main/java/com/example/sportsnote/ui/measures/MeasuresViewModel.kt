@@ -1,7 +1,9 @@
 package com.example.sportsnote.ui.measures
 
 import androidx.lifecycle.ViewModel
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Measures
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import java.util.Date
 import java.util.UUID
@@ -39,21 +41,33 @@ class MeasuresViewModel : ViewModel() {
      * @param created_at 作成日付
      */
     suspend fun saveMeasures(
-        measuresId: String = UUID.randomUUID().toString(),
+        measuresId: String? = null,
         taskId: String,
         title: String,
         order: Int = getMeasuresByTaskID(taskId).size,
         created_at: Date = Date(),
     ): Measures {
+        val finalMeasuresId = measuresId ?: UUID.randomUUID().toString()
+        val isUpdate = measuresId != null
         val measures =
             Measures(
-                measuresId = measuresId,
+                measuresId = finalMeasuresId,
                 taskId = taskId,
                 title = title,
                 order = order,
                 created_at = created_at,
             )
         realmManager.saveItem(measures)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return measures
+        }
+        if (isUpdate) {
+            FirebaseManager.updateMeasures(measures)
+        } else {
+            FirebaseManager.saveMeasures(measures)
+        }
         return measures
     }
 
@@ -64,5 +78,12 @@ class MeasuresViewModel : ViewModel() {
      */
     suspend fun deleteMeasures(measuresID: String) {
         realmManager.logicalDelete<Measures>(measuresID)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        val deletedMeasures = getMeasuresById(measuresID) ?: return
+        FirebaseManager.updateMeasures(deletedMeasures)
     }
 }

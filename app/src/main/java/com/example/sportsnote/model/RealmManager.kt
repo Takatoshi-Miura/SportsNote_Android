@@ -10,7 +10,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmObject
 import io.realm.Sort
-import io.realm.kotlin.executeTransactionAwait
 import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,7 +23,6 @@ object RealmConstants {
 }
 
 class RealmManager private constructor() {
-
     companion object {
         /**
          * Realmを初期化（起動準備）
@@ -226,7 +224,7 @@ class RealmManager private constructor() {
                 .equalTo("isDeleted", false)
                 .sort("order", Sort.ASCENDING)
                 .findAll()
-                .toList()
+                .map { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }
@@ -246,7 +244,7 @@ class RealmManager private constructor() {
                 .equalTo("isDeleted", false)
                 .sort("order", Sort.ASCENDING)
                 .findAll()
-                .toList()
+                .map { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }

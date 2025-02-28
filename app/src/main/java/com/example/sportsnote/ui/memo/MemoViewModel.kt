@@ -1,9 +1,11 @@
 package com.example.sportsnote.ui.memo
 
 import androidx.lifecycle.ViewModel
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.MeasuresMemo
 import com.example.sportsnote.model.Memo
 import com.example.sportsnote.model.Note
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import java.util.Date
 import java.util.UUID
@@ -52,6 +54,7 @@ class MemoViewModel : ViewModel() {
         created_at: Date = Date(),
     ): Memo {
         val finalMemoID = memoID ?: UUID.randomUUID().toString()
+        val isUpdate = memoID != null
         val memo =
             Memo(
                 memoID = finalMemoID,
@@ -61,6 +64,16 @@ class MemoViewModel : ViewModel() {
                 created_at = created_at,
             )
         realmManager.saveItem(memo)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return memo
+        }
+        if (isUpdate) {
+            FirebaseManager.updateMemo(memo)
+        } else {
+            FirebaseManager.saveMemo(memo)
+        }
         return memo
     }
 
@@ -71,5 +84,12 @@ class MemoViewModel : ViewModel() {
      */
     suspend fun deleteMemo(memoID: String) {
         realmManager.logicalDelete<Memo>(memoID)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        val deletedMemo = realmManager.getObjectById<Memo>(memoID) ?: return
+        FirebaseManager.updateMemo(deletedMemo)
     }
 }
