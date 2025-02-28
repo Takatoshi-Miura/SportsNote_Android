@@ -235,7 +235,7 @@ fun LoginScreen(onDismiss: () -> Unit) {
                             email = email.value,
                             password = password.value,
                             onSuccess = { onDismiss() },
-                            context = context
+                            context = context,
                         )
                         dialogType = DialogType.None
                         showDialog.value = false
@@ -255,7 +255,7 @@ fun LoginScreen(onDismiss: () -> Unit) {
                                 email.value = ""
                                 password.value = ""
                             },
-                            context = context
+                            context = context,
                         )
                         dialogType = DialogType.None
                         showDialog.value = false

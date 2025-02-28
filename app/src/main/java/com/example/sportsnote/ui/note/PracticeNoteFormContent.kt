@@ -242,7 +242,7 @@ fun PracticeNoteFormContent(
  */
 @Composable
 fun TaskListInput(
-    taskDataList: Map<TaskListData, String>, // 課題と入力テキストのマップ
+    taskDataList: Map<TaskListData, String>,
     onTaskRemoved: (TaskListData) -> Unit,
     onReflectionChanged: (TaskListData, String) -> Unit,
 ) {

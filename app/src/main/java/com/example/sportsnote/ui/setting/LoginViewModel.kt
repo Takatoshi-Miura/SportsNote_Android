@@ -157,17 +157,18 @@ class LoginViewModel : ViewModel() {
      */
     fun deleteAccount(
         onSuccess: () -> Unit,
-        context: Context
+        context: Context,
     ) {
         if (!_isLoggedIn.value) {
             _message.value = context.getString(R.string.pleaseLogin)
             return
         }
 
-        val user = auth.currentUser ?: run {
-            _message.value = context.getString(R.string.pleaseLogin)
-            return
-        }
+        val user =
+            auth.currentUser ?: run {
+                _message.value = context.getString(R.string.pleaseLogin)
+                return
+            }
 
         user.delete().addOnCompleteListener { task ->
             if (!task.isSuccessful) {

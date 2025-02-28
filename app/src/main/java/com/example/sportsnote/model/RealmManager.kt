@@ -95,7 +95,7 @@ class RealmManager {
                         val results = transactionRealm.where(clazz.simpleName).findAll()
                         results.forEach { obj ->
                             val dynamicObj = obj as DynamicRealmObject
-                            if (dynamicObj.hasField("userID"))
+                            if (dynamicObj.hasField("userID")) {
                                 dynamicObj.set("userID", userId)
                             }
                         }
@@ -103,6 +103,7 @@ class RealmManager {
                 }
             }
         }
+    }
 
     /**
      * 指定したクラスに対応するプライマリキーのプロパティ名を取得
