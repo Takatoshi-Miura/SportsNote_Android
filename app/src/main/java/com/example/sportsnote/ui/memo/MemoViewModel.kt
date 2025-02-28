@@ -9,7 +9,7 @@ import java.util.Date
 import java.util.UUID
 
 class MemoViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
 
     /**
      * measuresIDに合致するメモを取得

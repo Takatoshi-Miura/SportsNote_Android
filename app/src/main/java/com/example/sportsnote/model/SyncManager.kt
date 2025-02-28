@@ -3,6 +3,7 @@
 
 package com.example.sportsnote.model
 
+import io.realm.Realm
 import io.realm.RealmObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -21,7 +22,6 @@ interface Syncable {
 }
 
 object SyncManager {
-    private val realmManager = RealmManager()
 
     /**
      * Firebase と Realm の全データを同期
@@ -75,7 +75,16 @@ object SyncManager {
 
             // Firebase にしかないデータを Realm に保存
             onlyFirebaseID.forEach { id ->
-                firebaseMap[id]?.let { realmManager.saveItem(it) }
+                firebaseMap[id]?.let { item ->
+                    val realm = Realm.getDefaultInstance()
+                    try {
+                        realm.executeTransaction {
+                            it.insertOrUpdate(item)
+                        }
+                    } finally {
+                        realm.close()
+                    }
+                }
             }
 
             // 両方に存在するデータの更新日時を比較し、新しい方に更新
@@ -87,7 +96,7 @@ object SyncManager {
                         if (realmItem.updated_at > firebaseItem.updated_at) {
                             updateFirebase(realmItem)
                         } else if (firebaseItem.updated_at > realmItem.updated_at) {
-                            realmManager.saveItem(firebaseItem)
+                            RealmManager.getInstance().saveItem(firebaseItem)
                         }
                     }
                 }
@@ -101,7 +110,9 @@ object SyncManager {
     private suspend fun syncGroup() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllGroup() },
-            getRealmData = { realmManager.getDataList(Group::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(Group::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveGroup(it) },
             updateFirebase = { FirebaseManager.updateGroup(it) },
         )
@@ -113,7 +124,9 @@ object SyncManager {
     private suspend fun syncTask() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllTask() },
-            getRealmData = { realmManager.getDataList(TaskData::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(TaskData::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveTask(it) },
             updateFirebase = { FirebaseManager.updateTask(it) },
         )
@@ -125,7 +138,9 @@ object SyncManager {
     private suspend fun syncMeasures() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllMeasures() },
-            getRealmData = { realmManager.getDataList(Measures::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(Measures::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveMeasures(it) },
             updateFirebase = { FirebaseManager.updateMeasures(it) },
         )
@@ -137,7 +152,9 @@ object SyncManager {
     private suspend fun syncMemo() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllMemo() },
-            getRealmData = { realmManager.getDataList(Memo::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(Memo::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveMemo(it) },
             updateFirebase = { FirebaseManager.updateMemo(it) },
         )
@@ -149,7 +166,9 @@ object SyncManager {
     private suspend fun syncTarget() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllTarget() },
-            getRealmData = { realmManager.getDataList(Target::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(Target::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveTarget(it) },
             updateFirebase = { FirebaseManager.updateTarget(it) },
         )
@@ -161,7 +180,9 @@ object SyncManager {
     private suspend fun syncNote() {
         syncData(
             getFirebaseData = { FirebaseManager.getAllNote() },
-            getRealmData = { realmManager.getDataList(Note::class.java) },
+            getRealmData = {
+                RealmManager.getInstance().getDataList(Note::class.java)
+            },
             saveToFirebase = { FirebaseManager.saveNote(it) },
             updateFirebase = { FirebaseManager.updateNote(it) },
         )

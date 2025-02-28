@@ -129,7 +129,7 @@ class LoginViewModel : ViewModel() {
                     PreferencesManager.set(PreferencesManager.Keys.IS_LOGIN, true)
 
                     // RealmデータのuserIDを新しいIDに更新
-                    val realmManager = RealmManager()
+                    val realmManager = RealmManager.getInstance()
                     realmManager.updateAllUserIds(userId = result.user!!.uid)
 
                     // データ同期

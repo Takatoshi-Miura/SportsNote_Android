@@ -15,7 +15,7 @@ import java.util.Date
 import java.util.UUID
 
 class TaskViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
     private val _tasks = MutableStateFlow<List<TaskData>>(emptyList())
     val tasks: StateFlow<List<TaskData>> = _tasks
     private val _taskLists = MutableStateFlow<List<TaskListData>>(emptyList())

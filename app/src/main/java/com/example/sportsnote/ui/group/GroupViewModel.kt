@@ -16,7 +16,7 @@ import java.util.Date
 import java.util.UUID
 
 class GroupViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
     private val _groups = MutableStateFlow<List<Group>>(emptyList())
     val groups: StateFlow<List<Group>> = _groups
     private val _isLoading = MutableStateFlow(false)

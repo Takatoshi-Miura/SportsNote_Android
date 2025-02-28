@@ -29,7 +29,7 @@ import java.util.Locale
 import java.util.UUID
 
 class NoteViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
     private val _notes = MutableStateFlow<List<Note>>(emptyList())
     val notes: StateFlow<List<Note>> = _notes
     private val _targetNotes = MutableStateFlow<List<Note>>(emptyList())

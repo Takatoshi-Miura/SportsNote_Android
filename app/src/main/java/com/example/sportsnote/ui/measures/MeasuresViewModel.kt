@@ -7,7 +7,7 @@ import java.util.Date
 import java.util.UUID
 
 class MeasuresViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
 
     /**
      * 対策を取得（measuresID指定）

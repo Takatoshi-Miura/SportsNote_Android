@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 
 class TargetViewModel : ViewModel() {
-    private val realmManager: RealmManager = RealmManager()
+    private val realmManager: RealmManager = RealmManager.getInstance()
 
     // カレンダーに表示している年月の目標を保持
     private val _targets = mutableStateOf<List<Target>>(emptyList())

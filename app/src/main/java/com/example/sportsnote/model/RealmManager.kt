@@ -23,7 +23,8 @@ object RealmConstants {
     const val SCHEMA_VERSION = 1L
 }
 
-class RealmManager {
+class RealmManager private constructor() {
+
     companion object {
         /**
          * Realmを初期化（起動準備）
@@ -52,16 +53,33 @@ class RealmManager {
             println("Realm file path: $realmFile")
         }
 
+        // シングルトンインスタンス
+        private var instance: RealmManager? = null
+
+        /**
+         * インスタンス取得
+         *
+         * @return RealmManagerインスタンス
+         */
+        fun getInstance(): RealmManager {
+            return instance ?: synchronized(this) {
+                instance ?: RealmManager().also { instance = it }
+            }
+        }
+
         /**
          * Realmの全データを削除する
          */
         suspend fun clearAll() {
             withContext(Dispatchers.IO) {
                 val realm = Realm.getDefaultInstance()
-                realm.executeTransaction { transactionRealm ->
-                    transactionRealm.deleteAll()
+                try {
+                    realm.executeTransaction { transactionRealm ->
+                        transactionRealm.deleteAll()
+                    }
+                } finally {
+                    realm.close()
                 }
-                realm.close()
             }
         }
     }
@@ -73,11 +91,16 @@ class RealmManager {
      * @param item 保存するデータ
      */
     suspend fun <T : RealmObject> saveItem(item: T) {
-        val realm = Realm.getDefaultInstance()
-        realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            realmTransaction.insertOrUpdate(item)
+        withContext(Dispatchers.IO) {
+            val realm = Realm.getDefaultInstance()
+            try {
+                realm.executeTransaction {
+                    it.insertOrUpdate(item)
+                }
+            } finally {
+                realm.close()
+            }
         }
-        realm.close()
     }
 
     /**
@@ -87,20 +110,25 @@ class RealmManager {
      */
     suspend fun updateAllUserIds(userId: String) {
         withContext(Dispatchers.IO) {
-            val config = Realm.getDefaultInstance().configuration
-            DynamicRealm.getInstance(config).use { dynamicRealm ->
-                dynamicRealm.executeTransaction { transactionRealm ->
-                    val allSchemaClasses = transactionRealm.configuration.realmObjectClasses
-                    allSchemaClasses.forEach { clazz ->
-                        val results = transactionRealm.where(clazz.simpleName).findAll()
-                        results.forEach { obj ->
-                            val dynamicObj = obj as DynamicRealmObject
-                            if (dynamicObj.hasField("userID")) {
-                                dynamicObj.set("userID", userId)
+            val realm = Realm.getDefaultInstance()
+            try {
+                val config = realm.configuration
+                DynamicRealm.getInstance(config).use { dynamicRealm ->
+                    dynamicRealm.executeTransaction { transactionRealm ->
+                        val allSchemaClasses = transactionRealm.configuration.realmObjectClasses
+                        allSchemaClasses.forEach { clazz ->
+                            val results = transactionRealm.where(clazz.simpleName).findAll()
+                            results.forEach { obj ->
+                                val dynamicObj = obj as DynamicRealmObject
+                                if (dynamicObj.hasField("userID")) {
+                                    dynamicObj.set("userID", userId)
+                                }
                             }
                         }
                     }
                 }
+            } finally {
+                realm.close()
             }
         }
     }
@@ -134,7 +162,7 @@ class RealmManager {
     internal inline fun <reified T : RealmObject> getObjectById(id: String): T? {
         val realm = Realm.getDefaultInstance()
         return try {
-            realm.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
+            realm.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()?.let { realm.copyFromRealm(it) }
         } catch (e: Exception) {
             null
         } finally {
@@ -233,8 +261,7 @@ class RealmManager {
             realm.where(Note::class.java)
                 .equalTo("noteType", NoteType.FREE.value)
                 .equalTo("isDeleted", false)
-                .findAll()
-                .firstOrNull()
+                .findFirst()?.let { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }
@@ -249,14 +276,13 @@ class RealmManager {
     fun searchNotesByQuery(query: String): List<Note> {
         val realm = Realm.getDefaultInstance()
         return try {
-            // FREEタイプのノートを取得
             val freeNotes =
                 realm.where(Note::class.java)
                     .equalTo("noteType", NoteType.FREE.value)
                     .equalTo("isDeleted", false)
                     .findAll()
+                    .map { realm.copyFromRealm(it) }
 
-            // 検索クエリに一致するノートを取得
             val queryNotes =
                 realm.where(Note::class.java)
                     .equalTo("isDeleted", false)
@@ -277,8 +303,7 @@ class RealmManager {
                     .contains("result", query, Case.INSENSITIVE)
                     .endGroup()
                     .findAll()
-
-            // 結果をマージし、重複を排除
+                    .map { realm.copyFromRealm(it) }
             (freeNotes + queryNotes).distinct()
         } finally {
             realm.close()
@@ -293,16 +318,19 @@ class RealmManager {
      */
     fun getNotesByDate(selectedDate: LocalDate): List<Note> {
         val realm = Realm.getDefaultInstance()
-        val startOfDay = Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        val endOfDay = Date.from(selectedDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
-
-        return realm.where(Note::class.java)
-            .equalTo("isDeleted", false)
-            .notEqualTo("noteType", NoteType.FREE.value)
-            .greaterThanOrEqualTo("date", startOfDay)
-            .lessThan("date", endOfDay)
-            .findAll()
-            .toList()
+        return try {
+            val startOfDay = Date.from(selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            val endOfDay = Date.from(selectedDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+            realm.where(Note::class.java)
+                .equalTo("isDeleted", false)
+                .notEqualTo("noteType", NoteType.FREE.value)
+                .greaterThanOrEqualTo("date", startOfDay)
+                .lessThan("date", endOfDay)
+                .findAll()
+                .map { realm.copyFromRealm(it) }
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -319,7 +347,7 @@ class RealmManager {
                 .equalTo("isDeleted", false)
                 .sort("created_at", Sort.ASCENDING)
                 .findAll()
-                .toList()
+                .map { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }
@@ -339,7 +367,7 @@ class RealmManager {
                 .equalTo("isDeleted", false)
                 .sort("created_at", Sort.ASCENDING)
                 .findAll()
-                .toList()
+                .map { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }
@@ -352,11 +380,16 @@ class RealmManager {
      * @return 背景色
      */
     fun getNoteBackgroundColor(noteID: String): Color {
-        val memo = getMemosByNoteID(noteID).firstOrNull() ?: return Color.White
-        val measures = getObjectById<Measures>(memo.measuresID)
-        val taskData = getObjectById<TaskData>(measures!!.taskID)
-        val group = getObjectById<Group>(taskData!!.groupID)
-        return com.example.sportsnote.utils.Color.fromInt(group!!.color).toComposeColor()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            val memo = getMemosByNoteID(noteID).firstOrNull()?.let { realm.copyFromRealm(it) } ?: return Color.White
+            val measures = getObjectById<Measures>(memo.measuresID)
+            val taskData = getObjectById<TaskData>(measures!!.taskID)
+            val group = getObjectById<Group>(taskData!!.groupID)
+            com.example.sportsnote.utils.Color.fromInt(group!!.color).toComposeColor()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -386,7 +419,7 @@ class RealmManager {
                 .equalTo("isDeleted", false)
                 .endGroup()
                 .findAll()
-                .toList()
+                .map { realm.copyFromRealm(it) }
         } finally {
             realm.close()
         }
@@ -399,29 +432,31 @@ class RealmManager {
      * @param id 削除するデータのID
      */
     internal suspend inline fun <reified T : RealmObject> logicalDelete(id: String) {
-        val realm = Realm.getDefaultInstance()
-        try {
-            realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-                val item =
-                    realmTransaction.where(T::class.java)
-                        .equalTo(getPrimaryKeyName<T>(), id)
-                        .findFirst()
+        withContext(Dispatchers.IO) {
+            val realm = Realm.getDefaultInstance()
+            try {
+                realm.executeTransaction { realmTransaction ->
+                    val item =
+                        realmTransaction.where(T::class.java)
+                            .equalTo(getPrimaryKeyName<T>(), id)
+                            .findFirst()
 
-                item?.let {
-                    // 指定されたオブジェクトを削除
-                    markAsDeleted(it, realmTransaction)
+                    item?.let {
+                        // 指定されたオブジェクトを削除
+                        markAsDeleted(it, realmTransaction)
 
-                    // 関連エンティティも削除
-                    when (it) {
-                        is Note -> deleteRelatedNoteMemos(it.noteID, realmTransaction)
-                        is Group -> deleteRelatedTasks(it.groupID, realmTransaction)
-                        is TaskData -> deleteRelatedMeasures(it.taskID, realmTransaction)
-                        is Measures -> deleteRelatedMeasuresMemos(it.measuresID, realmTransaction)
+                        // 関連エンティティも削除
+                        when (it) {
+                            is Note -> deleteRelatedNoteMemos(it.noteID, realmTransaction)
+                            is Group -> deleteRelatedTasks(it.groupID, realmTransaction)
+                            is TaskData -> deleteRelatedMeasures(it.taskID, realmTransaction)
+                            is Measures -> deleteRelatedMeasuresMemos(it.measuresID, realmTransaction)
+                        }
                     }
                 }
+            } finally {
+                realm.close()
             }
-        } finally {
-            realm.close()
         }
     }
 
