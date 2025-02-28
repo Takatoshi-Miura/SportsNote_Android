@@ -16,9 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
-import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Group
-import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 import com.example.sportsnote.utils.Color
@@ -28,7 +26,6 @@ import java.util.Date
 /**
  * Group詳細画面
  *
- * @param viewModel GroupViewModel
  * @param groupId groupId
  * @param onBack 前画面に戻る処理
  * @param appBarNavigationIcon TopBar左のボタンを変更するために必要
@@ -37,12 +34,12 @@ import java.util.Date
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun GroupViewScreen(
-    viewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     groupId: String,
     onBack: () -> Unit,
     appBarNavigationIcon: MutableState<(@Composable () -> Unit)?>,
     appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
+    val viewModel = GroupViewModel()
     val group: Group? = viewModel.getGroupById(groupId)
     val coroutineScope = rememberCoroutineScope()
 
@@ -62,17 +59,13 @@ fun GroupViewScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
-                    val savedGroup =
-                        viewModel.saveGroup(
-                            groupId = groupId,
-                            title = title,
-                            colorId = color,
-                            order = group?.order,
-                            created_at = group?.created_at ?: Date(),
-                        )
-                    if (PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
-                        FirebaseManager.saveGroup(savedGroup)
-                    }
+                    viewModel.saveGroup(
+                        groupId = groupId,
+                        title = title,
+                        colorId = color,
+                        order = group?.order,
+                        created_at = group?.created_at ?: Date(),
+                    )
                 },
                 onDelete = {
                     showDialog.value = true

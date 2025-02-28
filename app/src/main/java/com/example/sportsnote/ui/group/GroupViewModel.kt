@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sportsnote.R
+import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Group
+import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,32 +71,42 @@ class GroupViewModel : ViewModel() {
     }
 
     /**
-     * Groupを保存(orderは最後尾固定)
+     * Groupを保存
      *
      * @param groupId グループID
      * @param title タイトル
      * @param colorId カラーID
      * @param order 並び順
      * @param created_at 作成日付
-     * @return 保存したGroupオブジェクト
      */
     suspend fun saveGroup(
-        groupId: String = UUID.randomUUID().toString(),
+        groupId: String? = null,
         title: String,
         colorId: Int,
         order: Int?,
         created_at: Date = Date(),
-    ): Group {
+    ) {
+        val finalGroupId = groupId ?: UUID.randomUUID().toString()
+        val isUpdate = groupId != null
         val group =
             Group(
-                groupId = groupId,
+                groupId = finalGroupId,
                 title = title,
                 colorId = colorId,
                 order = order ?: realmManager.getCount(Group::class.java),
                 created_at = created_at,
             )
         realmManager.saveItem(group)
-        return group
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        if (isUpdate) {
+            FirebaseManager.updateGroup(group)
+        } else {
+            FirebaseManager.saveGroup(group)
+        }
     }
 
     /**
@@ -104,5 +116,12 @@ class GroupViewModel : ViewModel() {
      */
     suspend fun deleteGroup(groupId: String) {
         realmManager.logicalDelete<Group>(groupId)
+
+        // Firebaseに反映
+        if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+            return
+        }
+        val deletedGroup = getGroupById(groupId) ?: return
+        FirebaseManager.updateGroup(deletedGroup)
     }
 }
