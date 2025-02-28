@@ -24,8 +24,6 @@ object RealmConstants {
 }
 
 class RealmManager {
-    internal val realm: Realm = Realm.getDefaultInstance()
-
     companion object {
         /**
          * Realmを初期化（起動準備）
@@ -75,9 +73,11 @@ class RealmManager {
      * @param item 保存するデータ
      */
     suspend fun <T : RealmObject> saveItem(item: T) {
+        val realm = Realm.getDefaultInstance()
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             realmTransaction.insertOrUpdate(item)
         }
+        realm.close()
     }
 
     /**
@@ -132,10 +132,13 @@ class RealmManager {
      * @return 取得データ（存在しない場合やエラーが発生した場合は`null`）
      */
     internal inline fun <reified T : RealmObject> getObjectById(id: String): T? {
+        val realm = Realm.getDefaultInstance()
         return try {
             realm.where(T::class.java).equalTo(getPrimaryKeyName<T>(), id).findFirst()
         } catch (e: Exception) {
             null
+        } finally {
+            realm.close()
         }
     }
 
@@ -146,16 +149,20 @@ class RealmManager {
      * @return 条件に一致するデータのリスト
      */
     fun <T : RealmObject> getDataList(clazz: Class<T>): List<T> {
-        return realm.where(clazz)
-            .equalTo("isDeleted", false)
-            .apply {
-                // `order` フィールドが存在する場合、昇順で並び替え
-                if (realm.schema[clazz.simpleName]?.hasField("order") == true) {
-                    sort("order", Sort.ASCENDING)
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(clazz)
+                .equalTo("isDeleted", false)
+                .apply {
+                    if (realm.schema[clazz.simpleName]?.hasField("order") == true) {
+                        sort("order", Sort.ASCENDING)
+                    }
                 }
-            }
-            .findAll()
-            .let { realm.copyFromRealm(it) }
+                .findAll()
+                .let { realm.copyFromRealm(it) }
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -165,10 +172,15 @@ class RealmManager {
      * @return Int データ数
      */
     fun <T : RealmObject> getCount(clazz: Class<T>): Int {
-        return realm.where(clazz)
-            .equalTo("isDeleted", false)
-            .count()
-            .toInt()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(clazz)
+                .equalTo("isDeleted", false)
+                .count()
+                .toInt()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -178,13 +190,18 @@ class RealmManager {
      * @return List<TaskData>
      */
     fun getCompletedTasksByGroupId(groupID: String): List<TaskData> {
-        return realm.where(TaskData::class.java)
-            .equalTo("groupID", groupID)
-            .equalTo("isComplete", true)
-            .equalTo("isDeleted", false)
-            .sort("order", Sort.ASCENDING)
-            .findAll()
-            .toList()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(TaskData::class.java)
+                .equalTo("groupID", groupID)
+                .equalTo("isComplete", true)
+                .equalTo("isDeleted", false)
+                .sort("order", Sort.ASCENDING)
+                .findAll()
+                .toList()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -194,23 +211,33 @@ class RealmManager {
      * @return List<Measures>
      */
     fun getMeasuresByTaskID(taskID: String): List<Measures> {
-        return realm.where(Measures::class.java)
-            .equalTo("taskID", taskID)
-            .equalTo("isDeleted", false)
-            .sort("order", Sort.ASCENDING)
-            .findAll()
-            .toList()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(Measures::class.java)
+                .equalTo("taskID", taskID)
+                .equalTo("isDeleted", false)
+                .sort("order", Sort.ASCENDING)
+                .findAll()
+                .toList()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
      * フリーノートを取得
      */
     fun getFreeNote(): Note? {
-        return realm.where(Note::class.java)
-            .equalTo("noteType", NoteType.FREE.value)
-            .equalTo("isDeleted", false)
-            .findAll()
-            .firstOrNull()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(Note::class.java)
+                .equalTo("noteType", NoteType.FREE.value)
+                .equalTo("isDeleted", false)
+                .findAll()
+                .firstOrNull()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -220,33 +247,42 @@ class RealmManager {
      * @return 検索結果のノートリスト
      */
     fun searchNotesByQuery(query: String): List<Note> {
-        val freeNotes =
-            realm.where(Note::class.java)
-                .equalTo("noteType", NoteType.FREE.value)
-                .equalTo("isDeleted", false)
-                .findAll()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            // FREEタイプのノートを取得
+            val freeNotes =
+                realm.where(Note::class.java)
+                    .equalTo("noteType", NoteType.FREE.value)
+                    .equalTo("isDeleted", false)
+                    .findAll()
 
-        val queryNotes =
-            realm.where(Note::class.java)
-                .equalTo("isDeleted", false)
-                .and()
-                .beginGroup()
-                .contains("condition", query, Case.INSENSITIVE)
-                .or()
-                .contains("reflection", query, Case.INSENSITIVE)
-                .or()
-                .contains("purpose", query, Case.INSENSITIVE)
-                .or()
-                .contains("detail", query, Case.INSENSITIVE)
-                .or()
-                .contains("target", query, Case.INSENSITIVE)
-                .or()
-                .contains("consciousness", query, Case.INSENSITIVE)
-                .or()
-                .contains("result", query, Case.INSENSITIVE)
-                .endGroup()
-                .findAll()
-        return (freeNotes + queryNotes).distinct()
+            // 検索クエリに一致するノートを取得
+            val queryNotes =
+                realm.where(Note::class.java)
+                    .equalTo("isDeleted", false)
+                    .and()
+                    .beginGroup()
+                    .contains("condition", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("reflection", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("purpose", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("detail", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("target", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("consciousness", query, Case.INSENSITIVE)
+                    .or()
+                    .contains("result", query, Case.INSENSITIVE)
+                    .endGroup()
+                    .findAll()
+
+            // 結果をマージし、重複を排除
+            (freeNotes + queryNotes).distinct()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -276,12 +312,17 @@ class RealmManager {
      * @return List<Memo>
      */
     fun getMemosByMeasuresID(measuresID: String): List<Memo> {
-        return realm.where(Memo::class.java)
-            .equalTo("measuresID", measuresID)
-            .equalTo("isDeleted", false)
-            .sort("created_at", Sort.ASCENDING)
-            .findAll()
-            .toList()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(Memo::class.java)
+                .equalTo("measuresID", measuresID)
+                .equalTo("isDeleted", false)
+                .sort("created_at", Sort.ASCENDING)
+                .findAll()
+                .toList()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -291,12 +332,17 @@ class RealmManager {
      * @return List<Memo>
      */
     fun getMemosByNoteID(noteID: String): List<Memo> {
-        return realm.where(Memo::class.java)
-            .equalTo("noteID", noteID)
-            .equalTo("isDeleted", false)
-            .sort("created_at", Sort.ASCENDING)
-            .findAll()
-            .toList()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where(Memo::class.java)
+                .equalTo("noteID", noteID)
+                .equalTo("isDeleted", false)
+                .sort("created_at", Sort.ASCENDING)
+                .findAll()
+                .toList()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -324,21 +370,26 @@ class RealmManager {
         year: Int,
         month: Int,
     ): List<Target> {
-        return realm.where<Target>()
-            .beginGroup()
-            .equalTo("isYearlyTarget", false)
-            .equalTo("year", year)
-            .equalTo("month", month)
-            .equalTo("isDeleted", false)
-            .endGroup()
-            .or()
-            .beginGroup()
-            .equalTo("isYearlyTarget", true)
-            .equalTo("year", year)
-            .equalTo("isDeleted", false)
-            .endGroup()
-            .findAll()
-            .toList()
+        val realm = Realm.getDefaultInstance()
+        return try {
+            realm.where<Target>()
+                .beginGroup()
+                .equalTo("isYearlyTarget", false)
+                .equalTo("year", year)
+                .equalTo("month", month)
+                .equalTo("isDeleted", false)
+                .endGroup()
+                .or()
+                .beginGroup()
+                .equalTo("isYearlyTarget", true)
+                .equalTo("year", year)
+                .equalTo("isDeleted", false)
+                .endGroup()
+                .findAll()
+                .toList()
+        } finally {
+            realm.close()
+        }
     }
 
     /**
@@ -348,24 +399,29 @@ class RealmManager {
      * @param id 削除するデータのID
      */
     internal suspend inline fun <reified T : RealmObject> logicalDelete(id: String) {
-        realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
-            val item =
-                realmTransaction.where(T::class.java)
-                    .equalTo(getPrimaryKeyName<T>(), id)
-                    .findFirst()
+        val realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
+                val item =
+                    realmTransaction.where(T::class.java)
+                        .equalTo(getPrimaryKeyName<T>(), id)
+                        .findFirst()
 
-            item?.let {
-                // 指定されたオブジェクトを削除
-                markAsDeleted(it, realmTransaction)
+                item?.let {
+                    // 指定されたオブジェクトを削除
+                    markAsDeleted(it, realmTransaction)
 
-                // 関連エンティティも削除
-                when (it) {
-                    is Note -> deleteRelatedNoteMemos(it.noteID, realmTransaction)
-                    is Group -> deleteRelatedTasks(it.groupID, realmTransaction)
-                    is TaskData -> deleteRelatedMeasures(it.taskID, realmTransaction)
-                    is Measures -> deleteRelatedMeasuresMemos(it.measuresID, realmTransaction)
+                    // 関連エンティティも削除
+                    when (it) {
+                        is Note -> deleteRelatedNoteMemos(it.noteID, realmTransaction)
+                        is Group -> deleteRelatedTasks(it.groupID, realmTransaction)
+                        is TaskData -> deleteRelatedMeasures(it.taskID, realmTransaction)
+                        is Measures -> deleteRelatedMeasuresMemos(it.measuresID, realmTransaction)
+                    }
                 }
             }
+        } finally {
+            realm.close()
         }
     }
 
@@ -470,12 +526,5 @@ class RealmManager {
             .equalTo("measuresID", measuresID)
             .findAll()
             .forEach { markAsDeleted(it, realmTransaction) }
-    }
-
-    /**
-     * Realmインスタンスを閉じる
-     */
-    fun close() {
-        realm.close()
     }
 }

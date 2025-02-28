@@ -4,9 +4,11 @@
 package com.example.sportsnote.model
 
 import io.realm.RealmObject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 /**
@@ -48,43 +50,45 @@ object SyncManager {
      */
     private suspend fun <T> syncData(
         getFirebaseData: suspend () -> List<T>,
-        getRealmData: suspend () -> List<T>,
+        getRealmData: () -> List<T>,
         saveToFirebase: suspend (T) -> Unit,
         updateFirebase: suspend (T) -> Unit,
     ) where T : Syncable, T : RealmObject {
-        // Firebase と Realm のデータを取得
-        val firebaseArray = getFirebaseData()
-        val realmArray = getRealmData()
+        withContext(Dispatchers.IO) {
+            // Firebase と Realm のデータを取得
+            val firebaseArray = getFirebaseData()
+            val realmArray = getRealmData()
 
-        // ID をキーとしたマップを作成
-        val firebaseMap = firebaseArray.associateBy { it.getId() }
-        val realmMap = realmArray.associateBy { it.getId() }
+            // ID をキーとしたマップを作成
+            val firebaseMap = firebaseArray.associateBy { it.getId() }
+            val realmMap = realmArray.associateBy { it.getId() }
 
-        // Firebase もしくは Realm にしか存在しないデータを取得
-        val onlyFirebaseID = firebaseMap.keys - realmMap.keys
-        val onlyRealmID = realmMap.keys - firebaseMap.keys
+            // Firebase もしくは Realm にしか存在しないデータを取得
+            val onlyFirebaseID = firebaseMap.keys - realmMap.keys
+            val onlyRealmID = realmMap.keys - firebaseMap.keys
 
-        // データの同期処理
-        // Realm にしかないデータを Firebase に保存
-        onlyRealmID.forEach { id ->
-            realmMap[id]?.let { saveToFirebase(it) }
-        }
+            // データの同期処理
+            // Realm にしかないデータを Firebase に保存
+            onlyRealmID.forEach { id ->
+                realmMap[id]?.let { saveToFirebase(it) }
+            }
 
-        // Firebase にしかないデータを Realm に保存
-        onlyFirebaseID.forEach { id ->
-            firebaseMap[id]?.let { realmManager.saveItem(it) }
-        }
+            // Firebase にしかないデータを Realm に保存
+            onlyFirebaseID.forEach { id ->
+                firebaseMap[id]?.let { realmManager.saveItem(it) }
+            }
 
-        // 両方に存在するデータの更新日時を比較し、新しい方に更新
-        (firebaseMap.keys intersect realmMap.keys).forEach { id ->
-            val realmItem = realmMap[id]
-            val firebaseItem = firebaseMap[id]
-            when {
-                realmItem != null && firebaseItem != null -> {
-                    if (realmItem.updated_at > firebaseItem.updated_at) {
-                        updateFirebase(realmItem)
-                    } else if (firebaseItem.updated_at > realmItem.updated_at) {
-                        realmManager.saveItem(firebaseItem)
+            // 両方に存在するデータの更新日時を比較し、新しい方に更新
+            (firebaseMap.keys intersect realmMap.keys).forEach { id ->
+                val realmItem = realmMap[id]
+                val firebaseItem = firebaseMap[id]
+                when {
+                    realmItem != null && firebaseItem != null -> {
+                        if (realmItem.updated_at > firebaseItem.updated_at) {
+                            updateFirebase(realmItem)
+                        } else if (firebaseItem.updated_at > realmItem.updated_at) {
+                            realmManager.saveItem(firebaseItem)
+                        }
                     }
                 }
             }

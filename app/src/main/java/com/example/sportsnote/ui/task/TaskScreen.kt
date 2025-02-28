@@ -30,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
+import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
@@ -39,7 +41,9 @@ import com.example.sportsnote.ui.group.GroupHeaderView
 import com.example.sportsnote.ui.group.GroupViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * 課題一覧画面
@@ -65,8 +69,15 @@ fun TaskScreen(reloadTrigger: Int) {
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
-        groupViewModel.loadData()
-        taskViewModel.loadData()
+        coroutineScope.launch {
+            if (PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+                withContext(Dispatchers.IO) {
+                    SyncManager.syncAllData()
+                }
+            }
+            groupViewModel.loadData()
+            taskViewModel.loadData()
+        }
     }
 
     LaunchedEffect(Unit, reloadTrigger) {
@@ -96,7 +107,7 @@ fun TaskScreen(reloadTrigger: Int) {
         Box(modifier = Modifier.fillMaxSize()) {
             SwipeRefresh(
                 state = swipeRefreshState,
-                onRefresh = onRefresh,
+                onRefresh = { onRefresh() },
             ) {
                 // 課題一覧
                 TaskListScreen(
