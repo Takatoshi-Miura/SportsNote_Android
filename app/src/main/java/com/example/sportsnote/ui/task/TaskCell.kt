@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,5 +63,11 @@ fun TaskCell(task: TaskListData) {
                 overflow = TextOverflow.Ellipsis,
             )
         }
+        // 並び替えアイコン
+        Icon(
+            imageVector = Icons.Default.Menu,
+            contentDescription = "Drag Handle",
+            modifier = Modifier.padding(end = 8.dp)
+        )
     }
 }
