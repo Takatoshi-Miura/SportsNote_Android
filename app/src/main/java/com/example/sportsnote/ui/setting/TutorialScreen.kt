@@ -42,7 +42,6 @@ data class TutorialPage(
  */
 @Composable
 fun TutorialScreen(onDismiss: () -> Unit) {
-    // TODO: スクリーンショットを差し替え
     val pages =
         listOf(
             TutorialPage(
@@ -53,7 +52,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     原因と対策を考えて実践し、反省を通して
                     解決を目指すことができます。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_1,
             ),
             TutorialPage(
                 title = "課題の管理①",
@@ -63,7 +62,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     グループを作成することで課題を分類して
                     管理することができます。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_2,
             ),
             TutorialPage(
                 title = "課題の管理②",
@@ -73,7 +72,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     優先度が最も高い対策が
                     ノートに読み込まれるようになります。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_3,
             ),
             TutorialPage(
                 title = "ノートを作成",
@@ -83,7 +82,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     ノートには登録した課題が読み込まれ、
                     課題への取り組みを記録しておくことができます。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_4,
             ),
             TutorialPage(
                 title = "振り返り",
@@ -93,7 +92,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     課題＞対策へと進めば、その課題への取り組み内容を
                     まとめて振り返ることもできます。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_5,
             ),
             TutorialPage(
                 title = "課題を完了にする",
@@ -103,7 +102,7 @@ fun TutorialScreen(onDismiss: () -> Unit) {
                     ノートへ読み込まれなくなります。完了にしても
                     完了した課題からいつでも振り返ることができます。
                     """.trimIndent(),
-                imageRes = R.drawable.ic_home_black_24dp,
+                imageRes = R.drawable.screenshot_6,
             ),
         )
 
@@ -232,7 +231,6 @@ fun TutorialPageContent(page: TutorialPage) {
             contentDescription = page.title,
             modifier =
                 Modifier
-                    .size(288.dp)
                     .padding(bottom = 50.dp),
         )
     }
