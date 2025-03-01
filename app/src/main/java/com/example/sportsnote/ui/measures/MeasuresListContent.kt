@@ -74,7 +74,6 @@ fun MeasuresListContent(
     ) {
         itemsIndexed(list, key = { _, item -> item.measuresID }) { _, measure ->
             ReorderableItem(state, key = measure.measuresID) { isDragging ->
-                Divider()
                 MeasureItem(
                     measure = measure,
                     modifier =
@@ -86,8 +85,6 @@ fun MeasuresListContent(
                             }
                             .padding(8.dp),
                 )
-            }
-            if (list.size == 1) {
                 Divider()
             }
         }
@@ -100,7 +97,10 @@ fun MeasureItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.height(40.dp),
+        modifier =
+            modifier
+                .background(MaterialTheme.colors.surface)
+                .height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // タイトル
