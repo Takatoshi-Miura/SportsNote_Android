@@ -23,16 +23,13 @@ import com.example.sportsnote.ui.measures.MeasuresViewModel
 /**
  * 課題追加画面
  *
- * @param viewModel TaskViewModel
  * @param onDismiss 画面閉じる時の処理
  */
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun AddTaskScreen(
-    viewModel: TaskViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    onDismiss: () -> Unit,
-) {
-    val measuresViewModel: MeasuresViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+fun AddTaskScreen(onDismiss: () -> Unit) {
+    val viewModel = TaskViewModel()
+    val measuresViewModel = MeasuresViewModel()
     val coroutineScope = rememberCoroutineScope()
     var title by remember { mutableStateOf("") }
     var cause by remember { mutableStateOf("") }

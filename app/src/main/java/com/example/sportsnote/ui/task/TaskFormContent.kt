@@ -37,7 +37,7 @@ fun AddTaskFormContent(
     onGroupChange: (Group) -> Unit,
 ) {
     // グループリストを取得
-    val groupViewModel: GroupViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    val groupViewModel = GroupViewModel()
     val groups by groupViewModel.groups.collectAsState()
     val addTaskData = AddTaskData(groupList = groups)
 
