@@ -1,23 +1,22 @@
 package com.example.sportsnote.utils
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.net.InetSocketAddress
+import java.net.Socket
 
 object Network {
     /**
      * デバイスがオンラインか判定
-     * @param context アプリケーションのコンテキスト
      * @return 接続状態（true→オンライン、false→オフライン）
      */
-    fun isOnline(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork ?: return false
-        val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-        return when {
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
+    suspend fun isOnline(): Boolean = withContext(Dispatchers.IO) {
+        try {
+            val socket = Socket()
+            socket.connect(InetSocketAddress("8.8.8.8", 53), 1500)
+            socket.close()
+            true
+        } catch (e: Exception) {
+            false
         }
     }
 }

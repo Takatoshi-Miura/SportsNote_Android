@@ -9,6 +9,7 @@ import com.example.sportsnote.model.Group
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.utils.Color
+import com.example.sportsnote.utils.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -99,6 +100,7 @@ class GroupViewModel : ViewModel() {
         realmManager.saveItem(group)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }
@@ -118,6 +120,7 @@ class GroupViewModel : ViewModel() {
         realmManager.logicalDelete<Group>(groupId)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }

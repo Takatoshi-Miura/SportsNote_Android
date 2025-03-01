@@ -16,6 +16,7 @@ import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.measures.MeasuresViewModel
 import com.example.sportsnote.ui.memo.MemoViewModel
 import com.example.sportsnote.ui.task.TaskViewModel
+import com.example.sportsnote.utils.Network
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -257,6 +258,7 @@ class NoteViewModel : ViewModel() {
         realmManager.saveItem(note)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }
@@ -314,6 +316,7 @@ class NoteViewModel : ViewModel() {
         realmManager.saveItem(note)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }
@@ -383,6 +386,7 @@ class NoteViewModel : ViewModel() {
         }
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }
@@ -402,6 +406,7 @@ class NoteViewModel : ViewModel() {
         realmManager.logicalDelete<Note>(noteId)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }

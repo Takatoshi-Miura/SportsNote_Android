@@ -10,6 +10,7 @@ import com.example.sportsnote.model.TaskData
 import com.example.sportsnote.model.TaskDetailData
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.utils.Color
+import com.example.sportsnote.utils.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -138,6 +139,7 @@ class TaskViewModel : ViewModel() {
         realmManager.saveItem(task)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return finalTaskId
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return finalTaskId
         }
@@ -158,6 +160,7 @@ class TaskViewModel : ViewModel() {
         realmManager.logicalDelete<TaskData>(taskID)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }

@@ -230,11 +230,13 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.passwordReset),
                     message = stringResource(R.string.confirmSendPasswordResetMail),
                     onConfirm = {
-                        isLoading.value = true
-                        viewModel.sendPasswordResetEmail(email.value, context)
-                        dialogType = DialogType.None
-                        showDialog.value = false
-                        isLoading.value = false
+                        coroutineScope.launch {
+                            isLoading.value = true
+                            viewModel.sendPasswordResetEmail(email.value, context)
+                            dialogType = DialogType.None
+                            showDialog.value = false
+                            isLoading.value = false
+                        }
                     },
                     showDialog = showDialog,
                 )
@@ -246,21 +248,23 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.createAccount),
                     message = stringResource(R.string.createAccountMessage),
                     onConfirm = {
-                        isLoading.value = true
-                        viewModel.createAccount(
-                            email = email.value,
-                            password = password.value,
-                            onSuccess = {
-                                isLoading.value = false
-                                onDismiss()
-                            },
-                            onFailure = {
-                                isLoading.value = false
-                            },
-                            context = context,
-                        )
-                        dialogType = DialogType.None
-                        showDialog.value = false
+                        coroutineScope.launch {
+                            isLoading.value = true
+                            viewModel.createAccount(
+                                email = email.value,
+                                password = password.value,
+                                onSuccess = {
+                                    isLoading.value = false
+                                    onDismiss()
+                                },
+                                onFailure = {
+                                    isLoading.value = false
+                                },
+                                context = context,
+                            )
+                            dialogType = DialogType.None
+                            showDialog.value = false
+                        }
                     },
                     showDialog = showDialog,
                 )
@@ -272,20 +276,22 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.deleteAccount),
                     message = stringResource(R.string.deleteAccountMessage),
                     onConfirm = {
-                        isLoading.value = true
-                        viewModel.deleteAccount(
-                            onSuccess = {
-                                email.value = ""
-                                password.value = ""
-                                isLoading.value = false
-                            },
-                            onFailure = {
-                                isLoading.value = false
-                            },
-                            context = context,
-                        )
-                        dialogType = DialogType.None
-                        showDialog.value = false
+                        coroutineScope.launch {
+                            isLoading.value = true
+                            viewModel.deleteAccount(
+                                onSuccess = {
+                                    email.value = ""
+                                    password.value = ""
+                                    isLoading.value = false
+                                },
+                                onFailure = {
+                                    isLoading.value = false
+                                },
+                                context = context,
+                            )
+                            dialogType = DialogType.None
+                            showDialog.value = false
+                        }
                     },
                     showDialog = showDialog,
                 )

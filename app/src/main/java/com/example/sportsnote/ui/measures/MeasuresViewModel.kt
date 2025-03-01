@@ -5,6 +5,7 @@ import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.Measures
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.utils.Network
 import java.util.Date
 import java.util.UUID
 
@@ -60,6 +61,7 @@ class MeasuresViewModel : ViewModel() {
         realmManager.saveItem(measures)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return measures
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return measures
         }
@@ -80,6 +82,7 @@ class MeasuresViewModel : ViewModel() {
         realmManager.logicalDelete<Measures>(measuresID)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }

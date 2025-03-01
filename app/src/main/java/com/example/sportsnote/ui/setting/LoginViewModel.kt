@@ -8,6 +8,7 @@ import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.ui.InitializationManager
+import com.example.sportsnote.utils.Network
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +58,11 @@ class LoginViewModel : ViewModel() {
             onFailure()
             return
         }
+        if (!Network.isOnline()) {
+            _message.value = context.getString(R.string.internetError)
+            onFailure()
+            return
+        }
         viewModelScope.launch {
             try {
                 // ログイン処理が完了するのを待機
@@ -93,6 +99,11 @@ class LoginViewModel : ViewModel() {
      * @param context Context
      */
     suspend fun logout(context: Context) {
+        if (!Network.isOnline()) {
+            _message.value = context.getString(R.string.internetError)
+            return
+        }
+
         auth.signOut()
 
         // データを全削除＆初期化
@@ -114,7 +125,7 @@ class LoginViewModel : ViewModel() {
      * @param onFailure アカウント作成失敗時の処理
      * @param context Context
      */
-    fun createAccount(
+    suspend fun createAccount(
         email: String,
         password: String,
         onSuccess: () -> Unit,
@@ -123,6 +134,11 @@ class LoginViewModel : ViewModel() {
     ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
+            onFailure()
+            return
+        }
+        if (!Network.isOnline()) {
+            _message.value = context.getString(R.string.internetError)
             onFailure()
             return
         }
@@ -166,11 +182,17 @@ class LoginViewModel : ViewModel() {
      * @param onFailure アカウント削除失敗時の処理
      * @param context Context
      */
-    fun deleteAccount(
+    suspend fun deleteAccount(
         onSuccess: () -> Unit,
         onFailure: () -> Unit,
         context: Context,
     ) {
+        if (!Network.isOnline()) {
+            _message.value = context.getString(R.string.internetError)
+            onFailure()
+            return
+        }
+
         if (!_isLoggedIn.value) {
             _message.value = context.getString(R.string.pleaseLogin)
             onFailure()
@@ -209,12 +231,16 @@ class LoginViewModel : ViewModel() {
      *
      * @param email メールアドレス
      */
-    fun sendPasswordResetEmail(
+    suspend fun sendPasswordResetEmail(
         email: String,
         context: Context,
     ) {
         if (email.isBlank()) {
             _message.value = context.getString(R.string.emptyTextErrorPasswordReset)
+            return
+        }
+        if (!Network.isOnline()) {
+            _message.value = context.getString(R.string.internetError)
             return
         }
 

@@ -7,6 +7,7 @@ import com.example.sportsnote.model.Memo
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
+import com.example.sportsnote.utils.Network
 import java.util.Date
 import java.util.UUID
 
@@ -66,6 +67,7 @@ class MemoViewModel : ViewModel() {
         realmManager.saveItem(memo)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return memo
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return memo
         }
@@ -86,6 +88,7 @@ class MemoViewModel : ViewModel() {
         realmManager.logicalDelete<Memo>(memoID)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return
         }

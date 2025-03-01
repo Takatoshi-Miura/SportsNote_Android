@@ -7,6 +7,7 @@ import com.example.sportsnote.model.FirebaseManager
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.RealmManager
 import com.example.sportsnote.model.Target
+import com.example.sportsnote.utils.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
@@ -92,6 +93,7 @@ class TargetViewModel : ViewModel() {
         realmManager.saveItem(target)
 
         // Firebaseに反映
+        if (!Network.isOnline()) return target.targetID
         if (!PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
             return target.targetID
         }
