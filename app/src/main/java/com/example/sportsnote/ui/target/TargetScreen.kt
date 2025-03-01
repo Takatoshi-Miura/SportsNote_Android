@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.NoteListItem
+import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.model.Target
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
@@ -43,7 +45,9 @@ import com.example.sportsnote.ui.note.NoteEmptyItem
 import com.example.sportsnote.ui.note.NoteListItem
 import com.example.sportsnote.ui.note.NoteViewModel
 import com.example.sportsnote.utils.NoteType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.YearMonth
 
 /**
@@ -69,7 +73,14 @@ fun TargetScreen(reloadTrigger: Int) {
     var selectedDate by remember { mutableStateOf<java.time.LocalDate?>(null) }
 
     LaunchedEffect(visibleMonth, isDialogVisible, reloadTrigger) {
-        targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
+        coroutineScope.launch {
+            if (PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+                withContext(Dispatchers.IO) {
+                    SyncManager.syncAllData()
+                }
+            }
+            targetViewModel.getTargetByYearMonth(visibleMonth.year, visibleMonth.monthValue)
+        }
     }
 
     ModalBottomSheetLayout(

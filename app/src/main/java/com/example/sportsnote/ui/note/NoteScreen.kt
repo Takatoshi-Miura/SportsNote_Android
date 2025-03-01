@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.NoteListItem
+import com.example.sportsnote.model.PreferencesManager
+import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
@@ -50,7 +52,9 @@ import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.utils.NoteType
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * ノート一覧画面
@@ -74,7 +78,14 @@ fun NoteScreen(reloadTrigger: Int) {
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
-        noteViewModel.searchNotesByQuery(searchQuery)
+        coroutineScope.launch {
+            if (PreferencesManager.get(PreferencesManager.Keys.IS_LOGIN, false)) {
+                withContext(Dispatchers.IO) {
+                    SyncManager.syncAllData()
+                }
+            }
+            noteViewModel.searchNotesByQuery(searchQuery)
+        }
     }
 
     LaunchedEffect(Unit, reloadTrigger) {
@@ -120,7 +131,7 @@ fun NoteScreen(reloadTrigger: Int) {
                 )
                 SwipeRefresh(
                     state = swipeRefreshState,
-                    onRefresh = onRefresh,
+                    onRefresh = { onRefresh() },
                 ) {
                     // ノート一覧
                     NoteListScreen(
