@@ -200,7 +200,7 @@ fun getDayOfWeekTextColor(dayOfWeek: DayOfWeek): Color {
     return when (dayOfWeek) {
         DayOfWeek.SATURDAY -> Color.Blue
         DayOfWeek.SUNDAY -> Color.Red
-        else -> Color.Black
+        else -> MaterialTheme.colors.onBackground
     }
 }
 
@@ -266,10 +266,10 @@ fun getDayTextColor(day: CalendarDay): Color {
     val isToday = day.date.isEqual(today)
 
     return when {
-        isToday -> Color.White
+        isToday -> MaterialTheme.colors.onBackground
         day.date.dayOfWeek == DayOfWeek.SUNDAY -> Color.Red
         day.date.dayOfWeek == DayOfWeek.SATURDAY -> Color.Blue
-        day.position == DayPosition.MonthDate -> Color.Black
+        day.position == DayPosition.MonthDate -> MaterialTheme.colors.onBackground
         else -> Color.Gray
     }
 }

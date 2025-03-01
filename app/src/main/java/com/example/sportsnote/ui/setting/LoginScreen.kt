@@ -1,5 +1,3 @@
-@file:Suppress("NAME_SHADOWING")
-
 package com.example.sportsnote.ui.setting
 
 import android.annotation.SuppressLint
@@ -146,9 +144,9 @@ fun LoginScreen(onDismiss: () -> Unit) {
                         coroutineScope.launch {
                             isLoading.value = true
                             if (isLoggedIn) {
-                                viewModel.logout(context)
                                 email.value = ""
                                 password.value = ""
+                                viewModel.logout(context)
                                 isLoading.value = false
                                 onDismiss()
                             } else {
@@ -320,11 +318,11 @@ fun CustomTextField(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(Color.White),
+                .background(MaterialTheme.colors.background),
         colors =
             TextFieldDefaults.outlinedTextFieldColors(
-                textColor = Color.Black,
-                cursorColor = Color.Black,
+                textColor = MaterialTheme.colors.onBackground,
+                cursorColor = MaterialTheme.colors.onBackground,
                 focusedBorderColor = Color.Gray,
                 unfocusedBorderColor = Color.LightGray,
                 focusedLabelColor = Color.Gray,

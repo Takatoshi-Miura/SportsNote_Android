@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
@@ -61,7 +60,6 @@ fun TargetScreen(reloadTrigger: Int) {
     val targetNotes by noteViewModel.targetNotes.collectAsState()
     val yearlyTarget by targetViewModel.yearlyTarget.collectAsState()
     val monthlyTarget by targetViewModel.monthlyTarget.collectAsState()
-    val systemGray6 = Color(0xFFF2F2F7)
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
@@ -106,7 +104,7 @@ fun TargetScreen(reloadTrigger: Int) {
         Box(
             modifier =
                 Modifier
-                    .background(systemGray6)
+                    .background(MaterialTheme.colors.surface)
                     .fillMaxSize(),
         ) {
             Column(
@@ -121,7 +119,7 @@ fun TargetScreen(reloadTrigger: Int) {
 
                 // カレンダー
                 CalendarDisplay(
-                    modifier = Modifier.background(Color.White),
+                    modifier = Modifier.background(MaterialTheme.colors.background),
                     targetViewModel = targetViewModel,
                     selectedDate = selectedDate,
                     onDateSelected = { date ->
@@ -188,7 +186,7 @@ fun TargetDisplaySection(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colors.background)
                 .padding(8.dp),
     ) {
         Column {
@@ -237,7 +235,7 @@ fun NoteListSection(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colors.background)
                 .padding(8.dp),
     ) {
         if (notes.isEmpty()) {

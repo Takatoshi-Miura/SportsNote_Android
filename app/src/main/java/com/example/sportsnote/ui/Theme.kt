@@ -38,17 +38,19 @@ private val LightColorPalette =
         secondary = Color(0xFF03DAC5),
         secondaryVariant = Color(0xFF018786),
         onSecondary = Color.Black,
+        surface = Color(0xFFF2F2F7),
     )
 
 // Dark Theme Colors
 private val DarkColorPalette =
     darkColors(
-        primary = Color(0xFF3478F6),
+        primary = Color(0xFF0A84FF),
         primaryVariant = Color(0xFF225AB7),
         onPrimary = Color.White,
         secondary = Color(0xFF03DAC5),
         secondaryVariant = Color(0xFF018786),
         onSecondary = Color.Black,
+        surface = Color(0xFF1C1C1E),
     )
 
 private val Typography =

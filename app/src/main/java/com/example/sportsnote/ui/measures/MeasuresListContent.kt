@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.model.Measures
@@ -44,8 +43,6 @@ fun MeasuresListContent(
     onOrderChanged: (List<Measures>) -> Unit,
     onItemClick: (String) -> Unit,
 ) {
-    val systemGray6 = Color(0xFFF2F2F7)
-
     // リストの状態を保持
     var list by remember { mutableStateOf(measuresList) }
 
@@ -74,7 +71,7 @@ fun MeasuresListContent(
                     measure = measure,
                     modifier =
                         Modifier
-                            .background(if (isDragging) MaterialTheme.colors.primary.copy(alpha = 0.1f) else systemGray6)
+                            .background(if (isDragging) MaterialTheme.colors.primary.copy(alpha = 0.1f) else MaterialTheme.colors.surface)
                             .fillMaxWidth()
                             .clickable {
                                 onItemClick(measure.measuresID)

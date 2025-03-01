@@ -1,9 +1,8 @@
 package com.example.sportsnote.ui.task
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -104,7 +103,12 @@ fun TaskScreen(reloadTrigger: Int) {
             ActionBottomSheetContent(items = actionItems)
         },
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.surface),
+        ) {
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = { onRefresh() },
@@ -166,7 +170,7 @@ fun TaskListScreen(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(),
+                .background(MaterialTheme.colors.background),
     ) {
         items(groups) { group ->
             // グループ表示

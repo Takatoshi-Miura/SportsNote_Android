@@ -114,7 +114,7 @@ fun TaskDetailScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+                .background(MaterialTheme.colors.background),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー

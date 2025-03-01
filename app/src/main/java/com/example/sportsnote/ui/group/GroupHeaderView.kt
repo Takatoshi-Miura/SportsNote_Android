@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.utils.Color
-import androidx.compose.ui.graphics.Color as AndroidColor
 
 /**
  * 課題一覧用のGroupヘッダーUI
@@ -33,14 +32,12 @@ fun GroupHeaderView(
     colorId: Int,
     onInfoButtonClick: () -> Unit,
 ) {
-    val systemGray6 = AndroidColor(0xFFF2F2F7)
-
     Row(
         modifier =
             Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .background(systemGray6),
+                .background(MaterialTheme.colors.surface),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

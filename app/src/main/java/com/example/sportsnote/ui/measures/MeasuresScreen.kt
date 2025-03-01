@@ -77,6 +77,7 @@ fun MeasuresScreen(
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                 )
+                Divider()
                 // 関連するメモを表示
                 LazyColumn {
                     items(memos.size) { index ->
@@ -87,9 +88,9 @@ fun MeasuresScreen(
                                 navController.navigate("practice_note_view/${memo.noteID}")
                             },
                         )
+                        Divider()
                     }
                 }
-                Divider()
             },
         )
 
@@ -97,7 +98,7 @@ fun MeasuresScreen(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+                .background(MaterialTheme.colors.background),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -161,10 +162,10 @@ fun MemoItem(
         modifier =
             Modifier
                 .fillMaxWidth()
+                .background(MaterialTheme.colors.surface)
                 .clickable { onClick() }
                 .padding(8.dp),
     ) {
-        Divider()
         Text(
             text = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(memo.date),
             style = MaterialTheme.typography.body2,

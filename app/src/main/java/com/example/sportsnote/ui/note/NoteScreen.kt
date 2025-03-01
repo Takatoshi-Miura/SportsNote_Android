@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -74,7 +75,6 @@ fun NoteScreen(reloadTrigger: Int) {
     var isDialogVisible by remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     var searchQuery by remember { mutableStateOf("") }
-    val systemGray6 = Color(0xFFF2F2F7)
 
     // 一覧のリフレッシュ処理
     val onRefresh = {
@@ -118,7 +118,7 @@ fun NoteScreen(reloadTrigger: Int) {
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(systemGray6),
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column {
                 // 検索バー
@@ -195,7 +195,7 @@ fun SearchBar(
             Modifier
                 .fillMaxWidth()
                 .padding(8.dp)
-                .background(MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium),
+                .background(MaterialTheme.colors.background, shape = MaterialTheme.shapes.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // 虫眼鏡アイコン
@@ -237,9 +237,8 @@ fun NoteListScreen(
     LazyColumn(
         modifier =
             Modifier
-                .background(Color.White)
-                .fillMaxWidth()
-                .fillMaxHeight(),
+                .background(MaterialTheme.colors.background)
+                .fillMaxWidth(),
     ) {
         items(notes) { note ->
             NoteListItem(
@@ -278,6 +277,7 @@ fun NoteListItem(
                     modifier =
                         Modifier
                             .size(24.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground),
                 )
             }
         } else {
