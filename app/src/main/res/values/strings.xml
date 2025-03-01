@@ -112,4 +112,5 @@
     <string name="completeTaskMessage">課題を完了にしますか？</string>
     <string name="notCompleteTask">課題を未完了に戻しますか？</string>
     <string name="Uncategorized">未分類</string>
+    <string name="sortByPriority">（優先度が高い順）</string>
 </resources>

@@ -52,6 +52,14 @@ fun MeasuresListContent(
             list =
                 list.toMutableList().apply {
                     add(to.index, removeAt(from.index))
+                }.mapIndexed { index, measure ->
+                    Measures(
+                        measuresId = measure.measuresID,
+                        taskId = measure.taskID,
+                        title = measure.title,
+                        order = index + 1,
+                        created_at = measure.created_at,
+                    )
                 }
             onOrderChanged(list)
         })

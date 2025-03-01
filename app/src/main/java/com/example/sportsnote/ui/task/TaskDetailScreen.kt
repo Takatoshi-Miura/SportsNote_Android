@@ -83,14 +83,25 @@ fun TaskDetailScreen(
             // 対策
             {
                 Text(
-                    text = stringResource(R.string.measures),
+                    text = stringResource(R.string.measures) + stringResource(R.string.sortByPriority),
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.padding(8.dp),
                 )
                 MeasuresListContent(
                     measuresList = measuresList,
-                    onOrderChanged = {
-                        // TODO: 対策の並び順を更新
+                    onOrderChanged = { updatedList ->
+                        coroutineScope.launch {
+                            // 並び順を更新
+                            updatedList.forEach { measure ->
+                                measuresViewModel.saveMeasures(
+                                    measuresId = measure.measuresID,
+                                    taskId = measure.taskID,
+                                    title = measure.title,
+                                    order = measure.order,
+                                    created_at = measure.created_at,
+                                )
+                            }
+                        }
                     },
                     onItemClick = { measuresID ->
                         coroutineScope.launch {
