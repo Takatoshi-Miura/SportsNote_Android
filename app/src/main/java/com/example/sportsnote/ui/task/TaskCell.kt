@@ -67,7 +67,7 @@ fun TaskCell(task: TaskListData) {
         Icon(
             imageVector = Icons.Default.Menu,
             contentDescription = "Drag Handle",
-            modifier = Modifier.padding(end = 8.dp)
+            modifier = Modifier.padding(end = 8.dp),
         )
     }
 }

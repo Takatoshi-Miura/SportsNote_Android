@@ -10,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,9 +26,11 @@ import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.DialogType
+import com.example.sportsnote.ui.components.GroupPickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.TextInputDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
+import com.example.sportsnote.ui.group.GroupViewModel
 import com.example.sportsnote.ui.measures.MeasuresListContent
 import com.example.sportsnote.ui.measures.MeasuresViewModel
 import kotlinx.coroutines.launch
@@ -48,6 +51,7 @@ fun TaskDetailScreen(
     appBarRightIcon: MutableState<(@Composable () -> Unit)?>,
 ) {
     val taskViewModel = TaskViewModel()
+    val groupViewModel = GroupViewModel()
     val measuresViewModel = MeasuresViewModel()
     val taskDetail = taskViewModel.getTaskByTaskId(taskId)
     val coroutineScope = rememberCoroutineScope()
@@ -56,11 +60,14 @@ fun TaskDetailScreen(
     // 入力データ
     var title by remember { mutableStateOf(taskDetail.task.title) }
     var cause by remember { mutableStateOf(taskDetail.task.cause) }
+    var groupId by remember { mutableStateOf(taskDetail.task.groupID) }
     val isComplete by remember { mutableStateOf(taskDetail.task.isComplete) }
     val showDialog = remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
     val inputText = remember { mutableStateOf("") }
     val measuresList = remember { mutableStateListOf(*taskDetail.measuresList.toTypedArray()) }
+    val groups by groupViewModel.groups.collectAsState()
+    val selectedGroup = groupViewModel.getGroupById(groupId)
 
     val inputFields: List<@Composable () -> Unit> =
         listOf(
@@ -79,6 +86,14 @@ fun TaskDetailScreen(
                     defaultLines = 3,
                     onTextChanged = { updatedText -> cause = updatedText },
                     initialText = cause,
+                )
+            },
+            // グループ選択
+            {
+                GroupPickerField(
+                    groups = groups,
+                    onGroupSelected = { selectedGroup -> groupId = selectedGroup.groupID },
+                    initialGroup = selectedGroup!!,
                 )
             },
             // 対策
@@ -112,7 +127,7 @@ fun TaskDetailScreen(
                                 taskId = taskId,
                                 title = title,
                                 cause = cause,
-                                groupId = taskDetail.task.groupID,
+                                groupId = groupId,
                                 isComplete = isComplete,
                                 created_at = taskDetail.task.created_at,
                             )
@@ -139,7 +154,7 @@ fun TaskDetailScreen(
                         taskId = taskId,
                         title = title,
                         cause = cause,
-                        groupId = taskDetail.task.groupID,
+                        groupId = groupId,
                         isComplete = isComplete,
                         created_at = taskDetail.task.created_at,
                     )

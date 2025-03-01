@@ -3,7 +3,6 @@ package com.example.sportsnote.ui.measures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -68,7 +67,7 @@ fun MeasuresListContent(
         state = state.listState,
         modifier =
             Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .reorderable(state)
                 .detectReorderAfterLongPress(state),
     ) {
