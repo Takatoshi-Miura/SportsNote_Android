@@ -42,6 +42,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.DialogType
+import com.example.sportsnote.ui.components.LoadingIndicator
 import kotlinx.coroutines.launch
 
 /**
@@ -62,6 +63,7 @@ fun LoginScreen(onDismiss: () -> Unit) {
     val message by viewModel.message.collectAsState()
     val showDialog = remember { mutableStateOf(false) }
     var dialogType by remember { mutableStateOf(DialogType.None) }
+    val isLoading = remember { mutableStateOf(false) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -142,16 +144,24 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     text = if (isLoggedIn) stringResource(R.string.logout) else stringResource(R.string.login),
                     onClick = {
                         coroutineScope.launch {
+                            isLoading.value = true
                             if (isLoggedIn) {
                                 viewModel.logout(context)
                                 email.value = ""
                                 password.value = ""
+                                isLoading.value = false
                                 onDismiss()
                             } else {
                                 viewModel.login(
                                     email = email.value,
                                     password = password.value,
-                                    onSuccess = { onDismiss() },
+                                    onSuccess = {
+                                        isLoading.value = false
+                                        onDismiss()
+                                    },
+                                    onFailure = {
+                                        isLoading.value = false
+                                    },
                                     context = context,
                                 )
                             }
@@ -206,6 +216,11 @@ fun LoginScreen(onDismiss: () -> Unit) {
                 viewModel.resetMessage()
             }
 
+            // ローディングインジケータ表示
+            if (isLoading.value) {
+                LoadingIndicator.Show()
+            }
+
             // ダイアログ表示
             if (!showDialog.value) {
                 return@Dialog
@@ -217,9 +232,11 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.passwordReset),
                     message = stringResource(R.string.confirmSendPasswordResetMail),
                     onConfirm = {
+                        isLoading.value = true
                         viewModel.sendPasswordResetEmail(email.value, context)
                         dialogType = DialogType.None
                         showDialog.value = false
+                        isLoading.value = false
                     },
                     showDialog = showDialog,
                 )
@@ -231,10 +248,17 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.createAccount),
                     message = stringResource(R.string.createAccountMessage),
                     onConfirm = {
+                        isLoading.value = true
                         viewModel.createAccount(
                             email = email.value,
                             password = password.value,
-                            onSuccess = { onDismiss() },
+                            onSuccess = {
+                                isLoading.value = false
+                                onDismiss()
+                            },
+                            onFailure = {
+                                isLoading.value = false
+                            },
                             context = context,
                         )
                         dialogType = DialogType.None
@@ -250,10 +274,15 @@ fun LoginScreen(onDismiss: () -> Unit) {
                     title = stringResource(R.string.deleteAccount),
                     message = stringResource(R.string.deleteAccountMessage),
                     onConfirm = {
+                        isLoading.value = true
                         viewModel.deleteAccount(
                             onSuccess = {
                                 email.value = ""
                                 password.value = ""
+                                isLoading.value = false
+                            },
+                            onFailure = {
+                                isLoading.value = false
                             },
                             context = context,
                         )

@@ -1,5 +1,3 @@
-@file:Suppress("NAME_SHADOWING")
-
 package com.example.sportsnote.ui.target
 
 import androidx.compose.foundation.background

@@ -42,16 +42,19 @@ class LoginViewModel : ViewModel() {
      * @param email メールアドレス
      * @param password パスワード
      * @param onSuccess ログイン成功時の処理
+     * @param onFailure ログイン失敗時の処理
      * @param context Context
      */
     suspend fun login(
         email: String,
         password: String,
         onSuccess: () -> Unit,
+        onFailure: () -> Unit,
         context: Context,
     ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
+            onFailure()
             return
         }
         viewModelScope.launch {
@@ -79,6 +82,7 @@ class LoginViewModel : ViewModel() {
                 onSuccess()
             } catch (e: Exception) {
                 _message.value = e.message ?: context.getString(R.string.loginError)
+                onFailure()
             }
         }
     }
@@ -98,6 +102,7 @@ class LoginViewModel : ViewModel() {
 
         _isLoggedIn.value = false
         _message.value = context.getString(R.string.logoutSuccess)
+        delay(2000)
     }
 
     /**
@@ -106,16 +111,19 @@ class LoginViewModel : ViewModel() {
      * @param email メールアドレス
      * @param password パスワード
      * @param onSuccess アカウント作成成功時の処理
+     * @param onFailure アカウント作成失敗時の処理
      * @param context Context
      */
     fun createAccount(
         email: String,
         password: String,
         onSuccess: () -> Unit,
+        onFailure: () -> Unit,
         context: Context,
     ) {
         if (email.isBlank() || password.isBlank()) {
             _message.value = context.getString(R.string.emptyTextError)
+            onFailure()
             return
         }
         viewModelScope.launch {
@@ -142,9 +150,11 @@ class LoginViewModel : ViewModel() {
                     onSuccess()
                 } else {
                     _message.value = context.getString(R.string.createAccountFailed)
+                    onFailure()
                 }
             } catch (e: Exception) {
                 _message.value = e.message
+                onFailure()
             }
         }
     }
@@ -153,26 +163,31 @@ class LoginViewModel : ViewModel() {
      * アカウント削除
      *
      * @param onSuccess アカウント削除成功時の処理
+     * @param onFailure アカウント削除失敗時の処理
      * @param context Context
      */
     fun deleteAccount(
         onSuccess: () -> Unit,
+        onFailure: () -> Unit,
         context: Context,
     ) {
         if (!_isLoggedIn.value) {
             _message.value = context.getString(R.string.pleaseLogin)
+            onFailure()
             return
         }
 
         val user =
             auth.currentUser ?: run {
                 _message.value = context.getString(R.string.pleaseLogin)
+                onFailure()
                 return
             }
 
         user.delete().addOnCompleteListener { task ->
             if (!task.isSuccessful) {
                 _message.value = task.exception?.message ?: context.getString(R.string.deleteAccountFailed)
+                onFailure()
                 return@addOnCompleteListener
             }
 
