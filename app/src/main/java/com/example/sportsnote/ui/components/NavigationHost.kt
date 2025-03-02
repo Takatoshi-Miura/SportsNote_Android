@@ -121,6 +121,7 @@ fun NavigationHost() {
             }
             // 完了した課題一覧
             composable(Screen.CompletedTask.route) { backStackEntry ->
+                appBarRightIcon.value = null
                 val groupId = backStackEntry.arguments?.getString("groupId") ?: ""
                 CompletedTaskScreen(
                     groupId = groupId,
