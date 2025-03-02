@@ -1,23 +1,17 @@
 package com.example.sportsnote.ui.setting
 
-import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -41,6 +34,8 @@ import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.components.LoadingIndicator
+import com.example.sportsnote.ui.setting.components.CustomButton
+import com.example.sportsnote.ui.setting.components.CustomTextField
 import kotlinx.coroutines.launch
 
 /**
@@ -297,68 +292,5 @@ fun LoginScreen(onDismiss: () -> Unit) {
                 )
             }
         }
-    }
-}
-
-/**
- * TextFieldの共通コンポーネント
- *
- * @param value 入力文字列
- * @param onValueChange 文字列変更時の処理
- * @param label 項目名
- * @param visualTransformation パスワードの伏字など
- */
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(text = label, color = Color.Gray) },
-        singleLine = true,
-        visualTransformation = visualTransformation,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background),
-        colors =
-            TextFieldDefaults.outlinedTextFieldColors(
-                textColor = MaterialTheme.colors.onBackground,
-                cursorColor = MaterialTheme.colors.onBackground,
-                focusedBorderColor = Color.Gray,
-                unfocusedBorderColor = Color.LightGray,
-                focusedLabelColor = Color.Gray,
-                unfocusedLabelColor = Color.Gray,
-            ),
-    )
-}
-
-/**
- * ボタンの共通コンポーネント
- *
- * @param text ボタン名
- * @param onClick 押下時の処理
- * @param backgroundColor 背景色
- * @param textColor テキスト色
- * @param modifier Modifier
- */
-@Composable
-fun CustomButton(
-    text: String,
-    onClick: () -> Unit,
-    backgroundColor: Color = MaterialTheme.colors.secondary,
-    textColor: Color = Color.White,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
-    ) {
-        Text(text = text, color = textColor)
     }
 }
