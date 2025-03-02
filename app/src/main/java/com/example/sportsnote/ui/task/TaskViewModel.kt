@@ -23,6 +23,8 @@ class TaskViewModel : ViewModel() {
     val tasks: StateFlow<List<TaskData>> = _tasks
     private val _taskLists = MutableStateFlow<List<TaskListData>>(emptyList())
     val taskLists: StateFlow<List<TaskListData>> = _taskLists
+    private val _taskListsForNote = MutableStateFlow<List<TaskListData>>(emptyList())
+    val taskListsForNote: StateFlow<List<TaskListData>> = _taskListsForNote
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -38,14 +40,20 @@ class TaskViewModel : ViewModel() {
             _isLoading.value = true
             _tasks.value = realmManager.getDataList(TaskData::class.java)
 
-            // 課題一覧用データを取得
+            // 課題一覧用データ,練習ノート用データを取得
             val taskListDatas = mutableListOf<TaskListData>()
+            val taskListForPracticeNote = mutableListOf<TaskListData>()
             _tasks.value.forEach { task ->
                 if (task.isComplete) return@forEach
                 val taskListData = convertTaskDataToTaskListData(task)
                 taskListDatas.add(taskListData)
+
+                // 練習ノートには対策が一つ1以上存在する課題のみ連携
+                if (taskListData.measures.isBlank()) return@forEach
+                taskListForPracticeNote.add(taskListData)
             }
             _taskLists.value = taskListDatas
+            _taskListsForNote.value = taskListForPracticeNote
             _isLoading.value = false
         }
     }

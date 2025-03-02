@@ -85,12 +85,12 @@ fun PracticeNoteFormContent(
 
     // `note` があればその `taskReflections` を、なければ全課題リストをデフォルトの Map にする
     val taskViewModel = TaskViewModel()
-    val taskLists by taskViewModel.taskLists.collectAsState()
+    val taskLists by taskViewModel.taskListsForNote.collectAsState()
     val taskListMap: Map<TaskListData, String> = note?.taskReflections ?: taskLists.associateWith { "" }
     val taskListState = remember { mutableStateOf(taskListMap) }
 
     // ノートに未追加の課題を取得
-    val allTasks by taskViewModel.taskLists.collectAsState()
+    val allTasks by taskViewModel.taskListsForNote.collectAsState()
     val unaddedTasks =
         remember(taskListState.value, allTasks) {
             derivedStateOf {
