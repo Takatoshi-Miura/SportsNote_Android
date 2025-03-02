@@ -5,6 +5,36 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import com.example.sportsnote.R
+import com.example.sportsnote.utils.AppInfo
+
+/**
+ * お問い合わせメーラー起動
+ *
+ * @param context Context
+ */
+fun openInquiryMailer(context: Context) {
+    val email = "SportsNote開発者<it6210ge@gmail.com>"
+    val subject = context.getText(R.string.inquiry).toString()
+    val deviceName = AppInfo.getDeviceName()
+    val androidOSVer = AppInfo.getAndroidVersionInfo()
+    val appVer = AppInfo.getAppVersion(context)
+    val body =
+        """
+        お問い合わせ内容をご記入下さい。
+                                
+                                
+        以下は削除しないでください。
+        ■ご利用端末：$deviceName
+        ■OSバージョン:$androidOSVer
+        ■アプリバージョン:$appVer
+        """.trimIndent()
+    launchMailer(
+        context = context,
+        email = email,
+        subject = subject,
+        body = body,
+    )
+}
 
 /**
  * メーラーを起動
@@ -15,7 +45,7 @@ import com.example.sportsnote.R
  * @param body 本文
  */
 @SuppressLint("QueryPermissionsNeeded")
-fun launchMailer(
+private fun launchMailer(
     context: Context,
     email: String,
     subject: String,
