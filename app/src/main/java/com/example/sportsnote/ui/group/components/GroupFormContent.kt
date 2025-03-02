@@ -24,7 +24,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.ColorPickerField
 import com.example.sportsnote.ui.components.CustomSpacerColumn
-import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.components.SingleLineTextInputField
 import com.example.sportsnote.ui.components.items.ItemLabel
 import com.example.sportsnote.ui.components.sort.SortItem
 import com.example.sportsnote.ui.group.GroupViewModel
@@ -60,7 +60,7 @@ fun GroupFormContent(
         buildList {
             // タイトル
             add {
-                MultiLineTextInputField(
+                SingleLineTextInputField(
                     title = stringResource(R.string.title),
                     onTextChanged = { updatedText -> title.value = updatedText },
                     initialText = title.value,
@@ -76,8 +76,6 @@ fun GroupFormContent(
             // グループ（グループ詳細画面のみ追加）
             if (group != null) {
                 add {
-                    ItemLabel(R.string.displayOrder)
-                    Divider()
                     GroupListContent(
                         groupList = groups,
                         onOrderChanged = { updatedList ->
@@ -143,6 +141,11 @@ fun GroupListContent(
             onOrderChanged(list)
         })
 
+    // 項目ラベル
+    ItemLabel(stringResource(R.string.displayOrder))
+    Divider()
+
+    // グループリスト
     LazyColumn(
         state = state.listState,
         modifier =

@@ -18,6 +18,7 @@ import com.example.sportsnote.model.PracticeNote
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
+import com.example.sportsnote.ui.note.components.PracticeNoteFormContent
 import com.example.sportsnote.utils.Weather
 import kotlinx.coroutines.launch
 import java.util.Date

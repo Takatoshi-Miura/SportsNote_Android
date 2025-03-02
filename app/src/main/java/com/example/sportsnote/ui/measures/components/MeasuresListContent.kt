@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.measures
+package com.example.sportsnote.ui.measures.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

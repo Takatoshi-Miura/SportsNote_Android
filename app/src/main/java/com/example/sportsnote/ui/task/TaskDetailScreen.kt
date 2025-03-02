@@ -33,8 +33,8 @@ import com.example.sportsnote.ui.components.MultiLineTextInputField
 import com.example.sportsnote.ui.components.TextInputDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 import com.example.sportsnote.ui.group.GroupViewModel
-import com.example.sportsnote.ui.measures.MeasuresListContent
 import com.example.sportsnote.ui.measures.MeasuresViewModel
+import com.example.sportsnote.ui.measures.components.MeasuresListContent
 import kotlinx.coroutines.launch
 
 /**

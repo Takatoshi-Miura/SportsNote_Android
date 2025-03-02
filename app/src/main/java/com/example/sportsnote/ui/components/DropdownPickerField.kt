@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.ui.components.items.ItemLabel
 import androidx.compose.ui.graphics.Color as AndroidColor
 
 /**
@@ -47,11 +48,7 @@ fun <T> DropdownPickerField(
                 .padding(8.dp),
     ) {
         // 項目名
-        Text(
-            text = fieldName,
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp),
-        )
+        ItemLabel(title = fieldName)
 
         // 選択ボタン
         Button(

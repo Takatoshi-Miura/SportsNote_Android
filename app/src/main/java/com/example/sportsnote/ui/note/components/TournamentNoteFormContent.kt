@@ -1,8 +1,7 @@
-package com.example.sportsnote.ui.note
+package com.example.sportsnote.ui.note.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -10,14 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Note
 import com.example.sportsnote.ui.components.CustomSpacerColumn
-import com.example.sportsnote.ui.components.DatePickerField
 import com.example.sportsnote.ui.components.MultiLineTextInputField
-import com.example.sportsnote.ui.components.TemperatureSlider
-import com.example.sportsnote.ui.components.WeatherPickerField
 import com.example.sportsnote.utils.Weather
 import java.util.Date
 
@@ -125,7 +120,6 @@ fun TournamentNoteFormContent(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .verticalScroll(rememberScrollState()),
     ) {
         CustomSpacerColumn(items = inputFields)

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -16,6 +17,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.components.header.AddScreenHeader
+import com.example.sportsnote.ui.note.components.PracticeNoteFormContent
 import com.example.sportsnote.utils.Weather
 import java.util.Date
 
@@ -30,8 +32,8 @@ fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
 
     // 入力データの状態管理
     val date = remember { mutableStateOf(Date()) }
-    val weather = remember { mutableStateOf(Weather.SUNNY.id) }
-    val temperature = remember { mutableStateOf(20) }
+    val weather = remember { mutableIntStateOf(Weather.SUNNY.id) }
+    val temperature = remember { mutableIntStateOf(20) }
     val condition = remember { mutableStateOf("") }
     val purpose = remember { mutableStateOf("") }
     val detail = remember { mutableStateOf("") }
@@ -61,8 +63,8 @@ fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
                         val noteViewModel = NoteViewModel()
                         noteViewModel.savePracticeNote(
                             date = date.value,
-                            weather = weather.value,
-                            temperature = temperature.value,
+                            weather = weather.intValue,
+                            temperature = temperature.intValue,
                             condition = condition.value,
                             purpose = purpose.value,
                             detail = detail.value,
@@ -78,8 +80,8 @@ fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
                 PracticeNoteFormContent(
                     note = null,
                     onDateChange = { selectedDate -> date.value = selectedDate },
-                    onWeatherChange = { selectedWeather -> weather.value = selectedWeather },
-                    onTemperatureChange = { selectedTemperature -> temperature.value = selectedTemperature },
+                    onWeatherChange = { selectedWeather -> weather.intValue = selectedWeather },
+                    onTemperatureChange = { selectedTemperature -> temperature.intValue = selectedTemperature },
                     onConditionChange = { updatedCondition -> condition.value = updatedCondition },
                     onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
                     onDetailChange = { updateDetail -> detail.value = updateDetail },

@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.MultiLineTextInputField
+import com.example.sportsnote.ui.components.SingleLineTextInputField
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
 
 /**
@@ -49,7 +50,7 @@ fun FreeNoteScreen(
         listOf(
             // タイトル
             {
-                MultiLineTextInputField(
+                SingleLineTextInputField(
                     title = stringResource(R.string.title),
                     onTextChanged = { updatedText -> title = updatedText },
                     initialText = title,

@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.components
+package com.example.sportsnote.ui.note.components
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.Row
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -15,7 +14,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.sportsnote.R
+import com.example.sportsnote.ui.components.items.ItemLabel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -57,12 +59,10 @@ fun DatePickerField(
                 .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = "日付",
-            style = MaterialTheme.typography.body1,
-            modifier = Modifier.padding(end = 8.dp),
-        )
+        // タイトルラベル
+        ItemLabel(title = stringResource(R.string.date))
         Spacer(modifier = Modifier.width(16.dp))
+
         // 選択した日付の表示 or ボタン
         Button(
             onClick = {

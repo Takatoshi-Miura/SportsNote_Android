@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.sportsnote.R
 import com.example.sportsnote.ui.components.header.AddScreenHeader
+import com.example.sportsnote.ui.note.components.TournamentNoteFormContent
 import com.example.sportsnote.utils.Weather
 import java.util.Date
 
