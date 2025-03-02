@@ -116,4 +116,8 @@
     <string name="displayOrder">表示順</string>
     <string name="internetError">インターネット接続がオフラインです。</string>
     <string name="emptyTitle">タイトルを入力して下さい</string>
+    <string name="termsOfServiceTitle">利用規約</string>
+    <string name="termsOfServiceMessage">アプリを使用するには利用規約に同意する必要があります。</string>
+    <string name="agree">同意する</string>
+    <string name="checkTermsOfService">利用規約を確認</string>
 </resources>
