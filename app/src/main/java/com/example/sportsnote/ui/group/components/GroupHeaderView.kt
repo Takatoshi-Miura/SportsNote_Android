@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.group
+package com.example.sportsnote.ui.group.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

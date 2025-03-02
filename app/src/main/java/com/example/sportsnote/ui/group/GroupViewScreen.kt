@@ -21,6 +21,7 @@ import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
 import com.example.sportsnote.ui.components.CustomAlertDialog
 import com.example.sportsnote.ui.components.header.NavigationScreenHeader
+import com.example.sportsnote.ui.group.components.GroupFormContent
 import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.launch
 import java.util.Date

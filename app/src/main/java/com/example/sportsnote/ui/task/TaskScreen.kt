@@ -39,8 +39,8 @@ import com.example.sportsnote.ui.components.ActionBottomSheetContent
 import com.example.sportsnote.ui.components.AdMobBanner
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.group.AddGroupScreen
-import com.example.sportsnote.ui.group.GroupHeaderView
 import com.example.sportsnote.ui.group.GroupViewModel
+import com.example.sportsnote.ui.group.components.GroupHeaderView
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Dispatchers
