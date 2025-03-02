@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation("com.kizitonwose.calendar:compose:2.6.1")
 
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+
     // テスト用依存関係（オプション）
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.0")

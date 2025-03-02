@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
 import com.example.sportsnote.R
 import com.example.sportsnote.model.PreferencesManager
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,6 +30,9 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             initializationManager.initializeApp()
         }
+
+        // AdMobを初期化
+        MobileAds.initialize(this@MainActivity) {}
 
         // 利用規約ダイアログを表示
         checkAndShowTermsDialog()

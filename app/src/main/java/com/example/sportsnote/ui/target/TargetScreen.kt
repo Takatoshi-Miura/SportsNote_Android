@@ -35,6 +35,7 @@ import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.model.Target
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.AdMobBanner
 import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
@@ -231,24 +232,31 @@ fun NoteListSection(
     notes: List<NoteListItem>,
     onNoteClick: (NoteListItem) -> Unit,
 ) {
-    LazyColumn(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-                .padding(8.dp),
+    Column(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        if (notes.isEmpty()) {
-            item {
-                NoteEmptyItem()
+        LazyColumn(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background)
+                    .padding(8.dp),
+        ) {
+            if (notes.isEmpty()) {
+                item {
+                    NoteEmptyItem()
+                }
+            }
+            items(notes) { note ->
+                NoteListItem(
+                    note = note,
+                    onClick = { onNoteClick(note) },
+                )
+                Divider()
             }
         }
-        items(notes) { note ->
-            NoteListItem(
-                note = note,
-                onClick = { onNoteClick(note) },
-            )
-            Divider()
-        }
+        // バナー広告
+        AdMobBanner()
     }
 }

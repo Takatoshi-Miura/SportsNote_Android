@@ -3,6 +3,8 @@ package com.example.sportsnote.ui.task
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,6 +36,7 @@ import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.model.TaskListData
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.AdMobBanner
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.group.AddGroupScreen
 import com.example.sportsnote.ui.group.GroupHeaderView
@@ -166,53 +169,61 @@ fun TaskListScreen(
 ) {
     val navController = LocalNavController.current
 
-    LazyColumn(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background),
+    Column(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        items(groups) { group ->
-            // グループ表示
-            GroupHeaderView(
-                title = group.title,
-                colorId = group.color,
-                onInfoButtonClick = { onInfoButtonClick(group) },
-            )
-            Divider()
-
-            // 課題セルのリスト
-            val groupTasks =
-                taskList
-                    .filter { it.groupID == group.groupID }
-                    .sortedBy { it.order }
-            groupTasks.forEach { task ->
-                TaskCell(task)
+        LazyColumn(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background),
+        ) {
+            items(groups) { group ->
+                // グループ表示
+                GroupHeaderView(
+                    title = group.title,
+                    colorId = group.color,
+                    onInfoButtonClick = { onInfoButtonClick(group) },
+                )
                 Divider()
-            }
 
-            // 完了した課題セル
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .clickable {
-                            // CompletedTaskScreenに遷移する
-                            navController.navigate("completed_task/${group.groupID}")
-                        },
-            ) {
-                Text(
-                    text = stringResource(R.string.completedTask),
-                    color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.body2,
+                // 課題セルのリスト
+                val groupTasks =
+                    taskList
+                        .filter { it.groupID == group.groupID }
+                        .sortedBy { it.order }
+                groupTasks.forEach { task ->
+                    TaskCell(task)
+                    Divider()
+                }
+
+                // 完了した課題セル
+                Box(
                     modifier =
                         Modifier
-                            .align(Alignment.CenterStart)
-                            .padding(start = 8.dp),
-                )
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .clickable {
+                                // CompletedTaskScreenに遷移する
+                                navController.navigate("completed_task/${group.groupID}")
+                            },
+                ) {
+                    Text(
+                        text = stringResource(R.string.completedTask),
+                        color = MaterialTheme.colors.primary,
+                        style = MaterialTheme.typography.body2,
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterStart)
+                                .padding(start = 8.dp),
+                    )
+                }
+                Divider()
             }
-            Divider()
         }
+
+        // バナー広告を最下位に表示
+        AdMobBanner()
     }
 }

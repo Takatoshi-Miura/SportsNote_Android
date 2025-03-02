@@ -48,6 +48,7 @@ import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.SyncManager
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
+import com.example.sportsnote.ui.components.AdMobBanner
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.utils.NoteType
@@ -234,19 +235,26 @@ fun NoteListScreen(
     notes: List<NoteListItem>,
     onNoteClick: (NoteListItem) -> Unit,
 ) {
-    LazyColumn(
-        modifier =
-            Modifier
-                .background(MaterialTheme.colors.background)
-                .fillMaxWidth(),
+    Column(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        items(notes) { note ->
-            NoteListItem(
-                note = note,
-                onClick = { onNoteClick(note) },
-            )
-            Divider()
+        LazyColumn(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.background),
+        ) {
+            items(notes) { note ->
+                NoteListItem(
+                    note = note,
+                    onClick = { onNoteClick(note) },
+                )
+                Divider()
+            }
         }
+        // バナー広告
+        AdMobBanner()
     }
 }
 
