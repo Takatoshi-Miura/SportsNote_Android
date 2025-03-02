@@ -1,5 +1,6 @@
 package com.example.sportsnote.ui.note
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
@@ -37,6 +39,7 @@ fun FreeNoteScreen(
 ) {
     val noteViewModel = NoteViewModel()
     val freeNote = noteViewModel.getNoteById(noteID)
+    val context = LocalContext.current
 
     // 入力データ
     var title by remember { mutableStateOf(freeNote!!.title) }
@@ -74,6 +77,14 @@ fun FreeNoteScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
+                    if (title.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.emptyTitle),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        return@NavigationScreenHeader
+                    }
                     noteViewModel.saveFreeNote(
                         noteId = noteID,
                         title = title,

@@ -1,5 +1,6 @@
 package com.example.sportsnote.ui.measures
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
@@ -55,6 +57,7 @@ fun MeasuresScreen(
     val memos = memoViewModel.getMemosByMeasuresID(measuresID)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
+    val context = LocalContext.current
 
     // 入力データ
     var title by remember { mutableStateOf(measures!!.title) }
@@ -105,6 +108,14 @@ fun MeasuresScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
+                    if (title.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.emptyTitle),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        return@NavigationScreenHeader
+                    }
                     // 保存処理
                     measuresViewModel.saveMeasures(
                         measuresId = measuresID,

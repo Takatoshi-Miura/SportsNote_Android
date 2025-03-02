@@ -1,6 +1,7 @@
 package com.example.sportsnote.ui.group
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.sportsnote.R
 import com.example.sportsnote.model.Group
@@ -42,6 +44,7 @@ fun GroupViewScreen(
     val viewModel = GroupViewModel()
     val group: Group? = viewModel.getGroupById(groupId)
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     // 入力データの状態管理
     var title by remember { mutableStateOf("") }
@@ -59,6 +62,14 @@ fun GroupViewScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
+                    if (title.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.emptyTitle),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        return@NavigationScreenHeader
+                    }
                     viewModel.saveGroup(
                         groupId = groupId,
                         title = title,

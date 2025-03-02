@@ -1,5 +1,6 @@
 package com.example.sportsnote.ui.task
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
@@ -56,6 +58,7 @@ fun TaskDetailScreen(
     val taskDetail = taskViewModel.getTaskByTaskId(taskId)
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
+    val context = LocalContext.current
 
     // 入力データ
     var title by remember { mutableStateOf(taskDetail.task.title) }
@@ -149,6 +152,14 @@ fun TaskDetailScreen(
             NavigationScreenHeader(
                 onDismiss = onBack,
                 onSave = {
+                    if (title.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.emptyTitle),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        return@NavigationScreenHeader
+                    }
                     // 保存処理
                     taskViewModel.saveTask(
                         taskId = taskId,
@@ -211,6 +222,14 @@ fun TaskDetailScreen(
             inputTextState = inputText,
             onConfirm = { input ->
                 coroutineScope.launch {
+                    if (input.isEmpty()) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.emptyTitle),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                        return@launch
+                    }
                     // 対策追加
                     val newMeasure =
                         measuresViewModel.saveMeasures(
