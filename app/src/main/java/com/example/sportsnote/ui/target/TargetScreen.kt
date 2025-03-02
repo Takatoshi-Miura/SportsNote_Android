@@ -39,9 +39,9 @@ import com.example.sportsnote.ui.components.AdMobBanner
 import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
-import com.example.sportsnote.ui.note.NoteEmptyItem
-import com.example.sportsnote.ui.note.NoteListItem
 import com.example.sportsnote.ui.note.NoteViewModel
+import com.example.sportsnote.ui.note.components.NoteEmptyItem
+import com.example.sportsnote.ui.note.components.NoteItem
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -249,7 +249,7 @@ fun NoteListSection(
                 }
             }
             items(notes) { note ->
-                NoteListItem(
+                NoteItem(
                     note = note,
                     onClick = { onNoteClick(note) },
                 )

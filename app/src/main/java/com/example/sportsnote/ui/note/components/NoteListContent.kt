@@ -55,7 +55,7 @@ fun NoteListContent(
                     .background(MaterialTheme.colors.background),
         ) {
             items(notes) { note ->
-                NoteListItem(
+                NoteItem(
                     note = note,
                     onClick = { onNoteClick(note) },
                 )
@@ -74,7 +74,7 @@ fun NoteListContent(
  * @param onClick 押下時の処理
  */
 @Composable
-fun NoteListItem(
+fun NoteItem(
     note: NoteListItem,
     onClick: () -> Unit = {},
 ) {
