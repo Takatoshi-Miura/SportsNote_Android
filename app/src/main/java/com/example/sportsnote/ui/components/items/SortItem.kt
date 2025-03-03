@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.components.sort
+package com.example.sportsnote.ui.components.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row

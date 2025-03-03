@@ -26,7 +26,7 @@ import com.example.sportsnote.ui.components.ColorPickerField
 import com.example.sportsnote.ui.components.CustomSpacerColumn
 import com.example.sportsnote.ui.components.SingleLineTextInputField
 import com.example.sportsnote.ui.components.items.ItemLabel
-import com.example.sportsnote.ui.components.sort.SortItem
+import com.example.sportsnote.ui.components.items.SortItem
 import com.example.sportsnote.ui.group.GroupViewModel
 import com.example.sportsnote.utils.Color
 import kotlinx.coroutines.launch

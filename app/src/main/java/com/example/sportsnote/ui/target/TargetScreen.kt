@@ -5,17 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,19 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.sportsnote.R
-import com.example.sportsnote.model.NoteListItem
 import com.example.sportsnote.model.PreferencesManager
 import com.example.sportsnote.model.SyncManager
-import com.example.sportsnote.model.Target
 import com.example.sportsnote.ui.LocalNavController
 import com.example.sportsnote.ui.components.ActionBottomSheetContent
-import com.example.sportsnote.ui.components.AdMobBanner
-import com.example.sportsnote.ui.components.CalendarDisplay
 import com.example.sportsnote.ui.components.CustomFloatingActionButton
 import com.example.sportsnote.ui.components.DialogType
 import com.example.sportsnote.ui.note.NoteViewModel
-import com.example.sportsnote.ui.note.components.NoteEmptyItem
-import com.example.sportsnote.ui.note.components.NoteItem
+import com.example.sportsnote.ui.target.components.CalendarDisplay
+import com.example.sportsnote.ui.target.components.NoteListSection
+import com.example.sportsnote.ui.target.components.TargetDisplaySection
 import com.example.sportsnote.utils.NoteType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -115,7 +106,6 @@ fun TargetScreen(reloadTrigger: Int) {
             ) {
                 // 年間目標と月間目標
                 TargetDisplaySection(yearlyTarget, monthlyTarget)
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // カレンダー
@@ -128,7 +118,6 @@ fun TargetScreen(reloadTrigger: Int) {
                         noteViewModel.getNoteListByDate(date)
                     },
                 )
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // ノートリスト
@@ -169,94 +158,5 @@ fun TargetScreen(reloadTrigger: Int) {
             isYearlyTarget = false,
             onDismiss = { isDialogVisible = false },
         )
-    }
-}
-
-/**
- * 年間目標と月間目標を表示するコンポーネント
- *
- * @param yearlyTarget 年間目標
- * @param monthlyTarget 月間目標
- */
-@Composable
-fun TargetDisplaySection(
-    yearlyTarget: Target?,
-    monthlyTarget: Target?,
-) {
-    Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-                .padding(8.dp),
-    ) {
-        Column {
-            // 年間目標
-            yearlyTarget?.let {
-                TargetLabel(stringResource(R.string.targetYear, it.title))
-            } ?: TargetLabel(stringResource(R.string.targetYear, stringResource(R.string.targetNotFound)))
-
-            // 月間目標
-            monthlyTarget?.let {
-                TargetLabel(stringResource(R.string.targetMonth, it.title))
-            } ?: TargetLabel(stringResource(R.string.targetMonth, stringResource(R.string.targetNotFound)))
-        }
-    }
-}
-
-/**
- * 目標表示ラベル
- *
- * @param text 目標文字列
- */
-@Composable
-fun TargetLabel(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.body1,
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
-    )
-}
-
-/**
- * ノートリストを縦にスクロール表示するコンポーネント
- *
- * @param notes ノートリスト
- * @param onNoteClick ノート押下時の処理
- */
-@Composable
-fun NoteListSection(
-    notes: List<NoteListItem>,
-    onNoteClick: (NoteListItem) -> Unit,
-) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        LazyColumn(
-            modifier =
-                Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colors.background)
-                    .padding(8.dp),
-        ) {
-            if (notes.isEmpty()) {
-                item {
-                    NoteEmptyItem()
-                }
-            }
-            items(notes) { note ->
-                NoteItem(
-                    note = note,
-                    onClick = { onNoteClick(note) },
-                )
-                Divider()
-            }
-        }
-        // バナー広告
-        AdMobBanner()
     }
 }

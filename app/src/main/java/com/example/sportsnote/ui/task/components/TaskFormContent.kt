@@ -1,4 +1,4 @@
-package com.example.sportsnote.ui.task
+package com.example.sportsnote.ui.task.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
