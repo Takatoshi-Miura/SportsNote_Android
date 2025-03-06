@@ -14,11 +14,11 @@ ktlint {
 }
 
 android {
-    namespace = "com.example.sportsnote"
+    namespace = "com.it6210.sportsnote"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.sportsnote"
+        applicationId = "com.it6210.sportsnote"
         minSdk = 31
         targetSdk = 34
         versionCode = 1

@@ -1,0 +1,103 @@
+package com.it6210.sportsnote.ui.setting
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.it6210.sportsnote.R
+import com.it6210.sportsnote.ui.components.DialogType
+import com.it6210.sportsnote.ui.components.ItemData
+import com.it6210.sportsnote.ui.components.SectionData
+import com.it6210.sportsnote.ui.components.SectionedColumn
+import com.it6210.sportsnote.utils.AppInfo
+import openInquiryMailer
+
+/**
+ * 設定画面を作成
+ *
+ * @param onDismiss 画面を閉じる処理
+ */
+@Composable
+fun SettingScreen(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val appVersion = AppInfo.getAppVersion(context)
+    var isDialogVisible by remember { mutableStateOf(false) }
+    var dialogType by remember { mutableStateOf(DialogType.None) }
+
+    val sections =
+        listOf(
+            // データ
+            SectionData(
+                title = stringResource(R.string.data),
+                items =
+                    listOf(
+                        // データの引継ぎ
+                        ItemData(
+                            title = stringResource(R.string.data_transfer),
+                            iconRes = R.drawable.outline_cloud_upload_24,
+                        ) {
+                            // ログイン画面を表示
+                            isDialogVisible = true
+                            dialogType = DialogType.Login
+                        },
+                    ),
+            ),
+            // ヘルプ
+            SectionData(
+                title = stringResource(R.string.help),
+                items =
+                    listOf(
+                        // アプリの使い方
+                        ItemData(
+                            title = stringResource(R.string.how_to_use_this_app),
+                            iconRes = R.drawable.baseline_question_mark_24,
+                        ) {
+                            // チュートリアル画面を表示
+                            isDialogVisible = true
+                            dialogType = DialogType.Tutorial
+                        },
+                        // お問い合わせ
+                        ItemData(
+                            title = stringResource(R.string.inquiry),
+                            iconRes = R.drawable.baseline_mail_outline_24,
+                        ) {
+                            // メーラーを表示
+                            openInquiryMailer(context)
+                        },
+                    ),
+            ),
+            // システム情報
+            SectionData(
+                title = stringResource(R.string.system_info),
+                items =
+                    listOf(
+                        // アプリバージョン
+                        ItemData(
+                            title = stringResource(R.string.app_version),
+                            subTitle = appVersion,
+                            iconRes = R.drawable.baseline_info_outline_24,
+                        ) { },
+                    ),
+            ),
+        )
+    SectionedColumn(sections = sections)
+
+    // ダイアログでフルスクリーンモーダルを表示
+    if (!isDialogVisible) return
+    if (dialogType == DialogType.Login) {
+        LoginScreen(
+            onDismiss = {
+                isDialogVisible = false
+                onDismiss()
+            },
+        )
+    }
+    if (dialogType == DialogType.Tutorial) {
+        TutorialScreen(
+            onDismiss = { isDialogVisible = false },
+        )
+    }
+}
