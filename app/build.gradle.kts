@@ -29,11 +29,17 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // リリースビルドでコード難読化と最適化を有効にする
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+        }
+        debug {
+            // デバッグビルドではクラッシュレポートの取得を容易にするため最適化を無効化
+            isMinifyEnabled = false
         }
     }
     compileOptions {
@@ -50,6 +56,14 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
+    }
+    // 不要なリソースやライブラリを除去する設定
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/LICENSE*"
+            excludes += "DebugProbesKt.bin"
+        }
     }
 }
 
@@ -72,12 +86,13 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.compose.foundation:foundation:1.6.0-alpha01")
+    // Firebase関連
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation(libs.firebase.auth.ktx)
+    // カレンダー
     implementation("com.kizitonwose.calendar:compose:2.6.1")
-
     // AdMob
     implementation("com.google.android.gms:play-services-ads:22.6.0")
 
