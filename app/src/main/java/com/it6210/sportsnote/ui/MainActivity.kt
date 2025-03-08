@@ -81,6 +81,7 @@ class MainActivity : ComponentActivity() {
             builder.setCancelable(false)
             builder.setOnDismissListener {
                 termsDialogShown = false
+                recreate()
             }
             builder.show()
         }
