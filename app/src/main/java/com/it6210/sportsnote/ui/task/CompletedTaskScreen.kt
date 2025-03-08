@@ -27,10 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.it6210.sportsnote.R
-import com.it6210.sportsnote.ui.task.components.TaskCell
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.it6210.sportsnote.R
+import com.it6210.sportsnote.ui.task.components.TaskCell
 import kotlinx.coroutines.launch
 
 /**

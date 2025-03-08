@@ -122,4 +122,9 @@
     <string name="date">Date</string>
     <string name="temperature">Temperature: %1$s℃</string>
     <string name="doneTask">Worked Tasks</string>
+    <string name="userCollisionError">An account already exists for the email address you entered.</string>
+    <string name="invalidCredentialsError">You have entered an invalid email address or password.</string>
+    <string name="weakPasswordError">The password is not strong enough. Please use a different password.</string>
+    <string name="recentLoginRequiredError">This is an important operation, so please try again after logging in.</string>
+    <string name="invalidUserError">User does not exist. Please enter a different email address.</string>
 </resources>

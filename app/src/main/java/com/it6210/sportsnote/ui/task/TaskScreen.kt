@@ -18,6 +18,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.PreferencesManager
 import com.it6210.sportsnote.model.SyncManager
@@ -27,8 +29,6 @@ import com.it6210.sportsnote.ui.components.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.group.AddGroupScreen
 import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.ui.task.components.TaskListContent
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

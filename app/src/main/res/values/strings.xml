@@ -122,4 +122,10 @@
     <string name="date">日付</string>
     <string name="temperature">気温: %1$s℃</string>
     <string name="doneTask">取り組んだ課題</string>
+    <string name="userCollisionError">入力されたメールアドレスのアカウントが既に存在します。</string>
+    <string name="invalidCredentialsError">無効なメールアドレスやパスワードが入力されています。</string>
+    <string name="weakPasswordError">パスワードの強度が不十分です。別のパスワードを使用してください。</string>
+    <string name="recentLoginRequiredError">重要な操作となるため、再ログインしてからお試しください。</string>
+    <string name="invalidUserError">ユーザーが存在しません。別のメールアドレスを入力してください。</string>
+    <string name="networkError">" ネットワークエラーが発生しました。時間をおいて再度お試しください。"</string>
 </resources>

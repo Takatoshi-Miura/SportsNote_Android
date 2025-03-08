@@ -3,13 +3,20 @@ package com.it6210.sportsnote.ui.setting
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.PreferencesManager
 import com.it6210.sportsnote.model.RealmManager
 import com.it6210.sportsnote.model.SyncManager
 import com.it6210.sportsnote.ui.InitializationManager
 import com.it6210.sportsnote.utils.Network
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,7 +94,13 @@ class LoginViewModel : ViewModel() {
                 delay(2000)
                 onSuccess()
             } catch (e: Exception) {
-                _message.value = e.message ?: context.getString(R.string.loginError)
+                _message.value =
+                    when (e) {
+                        is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.invalidCredentialsError)
+                        is FirebaseAuthInvalidUserException -> context.getString(R.string.invalidUserError)
+                        is FirebaseNetworkException -> context.getString(R.string.networkError)
+                        else -> e.message ?: context.getString(R.string.loginError)
+                    }
                 onFailure()
             }
         }
@@ -169,7 +182,13 @@ class LoginViewModel : ViewModel() {
                     onFailure()
                 }
             } catch (e: Exception) {
-                _message.value = e.message
+                _message.value =
+                    when (e) {
+                        is FirebaseAuthUserCollisionException -> context.getString(R.string.userCollisionError)
+                        is FirebaseAuthWeakPasswordException -> context.getString(R.string.weakPasswordError)
+                        is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.invalidCredentialsError)
+                        else -> e.message ?: context.getString(R.string.createAccountFailed)
+                    }
                 onFailure()
             }
         }
@@ -207,12 +226,18 @@ class LoginViewModel : ViewModel() {
             }
 
         user.delete().addOnCompleteListener { task ->
+            // 失敗
             if (!task.isSuccessful) {
-                _message.value = task.exception?.message ?: context.getString(R.string.deleteAccountFailed)
+                val exception = task.exception
+                _message.value =
+                    when (exception) {
+                        is FirebaseAuthRecentLoginRequiredException -> context.getString(R.string.recentLoginRequiredError)
+                        is FirebaseAuthInvalidCredentialsException -> context.getString(R.string.invalidCredentialsError)
+                        else -> exception?.message ?: context.getString(R.string.deleteAccountFailed)
+                    }
                 onFailure()
                 return@addOnCompleteListener
             }
-
             viewModelScope.launch {
                 // データを全削除＆初期化
                 val initializationManager = InitializationManager(context)
@@ -250,7 +275,14 @@ class LoginViewModel : ViewModel() {
                     if (task.isSuccessful) {
                         _message.value = context.getString(R.string.sendMail)
                     } else {
-                        _message.value = task.exception?.message ?: context.getString(R.string.sendMailFailed)
+                        val exception = task.exception as? FirebaseAuthException
+                        _message.value =
+                            when (exception?.errorCode) {
+                                "invalid-email" -> context.getString(R.string.invalidCredentialsError)
+                                "user-not-found" -> context.getString(R.string.invalidUserError)
+                                "network-request-failed" -> context.getString(R.string.networkError)
+                                else -> exception?.message ?: context.getString(R.string.sendMailFailed)
+                            }
                     }
                 }
             } catch (e: Exception) {
