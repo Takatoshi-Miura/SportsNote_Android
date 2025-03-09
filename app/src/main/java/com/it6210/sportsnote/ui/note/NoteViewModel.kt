@@ -5,14 +5,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.FirebaseManager
 import com.it6210.sportsnote.model.Note
 import com.it6210.sportsnote.model.NoteListItem
 import com.it6210.sportsnote.model.PracticeNote
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
 import com.it6210.sportsnote.model.TaskData
 import com.it6210.sportsnote.model.TaskListData
+import com.it6210.sportsnote.model.manager.FirebaseManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.RealmManager
 import com.it6210.sportsnote.ui.measures.MeasuresViewModel
 import com.it6210.sportsnote.ui.memo.MemoViewModel
 import com.it6210.sportsnote.ui.task.TaskViewModel

@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.components
+package com.it6210.sportsnote.ui.components.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

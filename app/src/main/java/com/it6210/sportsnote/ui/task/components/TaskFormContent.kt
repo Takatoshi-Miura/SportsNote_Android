@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.AddTaskData
 import com.it6210.sportsnote.model.Group
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
-import com.it6210.sportsnote.ui.components.GroupPickerField
-import com.it6210.sportsnote.ui.components.MultiLineTextInputField
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
+import com.it6210.sportsnote.ui.components.items.GroupPickerField
+import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.group.GroupViewModel
 
 /**

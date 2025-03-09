@@ -12,10 +12,10 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
-import com.it6210.sportsnote.model.SyncManager
-import com.it6210.sportsnote.ui.InitializationManager
+import com.it6210.sportsnote.model.manager.InitializationManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.RealmManager
+import com.it6210.sportsnote.model.manager.SyncManager
 import com.it6210.sportsnote.utils.Network
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

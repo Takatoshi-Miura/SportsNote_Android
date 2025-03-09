@@ -8,11 +8,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.TermsManager
+import com.it6210.sportsnote.model.manager.TermsManager
 import com.it6210.sportsnote.ui.components.DialogType
-import com.it6210.sportsnote.ui.components.ItemData
-import com.it6210.sportsnote.ui.components.SectionData
-import com.it6210.sportsnote.ui.components.SectionedColumn
+import com.it6210.sportsnote.ui.components.items.ItemData
+import com.it6210.sportsnote.ui.components.items.SectionData
+import com.it6210.sportsnote.ui.components.items.SectionedColumn
 import com.it6210.sportsnote.utils.AppInfo
 import openInquiryMailer
 

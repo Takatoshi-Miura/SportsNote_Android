@@ -1,8 +1,6 @@
-package com.it6210.sportsnote.ui
+package com.it6210.sportsnote.model.manager
 
 import android.content.Context
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
 import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.ui.note.NoteViewModel
 

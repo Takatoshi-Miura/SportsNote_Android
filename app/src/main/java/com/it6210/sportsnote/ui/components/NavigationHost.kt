@@ -21,12 +21,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.Screen
+import com.it6210.sportsnote.ui.components.header.CustomTopAppBar
 import com.it6210.sportsnote.ui.group.GroupViewScreen
 import com.it6210.sportsnote.ui.measures.MeasuresScreen
 import com.it6210.sportsnote.ui.note.FreeNoteScreen
 import com.it6210.sportsnote.ui.note.NoteScreen
 import com.it6210.sportsnote.ui.note.PracticeNoteViewScreen
 import com.it6210.sportsnote.ui.note.TournamentNoteViewScreen
+import com.it6210.sportsnote.ui.setting.SettingScreen
 import com.it6210.sportsnote.ui.target.TargetScreen
 import com.it6210.sportsnote.ui.task.CompletedTaskScreen
 import com.it6210.sportsnote.ui.task.TaskDetailScreen
@@ -74,7 +76,16 @@ fun NavigationHost() {
                 BottomNavigationBar()
             }
         },
-        drawerContent = { DrawerContent(scaffoldState) },
+        drawerContent = {
+            // 設定画面を描画
+            SettingScreen(
+                onDismiss = {
+                    coroutineScope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                },
+            )
+        },
     ) { paddingValues ->
         NavHost(
             navController,

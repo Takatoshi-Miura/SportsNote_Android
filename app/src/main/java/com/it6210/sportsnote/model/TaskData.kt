@@ -1,6 +1,8 @@
 package com.it6210.sportsnote.model
 
 import androidx.compose.ui.graphics.Color
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.Syncable
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.Date

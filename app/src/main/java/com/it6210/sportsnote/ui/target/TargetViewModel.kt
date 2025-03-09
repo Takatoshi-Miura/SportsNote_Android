@@ -3,10 +3,10 @@ package com.it6210.sportsnote.ui.target
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.it6210.sportsnote.model.FirebaseManager
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
 import com.it6210.sportsnote.model.Target
+import com.it6210.sportsnote.model.manager.FirebaseManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.RealmManager
 import com.it6210.sportsnote.utils.Network
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.model
+package com.it6210.sportsnote.model.manager
 
 import android.app.AlertDialog
 import android.content.Context

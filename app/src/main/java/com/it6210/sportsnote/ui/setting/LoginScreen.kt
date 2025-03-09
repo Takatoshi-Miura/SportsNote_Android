@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.PreferencesManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.DialogType
 import com.it6210.sportsnote.ui.components.LoadingIndicator

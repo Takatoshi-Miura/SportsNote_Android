@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.components
+package com.it6210.sportsnote.ui.components.items
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.times
-import com.it6210.sportsnote.ui.components.items.ItemLabel
 
 /**
  * 1行固定のテキスト入力欄

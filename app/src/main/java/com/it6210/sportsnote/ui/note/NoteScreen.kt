@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.SyncManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.SyncManager
 import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.ActionBottomSheetContent
-import com.it6210.sportsnote.ui.components.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.components.DialogType
+import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.note.components.NoteListContent
 import com.it6210.sportsnote.ui.note.components.SearchBar
 import com.it6210.sportsnote.utils.NoteType

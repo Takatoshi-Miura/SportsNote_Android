@@ -1,7 +1,13 @@
-package com.it6210.sportsnote.model
+package com.it6210.sportsnote.model.manager
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
+import com.it6210.sportsnote.model.Group
+import com.it6210.sportsnote.model.Measures
+import com.it6210.sportsnote.model.Memo
+import com.it6210.sportsnote.model.Note
+import com.it6210.sportsnote.model.Target
+import com.it6210.sportsnote.model.TaskData
 import com.it6210.sportsnote.utils.NoteType
 import io.realm.Case
 import io.realm.DynamicRealm

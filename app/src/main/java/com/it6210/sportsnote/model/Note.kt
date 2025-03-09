@@ -1,6 +1,8 @@
 package com.it6210.sportsnote.model
 
 import androidx.compose.ui.graphics.Color
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.Syncable
 import com.it6210.sportsnote.utils.NoteType
 import com.it6210.sportsnote.utils.Weather
 import io.realm.RealmObject

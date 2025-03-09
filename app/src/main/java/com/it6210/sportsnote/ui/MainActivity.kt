@@ -6,8 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.TermsManager
+import com.it6210.sportsnote.model.manager.InitializationManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.TermsManager
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {

@@ -1,10 +1,10 @@
 package com.it6210.sportsnote.ui.measures
 
 import androidx.lifecycle.ViewModel
-import com.it6210.sportsnote.model.FirebaseManager
 import com.it6210.sportsnote.model.Measures
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
+import com.it6210.sportsnote.model.manager.FirebaseManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.RealmManager
 import com.it6210.sportsnote.utils.Network
 import java.util.Date
 import java.util.UUID

@@ -24,8 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
-import com.it6210.sportsnote.ui.components.SingleLineTextInputField
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
+import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import java.time.LocalDate
 
 /**

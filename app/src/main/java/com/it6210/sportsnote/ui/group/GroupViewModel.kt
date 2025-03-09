@@ -4,10 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.FirebaseManager
 import com.it6210.sportsnote.model.Group
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.RealmManager
+import com.it6210.sportsnote.model.manager.FirebaseManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.RealmManager
 import com.it6210.sportsnote.utils.Color
 import com.it6210.sportsnote.utils.Network
 import kotlinx.coroutines.flow.MutableStateFlow

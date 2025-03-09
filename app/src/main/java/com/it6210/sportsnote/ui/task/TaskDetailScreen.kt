@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
-import com.it6210.sportsnote.ui.components.CustomFloatingActionButton
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.DialogType
-import com.it6210.sportsnote.ui.components.GroupPickerField
-import com.it6210.sportsnote.ui.components.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.TextInputDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
+import com.it6210.sportsnote.ui.components.items.GroupPickerField
+import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.ui.measures.MeasuresViewModel
 import com.it6210.sportsnote.ui.measures.components.MeasuresListContent

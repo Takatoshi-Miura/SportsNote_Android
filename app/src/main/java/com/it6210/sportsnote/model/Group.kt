@@ -1,5 +1,7 @@
 package com.it6210.sportsnote.model
 
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.Syncable
 import com.it6210.sportsnote.utils.Color
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

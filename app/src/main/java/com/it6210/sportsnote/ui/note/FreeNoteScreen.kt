@@ -18,10 +18,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
-import com.it6210.sportsnote.ui.components.MultiLineTextInputField
-import com.it6210.sportsnote.ui.components.SingleLineTextInputField
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
+import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
+import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 
 /**
  * フリーノート画面

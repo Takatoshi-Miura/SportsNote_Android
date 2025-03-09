@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.components
+package com.it6210.sportsnote.ui.components.header
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -21,9 +21,7 @@ fun CustomTopAppBar(
     TopAppBar(
         title = { Text(title) },
         navigationIcon = navigationIcon,
-        actions = {
-            rightIcon?.invoke()
-        },
+        actions = { rightIcon?.invoke() },
         backgroundColor = MaterialTheme.colors.primary,
     )
 }

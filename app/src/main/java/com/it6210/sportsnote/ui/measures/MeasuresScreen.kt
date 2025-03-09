@@ -18,9 +18,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
-import com.it6210.sportsnote.ui.components.SingleLineTextInputField
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
+import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import com.it6210.sportsnote.ui.memo.components.RelatedMemoList
 import kotlinx.coroutines.launch
 

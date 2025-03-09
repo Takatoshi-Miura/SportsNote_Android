@@ -22,10 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.Group
-import com.it6210.sportsnote.ui.components.ColorPickerField
-import com.it6210.sportsnote.ui.components.CustomSpacerColumn
-import com.it6210.sportsnote.ui.components.SingleLineTextInputField
+import com.it6210.sportsnote.ui.components.items.ColorPickerField
+import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.ItemLabel
+import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SortItem
 import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.utils.Color

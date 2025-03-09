@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.components
+package com.it6210.sportsnote.ui.components.items
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

@@ -1,7 +1,13 @@
 @file:Suppress("ktlint:standard:property-naming")
 
-package com.it6210.sportsnote.model
+package com.it6210.sportsnote.model.manager
 
+import com.it6210.sportsnote.model.Group
+import com.it6210.sportsnote.model.Measures
+import com.it6210.sportsnote.model.Memo
+import com.it6210.sportsnote.model.Note
+import com.it6210.sportsnote.model.Target
+import com.it6210.sportsnote.model.TaskData
 import io.realm.Realm
 import io.realm.RealmObject
 import kotlinx.coroutines.Dispatchers

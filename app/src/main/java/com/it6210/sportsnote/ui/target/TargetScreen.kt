@@ -23,12 +23,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
-import com.it6210.sportsnote.model.PreferencesManager
-import com.it6210.sportsnote.model.SyncManager
+import com.it6210.sportsnote.model.manager.PreferencesManager
+import com.it6210.sportsnote.model.manager.SyncManager
 import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.ActionBottomSheetContent
-import com.it6210.sportsnote.ui.components.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.components.DialogType
+import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.note.NoteViewModel
 import com.it6210.sportsnote.ui.target.components.CalendarDisplay
 import com.it6210.sportsnote.ui.target.components.NoteListSection

@@ -1,7 +1,13 @@
-package com.it6210.sportsnote.model
+package com.it6210.sportsnote.model.manager
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.it6210.sportsnote.model.Group
+import com.it6210.sportsnote.model.Measures
+import com.it6210.sportsnote.model.Memo
+import com.it6210.sportsnote.model.Note
+import com.it6210.sportsnote.model.Target
+import com.it6210.sportsnote.model.TaskData
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
@@ -189,7 +195,8 @@ object FirebaseManager {
         mapData: (Map<String, Any>) -> T,
     ): List<T> {
         val db = FirebaseFirestore.getInstance()
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val resultList = mutableListOf<T>()
 
         return try {
@@ -374,7 +381,8 @@ object FirebaseManager {
      * @param group グループデータ
      */
     fun updateGroup(group: Group) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${group.groupID}"
         val data =
             mapOf(
@@ -393,7 +401,8 @@ object FirebaseManager {
      * @param task 課題データ
      */
     fun updateTask(task: TaskData) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${task.taskID}"
         val data =
             mapOf(
@@ -414,7 +423,8 @@ object FirebaseManager {
      * @param measures 対策データ
      */
     fun updateMeasures(measures: Measures) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${measures.measuresID}"
         val data =
             mapOf(
@@ -432,7 +442,8 @@ object FirebaseManager {
      * @param memo メモデータ
      */
     fun updateMemo(memo: Memo) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${memo.memoID}"
         val data =
             mapOf(
@@ -449,7 +460,8 @@ object FirebaseManager {
      * @param target 目標データ
      */
     fun updateTarget(target: Target) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${target.targetID}"
         val data =
             mapOf(
@@ -469,7 +481,8 @@ object FirebaseManager {
      * @param note ノートデータ
      */
     fun updateNote(note: Note) {
-        val userID = PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
+        val userID =
+            PreferencesManager.get(PreferencesManager.Keys.USER_ID, UUID.randomUUID().toString())
         val documentID = "${userID}_${note.noteID}"
         val data =
             mapOf(

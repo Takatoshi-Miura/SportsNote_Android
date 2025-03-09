@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.TaskListData
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
-import com.it6210.sportsnote.ui.components.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.items.ItemLabel
+import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 
 /**
  * 取り組んだ課題のセクション表示
