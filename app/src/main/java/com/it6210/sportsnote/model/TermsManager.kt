@@ -17,8 +17,8 @@ object TermsManager {
 
     object URL {
         const val TERMS_OF_SERVICE_AND_PRIVACY_POLICY = "https://sportnote-b2c92.firebaseapp.com/"
-        const val TERMS_OF_SERVICE = "https://sportnote-b2c92.firebaseapp.com/"
-        const val PRIVACY_POLICY = "https://sportnote-b2c92.firebaseapp.com/"
+        const val TERMS_OF_SERVICE = "https://sportsnote-terms-of-service.firebaseapp.com/"
+        const val PRIVACY_POLICY = "https://sportsnote-privacy-policy.firebaseapp.com/"
     }
 
     /**
