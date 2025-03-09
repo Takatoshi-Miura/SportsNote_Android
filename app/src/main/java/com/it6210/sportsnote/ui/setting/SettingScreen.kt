@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.it6210.sportsnote.R
+import com.it6210.sportsnote.model.TermsManager
 import com.it6210.sportsnote.ui.components.DialogType
 import com.it6210.sportsnote.ui.components.ItemData
 import com.it6210.sportsnote.ui.components.SectionData
@@ -69,11 +70,25 @@ fun SettingScreen(onDismiss: () -> Unit) {
                         },
                     ),
             ),
-            // システム情報
+            // その他
             SectionData(
-                title = stringResource(R.string.system_info),
+                title = stringResource(R.string.other),
                 items =
                     listOf(
+                        // 利用規約
+                        ItemData(
+                            title = stringResource(R.string.termsOfServiceTitle),
+                            iconRes = R.drawable.ic_description_24dp,
+                        ) {
+                            TermsManager.navigateToTermsOfService(context)
+                        },
+                        // プライバシーポリシー
+                        ItemData(
+                            title = stringResource(R.string.privacyPolicy),
+                            iconRes = R.drawable.ic_lock_24dp,
+                        ) {
+                            TermsManager.navigateToPrivacyPolicy(context)
+                        },
                         // アプリバージョン
                         ItemData(
                             title = stringResource(R.string.app_version),

@@ -1,23 +1,16 @@
 package com.it6210.sportsnote.ui
 
-import android.app.AlertDialog
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
-import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.PreferencesManager
-import kotlinx.coroutines.Dispatchers
+import com.it6210.sportsnote.model.TermsManager
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
-    private var termsDialogShown = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,48 +47,11 @@ class MainActivity : ComponentActivity() {
      */
     private fun checkAndShowTermsDialog() {
         val agreeStatus = PreferencesManager.get(PreferencesManager.Keys.AGREE, false)
-        if (!agreeStatus && !termsDialogShown) {
+        if (!agreeStatus && !TermsManager.termsDialogShown) {
             lifecycleScope.launch {
-                showTermsOfServiceDialog()
+                TermsManager.showTermsDialog(this@MainActivity)
+                TermsManager.termsDialogShown = true
             }
         }
-    }
-
-    /**
-     * 利用規約ダイアログを表示
-     */
-    private suspend fun showTermsOfServiceDialog() {
-        withContext(Dispatchers.Main) {
-            if (isFinishing || isDestroyed) return@withContext
-            termsDialogShown = true
-            val builder = AlertDialog.Builder(this@MainActivity)
-            builder.setTitle(getString(R.string.termsOfServiceTitle))
-            builder.setMessage(getString(R.string.termsOfServiceMessage))
-            builder.setPositiveButton(getString(R.string.agree)) { _, _ ->
-                PreferencesManager.set(PreferencesManager.Keys.AGREE, true)
-                termsDialogShown = false
-            }
-            builder.setNegativeButton(getString(R.string.checkTermsOfService)) { _, _ ->
-                openTermsOfServiceLink()
-            }
-            builder.setCancelable(false)
-            builder.setOnDismissListener {
-                termsDialogShown = false
-                recreate()
-            }
-            builder.show()
-        }
-    }
-
-    /**
-     * 利用規約ページに遷移
-     */
-    private fun openTermsOfServiceLink() {
-        val intent =
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://sportnote-b2c92.firebaseapp.com/"),
-            )
-        startActivity(intent)
     }
 }

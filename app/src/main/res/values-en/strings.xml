@@ -127,4 +127,7 @@
     <string name="weakPasswordError">The password is not strong enough. Please use a different password.</string>
     <string name="recentLoginRequiredError">This is an important operation, so please try again after logging in.</string>
     <string name="invalidUserError">User does not exist. Please enter a different email address.</string>
+    <string name="networkError">A network error occurred. Please try again later.</string>
+    <string name="other">Other</string>
+    <string name="privacyPolicy">Privacy policy</string>
 </resources>

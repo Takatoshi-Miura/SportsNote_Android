@@ -127,5 +127,7 @@
     <string name="weakPasswordError">パスワードの強度が不十分です。別のパスワードを使用してください。</string>
     <string name="recentLoginRequiredError">重要な操作となるため、再ログインしてからお試しください。</string>
     <string name="invalidUserError">ユーザーが存在しません。別のメールアドレスを入力してください。</string>
-    <string name="networkError">" ネットワークエラーが発生しました。時間をおいて再度お試しください。"</string>
+    <string name="networkError">ネットワークエラーが発生しました。時間をおいて再度お試しください。</string>
+    <string name="other">その他</string>
+    <string name="privacyPolicy">プライバシーポリシー</string>
 </resources>
