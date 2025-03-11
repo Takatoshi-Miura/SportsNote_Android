@@ -45,10 +45,7 @@ fun TaskHeader(
     onAddClick: () -> Unit,
 ) {
     Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // タイトルラベル
@@ -134,20 +131,19 @@ fun TaskInputItem(
     val reflectionText = remember { mutableStateOf(initialReflection) }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
     ) {
         Row(
-            modifier =
-                Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // グループカラー
             Box(
                 modifier =
                     Modifier
-                        .padding(start = 12.dp)
                         .width(20.dp)
                         .height(50.dp)
                         .background(taskData.groupColor),

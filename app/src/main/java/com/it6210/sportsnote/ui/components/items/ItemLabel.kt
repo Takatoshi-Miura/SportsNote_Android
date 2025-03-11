@@ -1,12 +1,10 @@
 package com.it6210.sportsnote.ui.components.items
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 
 /**
  * 入力項目の共通タイトルラベル
@@ -17,7 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ItemLabel(
     title: String,
-    modifier: Modifier = Modifier.padding(8.dp),
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = title,

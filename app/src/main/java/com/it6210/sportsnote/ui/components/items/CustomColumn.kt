@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -54,17 +53,18 @@ data class ItemData(
  * 入力項目間にスペースを付与するColumn
  *
  * @param items 入力項目リスト
- * @param spacerHeight 付与したいスペース
  */
 @Composable
-fun CustomSpacerColumn(
-    items: List<@Composable () -> Unit>,
-    spacerHeight: Dp = 4.dp,
-) {
-    Column {
+fun CustomSpacerColumn(items: List<@Composable () -> Unit>) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+    ) {
         items.forEach { item ->
             item()
-            Spacer(modifier = Modifier.height(spacerHeight))
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

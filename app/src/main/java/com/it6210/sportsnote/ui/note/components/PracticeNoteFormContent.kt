@@ -130,8 +130,6 @@ fun PracticeNoteFormContent(
                     title = stringResource(R.string.doneTask),
                     onAddClick = { showDialog.value = true },
                 )
-            },
-            {
                 TaskListInput(
                     taskDataList = taskListState.value,
                     onTaskRemoved = { task ->

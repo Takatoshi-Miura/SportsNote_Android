@@ -1,9 +1,10 @@
 package com.it6210.sportsnote.ui.components.items
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,11 +37,14 @@ fun SingleLineTextInputField(
     var text by remember { mutableStateOf(initialText) }
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         if (title.isNotBlank()) {
             ItemLabel(title = title)
         }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         OutlinedTextField(
             value = text,
             onValueChange = {
@@ -48,10 +52,7 @@ fun SingleLineTextInputField(
                 onTextChanged(text)
             },
             placeholder = { Text(placeholder) },
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
+            modifier = Modifier.fillMaxWidth(),
             singleLine = true,
         )
     }
@@ -80,11 +81,14 @@ fun MultiLineTextInputField(
     val minTextHeight = lineHeight * defaultLines
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
+        modifier = Modifier.fillMaxWidth(),
     ) {
         if (title.isNotBlank()) {
             ItemLabel(title = title)
         }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
         OutlinedTextField(
             value = text,
             onValueChange = {
@@ -97,8 +101,7 @@ fun MultiLineTextInputField(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .heightIn(min = lineHeight * defaultLines)
-                    .padding(4.dp),
+                    .heightIn(min = lineHeight * defaultLines),
             singleLine = false,
         )
         // 動的に高さを更新する
