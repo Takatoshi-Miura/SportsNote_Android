@@ -18,6 +18,7 @@ import com.it6210.sportsnote.model.PracticeNote
 import com.it6210.sportsnote.model.TaskListData
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.note.components.PracticeNoteFormContent
 import com.it6210.sportsnote.utils.Weather
 import kotlinx.coroutines.launch
@@ -86,6 +87,8 @@ fun PracticeNoteViewScreen(
                     appBarRightIcon.value = rightIcon
                 },
             )
+
+            AutoSaveTimestamp(note.updated_at)
 
             // 共通フォーム
             PracticeNoteFormContent(

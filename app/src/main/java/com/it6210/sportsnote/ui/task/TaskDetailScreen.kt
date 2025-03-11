@@ -28,6 +28,7 @@ import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.DialogType
 import com.it6210.sportsnote.ui.components.TextInputDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.GroupPickerField
@@ -183,6 +184,8 @@ fun TaskDetailScreen(
                     appBarRightIcon.value = rightIcon
                 },
             )
+
+            AutoSaveTimestamp(taskDetail.task.updated_at)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

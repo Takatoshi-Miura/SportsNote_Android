@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import com.it6210.sportsnote.ui.memo.components.RelatedMemoList
@@ -100,6 +101,8 @@ fun MeasuresScreen(
                     appBarRightIcon.value = rightIcon
                 },
             )
+
+            AutoSaveTimestamp(measures!!.updated_at)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

@@ -18,6 +18,7 @@ import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.Note
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.note.components.TournamentNoteFormContent
 import com.it6210.sportsnote.utils.Weather
 import kotlinx.coroutines.launch
@@ -81,6 +82,8 @@ fun TournamentNoteViewScreen(
                     appBarRightIcon.value = rightIcon
                 },
             )
+
+            AutoSaveTimestamp(note!!.updated_at)
 
             // 共通フォーム
             TournamentNoteFormContent(

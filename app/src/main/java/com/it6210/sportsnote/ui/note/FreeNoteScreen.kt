@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
@@ -100,6 +101,8 @@ fun FreeNoteScreen(
                     appBarRightIcon.value = null
                 },
             )
+
+            AutoSaveTimestamp(freeNote!!.updated_at)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

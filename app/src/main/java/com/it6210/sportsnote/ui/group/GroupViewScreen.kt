@@ -21,6 +21,7 @@ import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.Group
 import com.it6210.sportsnote.ui.components.CustomAlertDialog
 import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
+import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.group.components.GroupFormContent
 import com.it6210.sportsnote.utils.Color
 import kotlinx.coroutines.launch
@@ -91,6 +92,8 @@ fun GroupViewScreen(
                     }
                 },
             )
+
+            AutoSaveTimestamp(group!!.updated_at)
 
             // 共通フォーム
             GroupFormContent(

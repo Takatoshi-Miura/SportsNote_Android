@@ -130,4 +130,5 @@
     <string name="networkError">ネットワークエラーが発生しました。時間をおいて再度お試しください。</string>
     <string name="other">その他</string>
     <string name="privacyPolicy">プライバシーポリシー</string>
+    <string name="autoSave">%1$s 自動保存済み</string>
 </resources>

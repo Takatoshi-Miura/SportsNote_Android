@@ -130,4 +130,5 @@
     <string name="networkError">A network error occurred. Please try again later.</string>
     <string name="other">Other</string>
     <string name="privacyPolicy">Privacy policy</string>
+    <string name="autoSave">%1$s Autosaved</string>
 </resources>

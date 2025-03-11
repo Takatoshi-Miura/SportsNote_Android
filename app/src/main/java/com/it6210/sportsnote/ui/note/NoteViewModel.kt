@@ -212,6 +212,7 @@ class NoteViewModel : ViewModel() {
             reflection = note.reflection,
             taskReflections = taskReflections,
             created_at = note.created_at,
+            updated_at = note.updated_at,
         )
     }
 
