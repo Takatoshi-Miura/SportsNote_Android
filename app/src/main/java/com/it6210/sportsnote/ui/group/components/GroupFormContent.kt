@@ -41,12 +41,14 @@ import org.burnoutcrew.reorderable.reorderable
  * @param group Groupデータ（nullならデフォルト値を設定）
  * @param onTitleChange タイトル変更時の処理
  * @param onColorChange カラー変更時の処理
+ * @param onGroupsChange グループ変更時の処理
  */
 @Composable
 fun GroupFormContent(
     group: Group? = null,
     onTitleChange: (String) -> Unit,
     onColorChange: (Int) -> Unit,
+    onGroupsChange: (List<Group>) -> Unit,
 ) {
     val groupViewModel = GroupViewModel()
     val coroutineScope = rememberCoroutineScope()
@@ -91,6 +93,7 @@ fun GroupFormContent(
                                     )
                                 }
                                 groupViewModel.loadData()
+                                onGroupsChange(updatedList)
                             }
                         },
                         onItemClick = { },

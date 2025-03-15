@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,7 +24,9 @@ import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import com.it6210.sportsnote.ui.memo.components.RelatedMemoList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * 対策画面
@@ -46,7 +49,8 @@ fun MeasuresScreen(
     val context = LocalContext.current
 
     // 入力データ
-    var title by remember { mutableStateOf(measures!!.title) }
+    var title by remember { mutableStateOf(measures?.title ?: "") }
+    var lastSavedAt by remember { mutableStateOf(measures?.updated_at ?: Date()) }
     val showDialog = remember { mutableStateOf(false) }
 
     val inputFields: List<@Composable () -> Unit> =
@@ -64,6 +68,21 @@ fun MeasuresScreen(
                 RelatedMemoList(measuresID = measuresID)
             },
         )
+
+    // 自動保存処理
+    LaunchedEffect(title) {
+        delay(1000)
+        if (title.isNotEmpty()) {
+            val now = Date()
+            measuresViewModel.saveMeasures(
+                measuresId = measuresID,
+                taskId = measures!!.taskID,
+                title = title,
+                created_at = measures.created_at,
+            )
+            lastSavedAt = now
+        }
+    }
 
     Box(
         modifier =
@@ -102,7 +121,7 @@ fun MeasuresScreen(
                 },
             )
 
-            AutoSaveTimestamp(measures!!.updated_at)
+            AutoSaveTimestamp(lastSavedAt)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

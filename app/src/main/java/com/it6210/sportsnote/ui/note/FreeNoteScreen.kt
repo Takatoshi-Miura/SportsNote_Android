@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,8 @@ import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
+import kotlinx.coroutines.delay
+import java.util.Date
 
 /**
  * フリーノート画面
@@ -44,8 +47,9 @@ fun FreeNoteScreen(
     val context = LocalContext.current
 
     // 入力データ
-    var title by remember { mutableStateOf(freeNote!!.title) }
-    var detail by remember { mutableStateOf(freeNote!!.detail) }
+    var title by remember { mutableStateOf(freeNote?.title ?: "") }
+    var detail by remember { mutableStateOf(freeNote?.detail ?: "") }
+    var lastSavedAt by remember { mutableStateOf(freeNote?.updated_at ?: Date()) }
 
     val inputFields: List<@Composable () -> Unit> =
         listOf(
@@ -67,6 +71,21 @@ fun FreeNoteScreen(
                 )
             },
         )
+
+    // 自動保存処理
+    LaunchedEffect(title, detail) {
+        delay(1000)
+        if (title.isNotEmpty()) {
+            val now = Date()
+            noteViewModel.saveFreeNote(
+                noteId = noteID,
+                title = title,
+                detail = detail,
+                created_at = freeNote?.created_at ?: now,
+            )
+            lastSavedAt = now
+        }
+    }
 
     Box(
         modifier =
@@ -102,7 +121,7 @@ fun FreeNoteScreen(
                 },
             )
 
-            AutoSaveTimestamp(freeNote!!.updated_at)
+            AutoSaveTimestamp(lastSavedAt)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

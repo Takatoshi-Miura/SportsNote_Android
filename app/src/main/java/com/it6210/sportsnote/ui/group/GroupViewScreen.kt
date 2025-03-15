@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -24,6 +26,7 @@ import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
 import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.group.components.GroupFormContent
 import com.it6210.sportsnote.utils.Color
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -49,9 +52,27 @@ fun GroupViewScreen(
     val context = LocalContext.current
 
     // 入力データの状態管理
-    var title by remember { mutableStateOf("") }
-    var color by remember { mutableStateOf(Color.RED.id) }
+    var title by remember { mutableStateOf(group?.title ?: "") }
+    var color by remember { mutableIntStateOf(group?.color ?: Color.RED.id) }
+    val groupsState = remember { mutableStateOf<List<Group>>(emptyList()) }
+    var lastSavedAt by remember { mutableStateOf(group?.updated_at ?: Date()) }
     val showDialog = remember { mutableStateOf(false) }
+
+    // 自動保存処理
+    LaunchedEffect(title, color, groupsState.value) {
+        delay(1000)
+        if (title.isNotEmpty()) {
+            val now = Date()
+            viewModel.saveGroup(
+                groupId = groupId,
+                title = title,
+                colorId = color,
+                order = group?.order,
+                created_at = group?.created_at ?: now,
+            )
+            lastSavedAt = now
+        }
+    }
 
     Box(
         modifier =
@@ -93,13 +114,14 @@ fun GroupViewScreen(
                 },
             )
 
-            AutoSaveTimestamp(group!!.updated_at)
+            AutoSaveTimestamp(lastSavedAt)
 
             // 共通フォーム
             GroupFormContent(
                 group = group,
                 onTitleChange = { title = it },
                 onColorChange = { color = it },
+                onGroupsChange = { updatedGroups -> groupsState.value = updatedGroups },
             )
         }
     }

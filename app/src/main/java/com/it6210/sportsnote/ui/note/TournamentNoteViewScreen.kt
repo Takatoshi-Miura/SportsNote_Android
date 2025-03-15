@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,6 +23,7 @@ import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
 import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.note.components.TournamentNoteFormContent
 import com.it6210.sportsnote.utils.Weather
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -39,15 +42,35 @@ fun TournamentNoteViewScreen(
     val coroutineScope = rememberCoroutineScope()
 
     // 入力データの状態管理
-    var date by remember { mutableStateOf(Date()) }
-    var weather by remember { mutableStateOf(Weather.SUNNY.id) }
-    var temperature by remember { mutableStateOf(20) }
-    var condition by remember { mutableStateOf("") }
-    var target by remember { mutableStateOf("") }
-    var consciousness by remember { mutableStateOf("") }
-    var result by remember { mutableStateOf("") }
-    var reflection by remember { mutableStateOf("") }
+    var date by remember { mutableStateOf(note?.date ?: Date()) }
+    var weather by remember { mutableIntStateOf(note?.weather ?: Weather.SUNNY.id) }
+    var temperature by remember { mutableIntStateOf(note?.temperature ?: 20) }
+    var condition by remember { mutableStateOf(note?.condition ?: "") }
+    var target by remember { mutableStateOf(note?.target ?: "") }
+    var consciousness by remember { mutableStateOf(note?.condition ?: "") }
+    var result by remember { mutableStateOf(note?.result ?: "") }
+    var reflection by remember { mutableStateOf(note?.reflection ?: "") }
+    var lastSavedAt by remember { mutableStateOf(note?.updated_at ?: Date()) }
     val showDialog = remember { mutableStateOf(false) }
+
+    // 自動保存処理
+    LaunchedEffect(date, weather, temperature, condition, target, consciousness, result, reflection) {
+        delay(1000)
+        val now = Date()
+        viewModel.saveTournamentNote(
+            noteId = noteId,
+            date = date,
+            weather = weather,
+            temperature = temperature,
+            condition = condition,
+            target = target,
+            consciousness = consciousness,
+            result = result,
+            reflection = reflection,
+            created_at = note?.created_at ?: now,
+        )
+        lastSavedAt = now
+    }
 
     Box(
         modifier =
@@ -83,7 +106,7 @@ fun TournamentNoteViewScreen(
                 },
             )
 
-            AutoSaveTimestamp(note!!.updated_at)
+            AutoSaveTimestamp(lastSavedAt)
 
             // 共通フォーム
             TournamentNoteFormContent(

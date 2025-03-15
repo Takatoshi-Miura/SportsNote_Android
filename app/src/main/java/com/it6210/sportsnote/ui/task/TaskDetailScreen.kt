@@ -10,6 +10,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +37,9 @@ import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.ui.measures.MeasuresViewModel
 import com.it6210.sportsnote.ui.measures.components.MeasuresListContent
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * Task詳細画面
@@ -72,6 +75,7 @@ fun TaskDetailScreen(
     val measuresList = remember { mutableStateListOf(*taskDetail.measuresList.toTypedArray()) }
     val groups by groupViewModel.groups.collectAsState()
     val selectedGroup = groupViewModel.getGroupById(groupId)
+    var lastSavedAt by remember { mutableStateOf(taskDetail.task.updated_at) }
 
     val inputFields: List<@Composable () -> Unit> =
         listOf(
@@ -142,6 +146,22 @@ fun TaskDetailScreen(
             },
         )
 
+    // 自動保存処理
+    LaunchedEffect(title, cause, groupId, measuresList.toList()) {
+        delay(1000)
+        if (title.isNotEmpty()) {
+            taskViewModel.saveTask(
+                taskId = taskId,
+                title = title,
+                cause = cause,
+                groupId = groupId,
+                isComplete = isComplete,
+                created_at = taskDetail.task.created_at,
+            )
+            lastSavedAt = Date()
+        }
+    }
+
     Box(
         modifier =
             Modifier
@@ -185,7 +205,7 @@ fun TaskDetailScreen(
                 },
             )
 
-            AutoSaveTimestamp(taskDetail.task.updated_at)
+            AutoSaveTimestamp(lastSavedAt)
 
             // 共通フォーム
             CustomSpacerColumn(items = inputFields)

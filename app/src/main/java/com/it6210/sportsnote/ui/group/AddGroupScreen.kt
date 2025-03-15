@@ -82,6 +82,7 @@ fun AddGroupScreen(onDismiss: () -> Unit) {
                     group = null,
                     onTitleChange = { title = it },
                     onColorChange = { color = it },
+                    onGroupsChange = { },
                 )
             }
         }
