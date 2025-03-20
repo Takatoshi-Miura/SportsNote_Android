@@ -21,7 +21,7 @@ android {
         applicationId = "com.it6210.sportsnote"
         minSdk = 29
         targetSdk = 34
-        versionCode = 6
+        versionCode = 7
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
