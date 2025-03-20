@@ -2,8 +2,7 @@ package com.it6210.sportsnote.ui.task.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.AddTaskData
 import com.it6210.sportsnote.model.Group
@@ -23,6 +23,7 @@ import com.it6210.sportsnote.viewModel.GroupViewModel
 /**
  * 課題追加画面のフォーム
  *
+ * @param modifier カスタムModifier（スクロール対応などに使用）
  * @param onTitleChange タイトル変更時の処理
  * @param onCauseChange 原因変更時の処理
  * @param onMeasuresChange 対策変更時の処理
@@ -30,6 +31,7 @@ import com.it6210.sportsnote.viewModel.GroupViewModel
  */
 @Composable
 fun AddTaskFormContent(
+    modifier: Modifier = Modifier,
     onTitleChange: (String) -> Unit,
     onCauseChange: (String) -> Unit,
     onMeasuresChange: (String) -> Unit,
@@ -60,7 +62,7 @@ fun AddTaskFormContent(
             {
                 MultiLineTextInputField(
                     title = stringResource(R.string.cause),
-                    defaultLines = 3,
+                    defaultLines = 2,
                     onTextChanged = { updatedText -> cause.value = updatedText },
                     initialText = cause.value,
                 )
@@ -83,12 +85,11 @@ fun AddTaskFormContent(
             },
         )
 
-    // 入力欄のレイアウト
+    // 入力欄のレイアウト - 下部に余白を追加（内部スクロールは削除）
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 300.dp) // キーボードが表示されても十分な余白を確保
     ) {
         CustomSpacerColumn(items = inputFields)
 

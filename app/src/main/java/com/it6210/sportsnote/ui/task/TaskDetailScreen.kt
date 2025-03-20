@@ -92,7 +92,7 @@ fun TaskDetailScreen(
             {
                 MultiLineTextInputField(
                     title = stringResource(R.string.cause),
-                    defaultLines = 3,
+                    defaultLines = 2,
                     onTextChanged = { updatedText -> cause = updatedText },
                     initialText = cause,
                 )

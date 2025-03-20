@@ -6,6 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,6 +39,7 @@ fun AddTaskScreen(onDismiss: () -> Unit) {
     val measuresViewModel = MeasuresViewModel()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     var title by remember { mutableStateOf("") }
     var cause by remember { mutableStateOf("") }
     var measures by remember { mutableStateOf("") }
@@ -49,10 +53,9 @@ fun AddTaskScreen(onDismiss: () -> Unit) {
             ),
     ) {
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.surface),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -87,13 +90,21 @@ fun AddTaskScreen(onDismiss: () -> Unit) {
                     coroutineScope = coroutineScope,
                 )
 
-                // フォーム
-                AddTaskFormContent(
-                    onTitleChange = { title = it },
-                    onCauseChange = { cause = it },
-                    onMeasuresChange = { measures = it },
-                    onGroupChange = { groupId = it.groupID },
-                )
+                // スクロール可能なコンテンツ領域
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    // フォーム
+                    AddTaskFormContent(
+                        modifier = Modifier.verticalScroll(scrollState),
+                        onTitleChange = { title = it },
+                        onCauseChange = { cause = it },
+                        onMeasuresChange = { measures = it },
+                        onGroupChange = { groupId = it.groupID },
+                    )
+                }
             }
         }
     }

@@ -2,8 +2,7 @@ package com.it6210.sportsnote.ui.note.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -13,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.PracticeNote
 import com.it6210.sportsnote.model.TaskListData
@@ -28,6 +28,7 @@ import java.util.Date
 /**
  * 練習ノートの共通フォーム
  *
+ * @param modifier カスタムModifier（スクロール対応などに使用）
  * @param note Noteオブジェクト（nullならデフォルト値を設定）
  * @param onDateChange 日付変更時の処理
  * @param onWeatherChange 天気変更時の処理
@@ -40,6 +41,7 @@ import java.util.Date
  */
 @Composable
 fun PracticeNoteFormContent(
+    modifier: Modifier = Modifier,
     note: PracticeNote? = null,
     onDateChange: (Date) -> Unit,
     onWeatherChange: (Int) -> Unit,
@@ -156,12 +158,11 @@ fun PracticeNoteFormContent(
             },
         )
 
-    // 入力フォーム
+    // 入力フォーム - 下部に余白を追加
     Column(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 300.dp) // キーボードが表示されても十分な余白を確保
     ) {
         CustomSpacerColumn(items = inputFields)
 

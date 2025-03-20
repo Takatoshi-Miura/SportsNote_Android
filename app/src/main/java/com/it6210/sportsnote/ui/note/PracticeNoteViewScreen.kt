@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +50,8 @@ fun PracticeNoteViewScreen(
     val note: PracticeNote = viewModel.getPracticeNote(noteId = noteId)
     val coroutineScope = rememberCoroutineScope()
     val showDialog = remember { mutableStateOf(false) }
-
+    val scrollState = rememberScrollState()
+    
     // 入力データの状態管理
     var date by remember { mutableStateOf(note.date) }
     var weather by remember { mutableIntStateOf(note.weather) }
@@ -58,7 +62,7 @@ fun PracticeNoteViewScreen(
     var reflection by remember { mutableStateOf(note.reflection) }
     var taskReflections by remember { mutableStateOf<Map<TaskListData, String>>(emptyMap()) }
     var lastSavedAt by remember { mutableStateOf(note.updated_at) }
-
+    
     // 自動保存処理
     LaunchedEffect(date, weather, temperature, condition, purpose, detail, reflection, taskReflections) {
         delay(1000)
@@ -76,12 +80,11 @@ fun PracticeNoteViewScreen(
         )
         lastSavedAt = Date()
     }
-
+    
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -112,22 +115,30 @@ fun PracticeNoteViewScreen(
             )
 
             AutoSaveTimestamp(lastSavedAt)
-
-            // 共通フォーム
-            PracticeNoteFormContent(
-                note = note,
-                onDateChange = { date = it },
-                onWeatherChange = { weather = it },
-                onTemperatureChange = { temperature = it },
-                onConditionChange = { condition = it },
-                onPurposeChange = { purpose = it },
-                onDetailChange = { detail = it },
-                onReflectionChange = { reflection = it },
-                onTaskReflectionsChange = { taskReflections = it },
-            )
+            
+            // スクロール可能なコンテンツ領域
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                // 共通フォーム
+                PracticeNoteFormContent(
+                    modifier = Modifier.verticalScroll(scrollState),
+                    note = note,
+                    onDateChange = { date = it },
+                    onWeatherChange = { weather = it },
+                    onTemperatureChange = { temperature = it },
+                    onConditionChange = { condition = it },
+                    onPurposeChange = { purpose = it },
+                    onDetailChange = { detail = it },
+                    onReflectionChange = { reflection = it },
+                    onTaskReflectionsChange = { taskReflections = it },
+                )
+            }
         }
     }
-
+    
     // 削除確認ダイアログの表示
     if (showDialog.value) {
         CustomAlertDialog(

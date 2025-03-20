@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +44,7 @@ fun TournamentNoteViewScreen(
 ) {
     val note: Note? = viewModel.getNoteById(noteId)
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     // 入力データの状態管理
     var date by remember { mutableStateOf(note?.date ?: Date()) }
@@ -74,10 +78,9 @@ fun TournamentNoteViewScreen(
     }
 
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -108,19 +111,27 @@ fun TournamentNoteViewScreen(
             )
 
             AutoSaveTimestamp(lastSavedAt)
-
-            // 共通フォーム
-            TournamentNoteFormContent(
-                note = note,
-                onDateChange = { date = it },
-                onWeatherChange = { weather = it },
-                onTemperatureChange = { temperature = it },
-                onConditionChange = { condition = it },
-                onTargetChange = { target = it },
-                onConsciousnessChange = { consciousness = it },
-                onResultChange = { result = it },
-                onReflectionChange = { reflection = it },
-            )
+            
+            // スクロール可能なコンテンツ領域
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+            ) {
+                // 共通フォーム
+                TournamentNoteFormContent(
+                    modifier = Modifier.verticalScroll(scrollState),
+                    note = note,
+                    onDateChange = { date = it },
+                    onWeatherChange = { weather = it },
+                    onTemperatureChange = { temperature = it },
+                    onConditionChange = { condition = it },
+                    onTargetChange = { target = it },
+                    onConsciousnessChange = { consciousness = it },
+                    onResultChange = { result = it },
+                    onReflectionChange = { reflection = it },
+                )
+            }
         }
     }
 

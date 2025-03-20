@@ -4,6 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,6 +33,7 @@ import java.util.Date
 @Composable
 fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     // 入力データの状態管理
     val date = remember { mutableStateOf(Date()) }
@@ -49,10 +53,9 @@ fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
             ),
     ) {
         Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.surface),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -77,18 +80,26 @@ fun AddPracticeNoteScreen(onDismiss: () -> Unit) {
                     coroutineScope = coroutineScope,
                 )
 
-                // 共通フォーム
-                PracticeNoteFormContent(
-                    note = null,
-                    onDateChange = { selectedDate -> date.value = selectedDate },
-                    onWeatherChange = { selectedWeather -> weather.intValue = selectedWeather },
-                    onTemperatureChange = { selectedTemperature -> temperature.intValue = selectedTemperature },
-                    onConditionChange = { updatedCondition -> condition.value = updatedCondition },
-                    onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
-                    onDetailChange = { updateDetail -> detail.value = updateDetail },
-                    onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
-                    onTaskReflectionsChange = { taskReflections.value = it },
-                )
+                // スクロール可能なコンテンツ領域
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    // 共通フォーム
+                    PracticeNoteFormContent(
+                        modifier = Modifier.verticalScroll(scrollState),
+                        note = null,
+                        onDateChange = { selectedDate -> date.value = selectedDate },
+                        onWeatherChange = { selectedWeather -> weather.intValue = selectedWeather },
+                        onTemperatureChange = { selectedTemperature -> temperature.intValue = selectedTemperature },
+                        onConditionChange = { updatedCondition -> condition.value = updatedCondition },
+                        onPurposeChange = { updatePurpose -> purpose.value = updatePurpose },
+                        onDetailChange = { updateDetail -> detail.value = updateDetail },
+                        onReflectionChange = { updatedReflection -> reflection.value = updatedReflection },
+                        onTaskReflectionsChange = { taskReflections.value = it },
+                    )
+                }
             }
         }
     }
