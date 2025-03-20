@@ -30,9 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.it6210.sportsnote.ui.note.NoteViewModel
-import com.it6210.sportsnote.ui.target.TargetViewModel
 import com.it6210.sportsnote.utils.NoteType
+import com.it6210.sportsnote.viewModel.NoteViewModel
+import com.it6210.sportsnote.viewModel.TargetViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay

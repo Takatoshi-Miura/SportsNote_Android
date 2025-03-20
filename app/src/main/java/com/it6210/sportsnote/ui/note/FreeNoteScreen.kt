@@ -24,6 +24,7 @@ import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
+import com.it6210.sportsnote.viewModel.NoteViewModel
 import kotlinx.coroutines.delay
 import java.util.Date
 

@@ -19,6 +19,7 @@ import com.it6210.sportsnote.model.TaskListData
 import com.it6210.sportsnote.ui.components.header.AddScreenHeader
 import com.it6210.sportsnote.ui.note.components.PracticeNoteFormContent
 import com.it6210.sportsnote.utils.Weather
+import com.it6210.sportsnote.viewModel.NoteViewModel
 import java.util.Date
 
 /**

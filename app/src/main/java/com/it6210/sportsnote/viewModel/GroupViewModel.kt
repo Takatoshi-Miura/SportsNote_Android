@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.group
+package com.it6210.sportsnote.viewModel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

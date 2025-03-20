@@ -18,7 +18,7 @@ import com.it6210.sportsnote.R
 import com.it6210.sportsnote.model.MeasuresMemo
 import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.items.ItemLabel
-import com.it6210.sportsnote.ui.memo.MemoViewModel
+import com.it6210.sportsnote.viewModel.MemoViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 

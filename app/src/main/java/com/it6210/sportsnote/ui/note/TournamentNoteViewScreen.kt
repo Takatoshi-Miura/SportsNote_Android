@@ -23,6 +23,7 @@ import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
 import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.note.components.TournamentNoteFormContent
 import com.it6210.sportsnote.utils.Weather
+import com.it6210.sportsnote.viewModel.NoteViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date

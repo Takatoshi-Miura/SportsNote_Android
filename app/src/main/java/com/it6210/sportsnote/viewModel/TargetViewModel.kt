@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.target
+package com.it6210.sportsnote.viewModel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.note
+package com.it6210.sportsnote.viewModel
 
 import android.content.Context
 import androidx.compose.ui.graphics.Color
@@ -13,9 +13,6 @@ import com.it6210.sportsnote.model.TaskListData
 import com.it6210.sportsnote.model.manager.FirebaseManager
 import com.it6210.sportsnote.model.manager.PreferencesManager
 import com.it6210.sportsnote.model.manager.RealmManager
-import com.it6210.sportsnote.ui.measures.MeasuresViewModel
-import com.it6210.sportsnote.ui.memo.MemoViewModel
-import com.it6210.sportsnote.ui.task.TaskViewModel
 import com.it6210.sportsnote.utils.Network
 import com.it6210.sportsnote.utils.NoteType
 import kotlinx.coroutines.flow.MutableStateFlow

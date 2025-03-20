@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.setting
+package com.it6210.sportsnote.viewModel
 
 import androidx.lifecycle.ViewModel
 import com.it6210.sportsnote.R

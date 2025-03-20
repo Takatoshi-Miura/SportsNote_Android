@@ -29,11 +29,12 @@ import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.ActionBottomSheetContent
 import com.it6210.sportsnote.ui.components.DialogType
 import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
-import com.it6210.sportsnote.ui.note.NoteViewModel
 import com.it6210.sportsnote.ui.target.components.CalendarDisplay
 import com.it6210.sportsnote.ui.target.components.NoteListSection
 import com.it6210.sportsnote.ui.target.components.TargetDisplaySection
 import com.it6210.sportsnote.utils.NoteType
+import com.it6210.sportsnote.viewModel.NoteViewModel
+import com.it6210.sportsnote.viewModel.TargetViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

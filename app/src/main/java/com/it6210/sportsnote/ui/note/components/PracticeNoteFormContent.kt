@@ -19,9 +19,9 @@ import com.it6210.sportsnote.model.TaskListData
 import com.it6210.sportsnote.ui.components.TaskSelectionDialog
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
-import com.it6210.sportsnote.ui.memo.MemoViewModel
-import com.it6210.sportsnote.ui.task.TaskViewModel
 import com.it6210.sportsnote.utils.Weather
+import com.it6210.sportsnote.viewModel.MemoViewModel
+import com.it6210.sportsnote.viewModel.TaskViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
 

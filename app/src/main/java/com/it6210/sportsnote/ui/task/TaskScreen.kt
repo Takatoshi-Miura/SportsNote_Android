@@ -27,8 +27,9 @@ import com.it6210.sportsnote.ui.LocalNavController
 import com.it6210.sportsnote.ui.components.ActionBottomSheetContent
 import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.group.AddGroupScreen
-import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.ui.task.components.TaskListContent
+import com.it6210.sportsnote.viewModel.GroupViewModel
+import com.it6210.sportsnote.viewModel.TaskViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

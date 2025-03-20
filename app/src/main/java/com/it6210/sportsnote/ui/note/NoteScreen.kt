@@ -31,6 +31,7 @@ import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.note.components.NoteListContent
 import com.it6210.sportsnote.ui.note.components.SearchBar
 import com.it6210.sportsnote.utils.NoteType
+import com.it6210.sportsnote.viewModel.NoteViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

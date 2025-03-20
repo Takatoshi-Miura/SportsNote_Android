@@ -20,8 +20,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.header.AddScreenHeader
-import com.it6210.sportsnote.ui.measures.MeasuresViewModel
 import com.it6210.sportsnote.ui.task.components.AddTaskFormContent
+import com.it6210.sportsnote.viewModel.MeasuresViewModel
+import com.it6210.sportsnote.viewModel.TaskViewModel
 
 /**
  * 課題追加画面

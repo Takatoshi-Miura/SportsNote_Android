@@ -18,7 +18,7 @@ import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.GroupPickerField
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
-import com.it6210.sportsnote.ui.group.GroupViewModel
+import com.it6210.sportsnote.viewModel.GroupViewModel
 
 /**
  * 課題追加画面のフォーム

@@ -20,6 +20,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.header.AddScreenHeader
 import com.it6210.sportsnote.ui.target.components.TargetFormContent
+import com.it6210.sportsnote.viewModel.TargetViewModel
 import kotlinx.coroutines.launch
 
 /**

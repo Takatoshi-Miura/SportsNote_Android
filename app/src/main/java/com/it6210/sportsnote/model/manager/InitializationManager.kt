@@ -1,8 +1,8 @@
 package com.it6210.sportsnote.model.manager
 
 import android.content.Context
-import com.it6210.sportsnote.ui.group.GroupViewModel
-import com.it6210.sportsnote.ui.note.NoteViewModel
+import com.it6210.sportsnote.viewModel.GroupViewModel
+import com.it6210.sportsnote.viewModel.NoteViewModel
 
 class InitializationManager(
     private val context: Context,

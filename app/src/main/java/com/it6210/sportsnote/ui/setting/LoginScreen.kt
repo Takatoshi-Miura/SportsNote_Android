@@ -36,6 +36,7 @@ import com.it6210.sportsnote.ui.components.DialogType
 import com.it6210.sportsnote.ui.components.LoadingIndicator
 import com.it6210.sportsnote.ui.setting.components.CustomButton
 import com.it6210.sportsnote.ui.setting.components.CustomTextField
+import com.it6210.sportsnote.viewModel.LoginViewModel
 import kotlinx.coroutines.launch
 
 /**

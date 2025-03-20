@@ -1,4 +1,4 @@
-package com.it6210.sportsnote.ui.task
+package com.it6210.sportsnote.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

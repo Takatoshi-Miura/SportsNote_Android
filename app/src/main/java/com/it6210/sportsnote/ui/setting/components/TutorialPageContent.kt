@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.it6210.sportsnote.ui.setting.TutorialPage
+import com.it6210.sportsnote.viewModel.TutorialPage
 
 /**
  * チュートリアルページのコンポーネント

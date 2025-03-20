@@ -34,9 +34,10 @@ import com.it6210.sportsnote.ui.components.items.CustomFloatingActionButton
 import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.GroupPickerField
 import com.it6210.sportsnote.ui.components.items.MultiLineTextInputField
-import com.it6210.sportsnote.ui.group.GroupViewModel
-import com.it6210.sportsnote.ui.measures.MeasuresViewModel
 import com.it6210.sportsnote.ui.measures.components.MeasuresListContent
+import com.it6210.sportsnote.viewModel.GroupViewModel
+import com.it6210.sportsnote.viewModel.MeasuresViewModel
+import com.it6210.sportsnote.viewModel.TaskViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date

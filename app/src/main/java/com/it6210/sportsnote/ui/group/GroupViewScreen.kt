@@ -26,6 +26,7 @@ import com.it6210.sportsnote.ui.components.header.NavigationScreenHeader
 import com.it6210.sportsnote.ui.components.items.AutoSaveTimestamp
 import com.it6210.sportsnote.ui.group.components.GroupFormContent
 import com.it6210.sportsnote.utils.Color
+import com.it6210.sportsnote.viewModel.GroupViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date

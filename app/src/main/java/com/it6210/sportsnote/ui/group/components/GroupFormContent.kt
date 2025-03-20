@@ -27,8 +27,8 @@ import com.it6210.sportsnote.ui.components.items.CustomSpacerColumn
 import com.it6210.sportsnote.ui.components.items.ItemLabel
 import com.it6210.sportsnote.ui.components.items.SingleLineTextInputField
 import com.it6210.sportsnote.ui.components.items.SortItem
-import com.it6210.sportsnote.ui.group.GroupViewModel
 import com.it6210.sportsnote.utils.Color
+import com.it6210.sportsnote.viewModel.GroupViewModel
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress

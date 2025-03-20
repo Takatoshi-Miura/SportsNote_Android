@@ -22,6 +22,7 @@ import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.components.header.AddScreenHeader
 import com.it6210.sportsnote.ui.group.components.GroupFormContent
 import com.it6210.sportsnote.utils.Color
+import com.it6210.sportsnote.viewModel.GroupViewModel
 
 /**
  * Group登録画面

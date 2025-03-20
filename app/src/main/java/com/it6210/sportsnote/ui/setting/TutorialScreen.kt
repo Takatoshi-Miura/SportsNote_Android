@@ -21,6 +21,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.it6210.sportsnote.R
 import com.it6210.sportsnote.ui.setting.components.PagerIndicator
 import com.it6210.sportsnote.ui.setting.components.TutorialPageContent
+import com.it6210.sportsnote.viewModel.TutorialViewModel
 
 /**
  * アプリの使い方画面
