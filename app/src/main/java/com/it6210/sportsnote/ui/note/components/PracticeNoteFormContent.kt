@@ -163,7 +163,8 @@ fun PracticeNoteFormContent(
         modifier =
             modifier
                 .fillMaxWidth()
-                .padding(bottom = 300.dp), // キーボードが表示されても十分な余白を確保
+                // キーボードが表示されても十分な余白を確保
+                .padding(bottom = 300.dp),
     ) {
         CustomSpacerColumn(items = inputFields)
 
