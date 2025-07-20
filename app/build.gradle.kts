@@ -15,12 +15,12 @@ ktlint {
 
 android {
     namespace = "com.it6210.sportsnote"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.it6210.sportsnote"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 7
         versionName = "1.0.0"
 
@@ -79,30 +79,32 @@ dependencies {
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.compose.reorderable)
 
-    // Composeの依存関係
-    implementation("androidx.activity:activity-compose:1.8.0")
-    implementation("androidx.compose.ui:ui:1.6.0")
-    implementation("androidx.compose.material:material:1.6.0")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.6.0")
-    implementation("androidx.navigation:navigation-compose:2.7.3")
-    implementation("androidx.compose.foundation:foundation:1.6.0-alpha01")
-    // Firebase関連
+    // Composeの依存関係 (API 35対応版)
+    implementation("androidx.activity:activity-compose:1.9.3")
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.material:material:1.7.6")
+    implementation("androidx.compose.material:material-icons-core:1.7.6")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+    implementation("androidx.compose.foundation:foundation:1.7.6")
+    // Firebase関連 (最新版)
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation(libs.firebase.auth.ktx)
     // カレンダー
     implementation("com.kizitonwose.calendar:compose:2.6.1")
-    // AdMob
-    implementation("com.google.android.gms:play-services-ads:22.6.0")
+    // AdMob (最新版)
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.espresso.core)
 
     // テスト用依存関係（オプション）
-    debugImplementation("androidx.compose.ui:ui-tooling:1.6.0")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.0")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.7.6")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.6")
 }

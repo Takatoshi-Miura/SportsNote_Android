@@ -51,7 +51,7 @@ fun PracticeNoteViewScreen(
     val coroutineScope = rememberCoroutineScope()
     val showDialog = remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
-    
+
     // 入力データの状態管理
     var date by remember { mutableStateOf(note.date) }
     var weather by remember { mutableIntStateOf(note.weather) }
@@ -62,7 +62,7 @@ fun PracticeNoteViewScreen(
     var reflection by remember { mutableStateOf(note.reflection) }
     var taskReflections by remember { mutableStateOf<Map<TaskListData, String>>(emptyMap()) }
     var lastSavedAt by remember { mutableStateOf(note.updated_at) }
-    
+
     // 自動保存処理
     LaunchedEffect(date, weather, temperature, condition, purpose, detail, reflection, taskReflections) {
         delay(1000)
@@ -80,11 +80,12 @@ fun PracticeNoteViewScreen(
         )
         lastSavedAt = Date()
     }
-    
+
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -115,12 +116,13 @@ fun PracticeNoteViewScreen(
             )
 
             AutoSaveTimestamp(lastSavedAt)
-            
+
             // スクロール可能なコンテンツ領域
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
             ) {
                 // 共通フォーム
                 PracticeNoteFormContent(
@@ -138,7 +140,7 @@ fun PracticeNoteViewScreen(
             }
         }
     }
-    
+
     // 削除確認ダイアログの表示
     if (showDialog.value) {
         CustomAlertDialog(

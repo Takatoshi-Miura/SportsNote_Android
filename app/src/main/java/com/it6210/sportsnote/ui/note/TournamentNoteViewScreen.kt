@@ -78,9 +78,10 @@ fun TournamentNoteViewScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.surface),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // ヘッダー
@@ -111,12 +112,13 @@ fun TournamentNoteViewScreen(
             )
 
             AutoSaveTimestamp(lastSavedAt)
-            
+
             // スクロール可能なコンテンツ領域
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
             ) {
                 // 共通フォーム
                 TournamentNoteFormContent(

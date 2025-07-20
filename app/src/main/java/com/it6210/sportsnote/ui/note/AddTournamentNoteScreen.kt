@@ -36,7 +36,7 @@ fun AddTournamentNoteScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    
+
     // 入力データの状態管理
     val date = remember { mutableStateOf(Date()) }
     val weather = remember { mutableStateOf(Weather.SUNNY.id) }
@@ -46,7 +46,7 @@ fun AddTournamentNoteScreen(
     val consciousness = remember { mutableStateOf("") }
     val result = remember { mutableStateOf("") }
     val reflection = remember { mutableStateOf("") }
-    
+
     Dialog(
         onDismissRequest = onDismiss,
         properties =
@@ -55,9 +55,10 @@ fun AddTournamentNoteScreen(
             ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -80,12 +81,13 @@ fun AddTournamentNoteScreen(
                     },
                     coroutineScope = coroutineScope,
                 )
-                
+
                 // スクロール可能なコンテンツ領域
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
                 ) {
                     // 共通フォーム
                     TournamentNoteFormContent(

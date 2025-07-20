@@ -87,9 +87,10 @@ fun AddTaskFormContent(
 
     // 入力欄のレイアウト - 下部に余白を追加（内部スクロールは削除）
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 300.dp) // キーボードが表示されても十分な余白を確保
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 300.dp), // キーボードが表示されても十分な余白を確保
     ) {
         CustomSpacerColumn(items = inputFields)
 

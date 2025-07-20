@@ -53,9 +53,10 @@ fun AddTaskScreen(onDismiss: () -> Unit) {
             ),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.surface),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colors.surface),
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 // ヘッダー
@@ -92,9 +93,10 @@ fun AddTaskScreen(onDismiss: () -> Unit) {
 
                 // スクロール可能なコンテンツ領域
                 Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth(),
                 ) {
                     // フォーム
                     AddTaskFormContent(

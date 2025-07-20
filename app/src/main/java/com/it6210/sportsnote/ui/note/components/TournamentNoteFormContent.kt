@@ -119,9 +119,10 @@ fun TournamentNoteFormContent(
 
     // 入力フォーム - 下部に余白を追加
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 300.dp) // キーボードが表示されても十分な余白を確保
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(bottom = 300.dp), // キーボードが表示されても十分な余白を確保
     ) {
         CustomSpacerColumn(items = inputFields)
 
