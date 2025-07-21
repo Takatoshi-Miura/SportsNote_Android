@@ -1,5 +1,8 @@
 package com.it6210.sportsnote.ui.components
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -9,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +28,7 @@ fun BottomNavigationBar() {
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primary,
+        modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
     ) {
         val items =
             listOf(

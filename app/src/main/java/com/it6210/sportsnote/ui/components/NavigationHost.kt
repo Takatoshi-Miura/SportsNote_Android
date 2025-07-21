@@ -1,6 +1,8 @@
 package com.it6210.sportsnote.ui.components
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -64,6 +66,7 @@ fun NavigationHost() {
 
     Scaffold(
         scaffoldState = scaffoldState,
+        contentWindowInsets = WindowInsets.systemBars,
         topBar = {
             CustomTopAppBar(
                 title = screenConfig.topBarTitle,

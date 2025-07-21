@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.ads.MobileAds
 import com.it6210.sportsnote.model.manager.InitializationManager
@@ -18,6 +19,9 @@ class MainActivity : ComponentActivity() {
         // アクションバーを無効化
         window.requestFeature(Window.FEATURE_NO_TITLE)
         actionBar?.hide()
+
+        // EdgeToEdgeを有効化
+        enableEdgeToEdge()
 
         // アプリの初期化
         val initializationManager = InitializationManager(applicationContext)
