@@ -85,6 +85,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.7.6")
     implementation("androidx.compose.material:material-icons-core:1.7.6")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("androidx.compose.material3:material3:1.3.1")
     implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.compose.foundation:foundation:1.7.6")
@@ -99,6 +100,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:23.6.0")
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.espresso.core)
+    implementation(libs.material3.android)
 
     // テスト用依存関係（オプション）
     debugImplementation("androidx.compose.ui:ui-tooling:1.7.6")

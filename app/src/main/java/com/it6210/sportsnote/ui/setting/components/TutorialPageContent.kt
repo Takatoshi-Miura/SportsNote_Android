@@ -41,7 +41,6 @@ fun TutorialPageContent(page: TutorialPage) {
             textAlign = TextAlign.Center,
             modifier =
                 Modifier
-                    .padding(top = 60.dp)
                     .padding(bottom = 8.dp),
         )
 
@@ -60,9 +59,7 @@ fun TutorialPageContent(page: TutorialPage) {
         Image(
             painter = painterResource(id = page.imageRes),
             contentDescription = page.title,
-            modifier =
-                Modifier
-                    .padding(bottom = 50.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
         )
     }
 }
