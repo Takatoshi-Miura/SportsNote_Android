@@ -97,7 +97,7 @@ com.it6210.sportsnote/
 - **アプリケーションID**: `com.it6210.sportsnote`
 - **最小SDK**: 29 (Android 10)
 - **ターゲットSDK**: 34 (Android 14)
-- **現在のバージョン**: 1.0.0 (versionCode: 7)
+- **現在のバージョン**: 1.0.1 (versionCode: 8)
 - **向き**: 縦向きのみ
 - **言語**: 日本語（デフォルト）、英語
 
