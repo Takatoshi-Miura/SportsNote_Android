@@ -16,6 +16,7 @@ ktlint {
 android {
     namespace = "com.it6210.sportsnote"
     compileSdk = 35
+    ndkVersion = "28.0.12674087"
 
     defaultConfig {
         applicationId = "com.it6210.sportsnote"
