@@ -71,7 +71,6 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -79,35 +78,38 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.compose.reorderable)
-
-    // Composeの依存関係 (API 35対応版)
-    implementation("androidx.activity:activity-compose:1.9.3")
-    implementation("androidx.compose.ui:ui:1.7.6")
-    implementation("androidx.compose.material:material:1.7.6")
-    implementation("androidx.compose.material:material-icons-core:1.7.6")
-    implementation("androidx.compose.material:material-icons-extended:1.7.6")
-    implementation("androidx.compose.material3:material3:1.3.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.7.6")
-    implementation("androidx.navigation:navigation-compose:2.8.5")
-    implementation("androidx.compose.foundation:foundation:1.7.6")
-    // Firebase関連 (最新版)
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation(libs.firebase.auth.ktx)
-    // カレンダー
-    implementation("com.kizitonwose.calendar:compose:2.6.1")
-    // AdMob (最新版)
-    implementation("com.google.android.gms:play-services-ads:23.6.0")
-    implementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.espresso.core)
+    implementation(libs.material)
     implementation(libs.material3.android)
 
-    // テスト用依存関係（オプション）
-    debugImplementation("androidx.compose.ui:ui-tooling:1.7.6")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.7.6")
+    // Compose関連
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.navigation.compose)
+
+    // Firebase関連
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth.ktx)
+
+    // カレンダー
+    implementation(libs.calendar.compose)
+
+    // AdMob
+    implementation(libs.play.services.ads)
+
+    // テスト用
+    implementation(libs.androidx.espresso.core)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.6")
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
