@@ -45,6 +45,22 @@ SportsNoteは、KotlinとJetpack Composeで構築されたAndroidスポーツノ
 ./gradlew ktlintCheck
 ```
 
+### Firebase Hosting デプロイ
+```bash
+# プライバシーポリシーをデプロイ
+cd hosting/privacyPolicy && firebase deploy
+
+# 利用規約をデプロイ
+cd hosting/termsOfService && firebase deploy
+
+# 両方を一度にデプロイ（プロジェクトルートから実行）
+cd hosting/privacyPolicy && firebase deploy && cd ../termsOfService && firebase deploy
+```
+
+**デプロイ後のURL:**
+- プライバシーポリシー: https://sportsnote-privacy-policy.web.app
+- 利用規約: https://sportsnote-terms-of-service.web.app
+
 ## プロジェクトアーキテクチャ
 
 ### 技術スタック
